@@ -1,0 +1,17 @@
+{% extends "catalogue/base.html" %}
+
+{% block title %}Liste des Spectacles{% endblock %}
+
+{% block content %}
+    <h1>🎬 Nos Spectacles</h1>
+    <div class="list-container">
+        {% for show in shows %}
+            <div style="padding: 15px; margin-bottom: 10px; background: #fff; border-left: 5px solid #e74c3c; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <strong>{{ show.title }}</strong> - {{ show.price }} €
+                <p>{{ show.description }}</p>
+            </div>
+        {% empty %}
+            <p>Prochainement...</p>
+        {% endfor %}
+    </div>
+{% endblock %}

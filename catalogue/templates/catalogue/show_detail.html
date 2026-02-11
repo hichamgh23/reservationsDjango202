@@ -1,0 +1,42 @@
+{% extends "catalogue/base.html" %}
+
+{% block title %}Détail du spectacle : {{ show.title }}{% endblock %}
+
+{% block content %}
+    <div style="max-width: 800px; margin: 20px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h1 style="color: #2c3e50; border-bottom: 3px solid #e74c3c; padding-bottom: 10px;">
+            {{ show.title }}
+        </h1>
+
+        <p style="font-size: 1.2em;">
+            <strong>Lieu :</strong> 
+            {% if show.location %}
+                {{ show.location.designation }}
+            {% else %}
+                <em>Lieu non précisé</em>
+            {% endif %}
+        </p>
+
+        <p style="font-size: 1.5em; color: #27ae60; font-weight: bold;">
+            Prix : {{ show.price }} €
+        </p>
+
+        <div style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
+            <h3 style="margin-top: 0;">Description</h3>
+            <p>{{ show.description|linebreaks }}</p>
+        </div>
+
+        <p style="margin-top: 30px;">
+            {% if show.bookable %}
+                <span style="color: white; background: #27ae60; padding: 8px 15px; border-radius: 20px;">Réservable</span>
+            {% else %}
+                <span style="color: white; background: #e74c3c; padding: 8px 15px; border-radius: 20px;">Complet</span>
+            {% endif %}
+        </p>
+
+        <hr style="margin-top: 40px; border: 0; border-top: 1px solid #eee;">
+        <a href="{% url 'show_index' %}" style="color: #3498db; text-decoration: none; font-weight: bold;">
+            ← Retour à la liste des spectacles
+        </a>
+    </div>
+{% endblock %}
