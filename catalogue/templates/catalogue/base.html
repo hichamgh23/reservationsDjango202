@@ -1,39 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Projet Réservations{% endblock %}</title>
-    </head>
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
 <body>
 
     <header>
-        <h1>Projet Réservations</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'catalogue:artist_index' %}">Artistes</a></li>
-                {% if user.is_authenticated and user.is_staff %}
-                    {# Si l'utilisateur est connecté ET admin #}
-                    <li><a href="{% url 'admin:index' %}">Administration</a></li>
-                {% elif not user.is_authenticated %}
-                    {# Si l'utilisateur n'est pas connecté #}
-                    <li><a href="{% url 'admin:index' %}">Administration</a></li>
-                {% endif %}
-                
-                {% if user.is_authenticated %}
-                    <li>Bonjour, {{ user.username }} ! (<a href="{% url 'admin:logout' %}">Déconnexion</a>)</li>
-                {% endif %}
-            </ul>
-        </nav>
+        <div class="container">
+            <h1>Projet Réservations</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'catalogue:artist_index' %}">Artistes</a></li>
+                    <li><a href="{% url 'catalogue:show_index' %}">Spectacles</a></li>
+                    
+                    {# Lien Administration selon les consignes du Doc 1 #}
+                    {% if user.is_authenticated and user.is_staff %}
+                        <li><a href="{% url 'admin:index' %}">Administration</a></li>
+                    {% elif not user.is_authenticated %}
+                        <li><a href="{% url 'admin:index' %}">Administration</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        {% block content %}
-        {% endblock %}
+    <main class="container">
+        {% block content %}{% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2026 - Projet Réservations Django 5</p>
+        <div class="container">
+            <p>&copy; {{ 2026 }} - Projet Réservations Django 5</p>
+        </div>
     </footer>
 
 </body>

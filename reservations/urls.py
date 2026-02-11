@@ -16,13 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import RedirectView
+from django.conf import settings # AJOUT
+from django.conf.urls.static import static # AJOUT
 
 urlpatterns = [
-    # ICI : On change .exe par .urls
-    path('admin/', admin.site.urls), 
-    
-    # Le reste ne change pas
-    path('', include('catalogue.urls')), 
-    path('', RedirectView.as_view(url='/artists/', permanent=True)),
+    path('admin/', admin.site.urls),
+    path('', include('catalogue.urls')),
 ]
+
+# AJOUT pour servir les images en mode développement
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
