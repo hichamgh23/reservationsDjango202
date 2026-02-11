@@ -1,4 +1,4 @@
-{% extends "catalogue/base.html" %}
+{% extends "base.html" %}
 
 {% block title %}Liste des Spectacles{% endblock %}
 
@@ -6,9 +6,18 @@
     <h1>🎬 Nos Spectacles</h1>
     <div class="list-container">
         {% for show in shows %}
-            <div style="padding: 15px; margin-bottom: 10px; background: #fff; border-left: 5px solid #e74c3c; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <strong>{{ show.title }}</strong> - {{ show.price }} €
+            <div style="padding: 15px; margin-bottom: 20px; background: #fff; border-left: 5px solid #e74c3c; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <h3>{{ show.title }}</h3>
+                <p><strong>Prix :</strong> {{ show.price }} €</p>
                 <p>{{ show.description }}</p>
+
+                {% if show.bookable %}
+                    <a href="{% url 'catalogue:show_representations' show.slug %}" class="btn btn-primary">
+                        Réserver
+                    </a>
+                {% else %}
+                    <span class="text-muted">Complet ou non réservable</span>
+                {% endif %}
             </div>
         {% empty %}
             <p>Prochainement...</p>

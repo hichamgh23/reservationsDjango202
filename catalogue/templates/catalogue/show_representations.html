@@ -1,0 +1,16 @@
+{% extends "base.html" %} 
+{% block content %} 
+<h1>Choisir une date pour : {{ show.title }}</h1> 
+<table class="table mt-4"> 
+    <thead><tr><th>Date</th><th>Lieu</th><th>Action</th></tr></thead> 
+    <tbody> 
+        {% for rep in representations %} 
+        <tr> 
+            <td>{{ rep.when|date:"d/m/Y H:i" }}</td> 
+            <td>{{ rep.location.designation }}</td> 
+            <td><a href="{% url 'catalogue:book_representation' rep.id %}" class="btn btn-success">Choisir</a></td> 
+        </tr> 
+        {% endfor %} 
+    </tbody> 
+</table> 
+{% endblock %} 

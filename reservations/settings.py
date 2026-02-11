@@ -6,20 +6,15 @@ from pathlib import Path
 import pymysql
 pymysql.install_as_MySQLdb()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Chemin de base du projet
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
+# Sécurité
 SECRET_KEY = 'django-insecure-ik5!h=%np*)@m)j^l1(w9i(!z34d*#&kbbb(rmc8f9gk=skr=6'
-
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
+# Définition des applications
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,8 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalogue',
-    'rest_framework',
+    'catalogue',          # Ton application principale
+    'rest_framework',     # Framework pour l'API
 ]
 
 MIDDLEWARE = [
@@ -46,10 +41,11 @@ ROOT_URLCONF = 'reservations.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [], # Les templates sont cherchés dans les dossiers "templates" des apps
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -60,9 +56,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'reservations.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# Base de données MariaDB
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -74,13 +68,16 @@ DATABASES = {
     }
 }
 
-# Password validation
+# Validation des mots de passe (Configuré selon le document "reste (4)")
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 6,  # Autorise 6 caractères au lieu de 8
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -90,37 +87,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
+# Internationalisation
 LANGUAGE_CODE = 'fr-be'
 TIME_ZONE = 'Europe/Brussels'
-
 USE_I18N = True
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
+# Fichiers Statiques et Médias
 STATIC_URL = 'static/'
-
-# Dossier où Django va chercher les fichiers statiques à la racine du projet
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
-# Dossier utilisé lors du déploiement (collectstatic)
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Gestion des médias (images des spectacles)
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
- 
-# REST Framework authentications & permissions 
+# Configuration de l'API REST (Chapitre 8)
 REST_FRAMEWORK = { 
     'DEFAULT_AUTHENTICATION_CLASSES': [ 
         'rest_framework.authentication.SessionAuthentication', 
@@ -129,4 +112,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [ 
         'rest_framework.permissions.IsAuthenticated', 
     ], 
-} 
+}
+
+# Configuration des redirections (Chapitre 10)
+LOGIN_REDIRECT_URL = '/'   # Redirige vers l'accueil après connexion
+LOGOUT_REDIRECT_URL = '/'  # Redirige vers l'accueil après déconnexion

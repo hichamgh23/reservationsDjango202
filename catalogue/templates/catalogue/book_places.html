@@ -1,0 +1,12 @@
+{% extends "base.html" %} 
+{% block content %} 
+<h2>Reserver pour le {{ representation.when|date:"d/m/Y H:i" }}</h2> 
+<form method="post" class="mt-4"> 
+    {% csrf_token %} 
+    <div class="mb-3"> 
+        <label for="places" class="form-label">Nombre de places :</label> 
+        <input type="number" name="places" id="places" value="1" min="1" class="form-control" style="width: 100px;"> 
+    </div> 
+    <button type="submit" class="btn btn-primary">Confirmer la reservation</button> 
+</form> 
+{% endblock %} 

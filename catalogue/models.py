@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # 1. Artistes
 class Artist(models.Model):
@@ -73,7 +74,7 @@ class Show(models.Model):
     def __str__(self):
         return self.title
 
-# 7. Représentations (L'endroit où tu avais l'erreur d'indentation)
+# 7. Représentations
 class Representation(models.Model):
     show = models.ForeignKey(Show, on_delete=models.CASCADE, related_name='representations')
     when = models.DateTimeField()
@@ -106,3 +107,15 @@ class ArtistTypeShow(models.Model):
 
     def __str__(self):
         return f"{self.artist_type} - {self.show.title}"
+
+# 10. Réservations (Ajouté selon le document "reste")
+class Reservation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
+    representation = models.ForeignKey(Representation, on_delete=models.CASCADE, related_name='reservations')
+    places = models.PositiveIntegerField()
+
+    class Meta:
+        db_table = "reservations"
+
+    def __str__(self):
+        return f"Réservation de {self.user.username} pour {self.representation}"
