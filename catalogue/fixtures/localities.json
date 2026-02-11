@@ -1,0 +1,1 @@
+[  {    "model": "catalogue.locality",    "pk": 1,    "fields": {      "postal_code": "1000",      "locality": "Bruxelles"    }  },  {    "model": "catalogue.locality",    "pk": 2,    "fields": {      "postal_code": "1170",      "locality": "Watermael-Boitsfort"    }  }] 

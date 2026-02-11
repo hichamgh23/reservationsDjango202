@@ -1,0 +1,1 @@
+[  {    "model": "catalogue.representation",    "pk": 1,    "fields": {      "show": 1,      "when": "2026-10-12T20:00:00Z",      "location": 1    }  },  {    "model": "catalogue.representation",    "pk": 2,    "fields": {      "show": 2,      "when": "2026-10-15T19:30:00Z",      "location": 2    }  }] 
