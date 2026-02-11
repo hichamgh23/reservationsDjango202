@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('catalogue.urls')), # C'est cette ligne qui manque !
+    # ICI : On change .exe par .urls
+    path('admin/', admin.site.urls), 
+    
+    # Le reste ne change pas
+    path('', include('catalogue.urls')), 
+    path('', RedirectView.as_view(url='/artists/', permanent=True)),
 ]

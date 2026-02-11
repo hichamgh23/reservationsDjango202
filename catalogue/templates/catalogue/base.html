@@ -1,22 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>{% block title %}Ma Réservation{% endblock %}</title>
-    <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; }
-        nav { background: #2c3e50; padding: 15px; color: white; }
-        nav a { color: white; margin-right: 20px; text-decoration: none; font-weight: bold; }
-        .container { padding: 20px; }
-    </style>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Projet Réservations{% endblock %}</title>
+    </head>
 <body>
-    <nav>
-        <a href="/artists/">🎭 Artistes</a>
-        <a href="/shows/">🎬 Spectacles</a>
-        <a href="/admin/">⚙️ Admin</a>
-    </nav>
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
+
+    <header>
+        <h1>Projet Réservations</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'catalogue:artist_index' %}">Artistes</a></li>
+                {% if user.is_authenticated and user.is_staff %}
+                    {# Si l'utilisateur est connecté ET admin #}
+                    <li><a href="{% url 'admin:index' %}">Administration</a></li>
+                {% elif not user.is_authenticated %}
+                    {# Si l'utilisateur n'est pas connecté #}
+                    <li><a href="{% url 'admin:index' %}">Administration</a></li>
+                {% endif %}
+                
+                {% if user.is_authenticated %}
+                    <li>Bonjour, {{ user.username }} ! (<a href="{% url 'admin:logout' %}">Déconnexion</a>)</li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 - Projet Réservations Django 5</p>
+    </footer>
+
 </body>
 </html>
