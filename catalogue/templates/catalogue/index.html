@@ -1,16 +1,11 @@
-{% extends "catalogue/base.html" %}
-
-{% block title %}Liste des Artistes{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-    <h1>🎭 Nos Artistes</h1>
-    <div class="list-container">
-        {% for artist in artists %}
-            <div style="padding: 10px; border-bottom: 1px solid #eee;">
-                <strong>{{ artist.firstname }}</strong> {{ artist.lastname }}
-            </div>
-        {% empty %}
-            <p>Aucun artiste enregistré.</p>
-        {% endfor %}
-    </div>
+<h1>Liste des artistes</h1>
+<ul>
+    {% for artist in artists %}
+    <li>{{ artist.firstname }} {{ artist.lastname }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'catalogue:welcome' %}">Retour à l'accueil</a>
 {% endblock %}

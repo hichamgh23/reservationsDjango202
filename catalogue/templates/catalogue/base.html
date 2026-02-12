@@ -1,51 +1,16 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Projet Réservations{% endblock %}</title>
-    
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-
-    <header>
-    <div class="container">
-        <h1>Projet Réservations</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'catalogue:artist_index' %}">Artistes</a></li>
-                <li><a href="{% url 'catalogue:show_index' %}">Spectacles</a></li>
-
-                {# --- PARTIE AUTHENTIFICATION --- #}
-                {% if user.is_authenticated %}
-                    <li style="color: #ffcc00;">Bonjour, {{ user.first_name }}</li>
-                    <li>
-                        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">Se déconnecter</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">Se connecter</a></li>
-                    <li><a href="{% url 'signup' %}">S'inscrire</a></li>
-                {% endif %}
-                {# ------------------------------- #}
-            </ul>
-        </nav>
-    </div>
-</header>
-
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; {{ 2026 }} - Projet Réservations Django 5</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+<nav>
+    <ul style="display: flex; gap: 20px; list-style: none;">
+        <li><a href="{% url 'catalogue:welcome' %}">Accueil</a></li>
+        <li><a href="{% url 'catalogue:show_index' %}">Spectacles</a></li>
+        {% if user.is_authenticated %}
+            <li><strong>{{ user.username }}</strong></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}<button type="submit">Déconnexion</button>
+                </form>
+            </li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Connexion</a></li>
+        {% endif %}
+    </ul>
+</nav>

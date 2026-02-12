@@ -1,1 +1,21 @@
-<h1>Reservation confirmee !</h1><p>Votre place a bien ete enregistree pour ce spectacle.</p><a href="/shows/">Retour aux spectacles</a> 
+{% extends "base.html" %}
+{% block content %}
+<div style="max-width: 800px; margin: 40px auto; padding: 40px; background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 15px; text-align: center;">
+    <h1 style="color: #2e7d32;">✅ Réservation Confirmée !</h1>
+    <hr style="border-top: 1px solid #c8e6c9; margin: 20px 0;">
+    
+    <div style="text-align: left; background: white; padding: 20px; border-radius: 8px;">
+        <h3>Détails de votre commande :</h3>
+        <p><strong>Client :</strong> {{ user.first_name }} {{ user.last_name }} ({{ user.username }})</p>
+        <p><strong>Spectacle :</strong> {{ representation.show.title }}</p>
+        <p><strong>Lieu :</strong> {{ representation.location.designation }}</p>
+        <p><strong>Date :</strong> {{ representation.when|date:"d F Y à H:i" }}</p>
+        <p><strong>Places réservées :</strong> <span style="font-size: 1.2em; color: #2e7d32; font-weight: bold;">{{ places }}</span></p>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <p>Un email de confirmation a été envoyé à <strong>{{ user.email }}</strong>.</p>
+        <a href="{% url 'catalogue:show_index' %}" style="display: inline-block; padding: 12px 25px; background: #2c3e50; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;">Retour au catalogue</a>
+    </div>
+</div>
+{% endblock %}

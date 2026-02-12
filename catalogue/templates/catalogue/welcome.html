@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - Projet Réservations{% endblock %}
+
+{% block content %}
+<div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px;">
+    
+    <div style="background: #2c3e50; color: white; padding: 60px 20px; text-align: center; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Bienvenue sur Projet Réservations</h1>
+        <p style="font-size: 1.2rem; opacity: 0.9;">La plateforme officielle de gestion et réservation de spectacles.</p>
+        
+        <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px; display: inline-block;">
+            {% if user.is_authenticated %}
+                <h2 style="color: #f1c40f; margin-bottom: 10px;">👤 Profil Client</h2>
+                <p style="font-size: 1.1rem;">Ravi de vous revoir, <strong>{{ user.first_name|default:user.username }}</strong> !</p>
+                <div style="margin-top: 20px;">
+                    <a href="{% url 'catalogue:show_index' %}" style="background: #27ae60; color: white; padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: bold; transition: 0.3s;">
+                        🎟️ Voir le catalogue et réserver
+                    </a>
+                </div>
+            {% else %}
+                <h2 style="margin-bottom: 15px;">Prêt à réserver vos places ?</h2>
+                <p>Connectez-vous pour accéder aux spectacles disponibles.</p>
+                <div style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
+                    <a href="{% url 'login' %}" style="background: #3498db; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Se connecter</a>
+                    
+                    <a href="{% url 'catalogue:signup' %}" style="background: #95a5a6; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold;">Créer un compte</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div style="margin-top: 40px;">
+        <h2 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">🎭 À l'affiche</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+            {% for show in latest_shows %}
+                <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-top: 4px solid #3498db;">
+                    <h3 style="margin-top: 0;">{{ show.title }}</h3>
+                    <p style="color: #e67e22; font-weight: bold;">{{ show.price }} €</p>
+                    <a href="{% url 'catalogue:show_detail' show.id %}" style="color: #3498db; text-decoration: none; font-weight: bold;">Détails →</a>
+                </div>
+            {% empty %}
+                <p>Aucun spectacle disponible pour le moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

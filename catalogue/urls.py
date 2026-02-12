@@ -11,4 +11,5 @@ urlpatterns = [
     path('shows/<slug:slug>/representations/', views.show_representations, name='show_representations'),
     path('signup/', views.signup, name='signup'), 
     path('book/<int:representation_id>/', views.book_representation, name='book_representation'),
+   path('', views.welcome, name='welcome'),
 ]

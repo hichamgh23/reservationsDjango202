@@ -1,26 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Liste des Spectacles{% endblock %}
-
 {% block content %}
-    <h1>🎬 Nos Spectacles</h1>
-    <div class="list-container">
-        {% for show in shows %}
-            <div style="padding: 15px; margin-bottom: 20px; background: #fff; border-left: 5px solid #e74c3c; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                <h3>{{ show.title }}</h3>
-                <p><strong>Prix :</strong> {{ show.price }} €</p>
-                <p>{{ show.description }}</p>
-
-                {% if show.bookable %}
-                    <a href="{% url 'catalogue:show_representations' show.slug %}" class="btn btn-primary">
-                        Réserver
-                    </a>
-                {% else %}
-                    <span class="text-muted">Complet ou non réservable</span>
-                {% endif %}
-            </div>
-        {% empty %}
-            <p>Prochainement...</p>
-        {% endfor %}
+<h1>Tous les spectacles</h1>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+    {% for show in shows %}
+    <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+        <h3>{{ show.title }}</h3>
+        <p>Prix: {{ show.price }} €</p>
+        <a href="{% url 'catalogue:show_detail' show.id %}" style="color: blue;">En savoir plus</a>
     </div>
+    {% endfor %}
+</div>
 {% endblock %}

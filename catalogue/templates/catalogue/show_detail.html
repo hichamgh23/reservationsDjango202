@@ -1,46 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}{{ show.title }}{% endblock %}
-
 {% block content %}
-    <article>
-        <h1>{{ show.title }}</h1>
+<div style="max-width: 800px; margin: 0 auto;">
+    <h1>{{ show.title }}</h1>
+    <p><strong>Description :</strong> {{ show.description }}</p>
+    <p><strong>Prix :</strong> {{ show.price }} €</p>
 
-        <div style="display: flex; gap: 20px;">
-            {# Affichage de l'affiche si elle existe #}
-            {% if show.poster_url %}
-            <div class="show-poster">
-                <img src="{% static 'images/' %}{{ show.poster_url }}" alt="{{ show.title }}" style="max-width: 300px; border-radius: 8px;">
+    <h2 style="margin-top: 30px;">Prochaines représentations</h2>
+    <ul style="list-style: none; padding: 0;">
+        {% for representation in show.representations.all %}
+        <li style="background: #f4f4f4; margin-bottom: 10px; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>{{ representation.when|date:"d M Y à H:i" }}</strong> - 
+                <em>{{ representation.location.designation }}</em>
             </div>
-            {% endif %}
+            <a href="{% url 'catalogue:book_representation' representation.id %}" style="background: #27ae60; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Réserver</a>
+        </li>
+        {% empty %}
+        <li>Aucune représentation prévue pour le moment.</li>
+        {% endfor %}
+    </ul>
 
-            <div class="show-info">
-                <p><strong>Description :</strong> {{ show.description }}</p>
-                <p><strong>Prix :</strong> {{ show.price }} €</p>
-                
-                <p><strong>Lieu :</strong> 
-                    {% if show.location %}
-                        {{ show.location.designation }} 
-                        <br><small>{{ show.location.address }}, {{ show.location.locality.postal_code }} {{ show.location.locality.locality }}</small>
-                    {% else %}
-                        <em>Lieu non communiqué</em>
-                    {% endif %}
-                </p>
-
-                <h3>📅 Dates des représentations</h3>
-                <ul>
-                    {# Ici on utilise le related_name 'representations' défini dans ton models.py #}
-                    {% for representation in show.representations.all %}
-                        <li>{{ representation.when|date:"d F Y à H:i" }}</li>
-                    {% empty %}
-                        <li><em>Aucune représentation prévue pour le moment.</em></li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-
-        <p style="margin-top: 30px;">
-            <a href="{% url 'catalogue:show_index' %}" class="btn">⬅ Retour à la liste des spectacles</a>
-        </p>
-    </article>
+    <p style="margin-top: 20px;">
+        <a href="{% url 'catalogue:show_index' %}">← Retour au catalogue</a>
+    </p>
+</div>
 {% endblock %}

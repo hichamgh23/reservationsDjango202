@@ -1,65 +1,12 @@
 {% extends "base.html" %}
-
-{% block title %}Connexion - Projet Réservations{% endblock %}
-
 {% block content %}
-<div class="container" style="margin-top: 50px;">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-sm-8">
-            <div class="card border-info">
-                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                    <h3 class="card-title mb-0">Connexion</h3>
-                    <a href="#" class="text-white small">Récupérer votre mot de passe?</a>
-                </div>
-                
-                <div class="card-body" style="padding-top: 30px;">
-                    {# Message d'erreur si les identifiants sont faux #}
-                    {% if form.errors %}
-                        <div class="alert alert-danger">
-                            Votre login ou mot de passe est incorrect.
-                        </div>
-                    {% endif %}
-
-                    <form method="post" action="{% url 'login' %}" class="form-horizontal">
-                        {% csrf_token %}
-                        
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-user"></i></span>
-                            </div>
-                            <input type="text" name="username" class="form-control" placeholder="login ou email" required>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                            </div>
-                            <input type="password" name="password" class="form-control" placeholder="mot de passe" required>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                                <label class="form-check-label" for="remember">
-                                    Retenir mon login
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group mt-4">
-                            <button type="submit" class="btn btn-success btn-block">Se connecter</button>
-                        </div>
-
-                        <div class="mt-3 pt-3 border-top">
-                            <p class="small text-muted">
-                                Vous n'avez pas de compte ? 
-                                <a href="{% url 'signup' %}">Inscrivez-vous ici</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+    <h2>Connexion</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Se connecter</button>
+    </form>
+    <p style="margin-top: 15px;">Pas encore de compte ? <a href="{% url 'catalogue:signup' %}">Inscrivez-vous ici</a></p>
 </div>
 {% endblock %}
