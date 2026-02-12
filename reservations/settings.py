@@ -117,3 +117,4 @@ REST_FRAMEWORK = {
 # Configuration des redirections (Chapitre 10)
 LOGIN_REDIRECT_URL = '/'   # Redirige vers l'accueil après connexion
 LOGOUT_REDIRECT_URL = '/'  # Redirige vers l'accueil après déconnexion
+LOGIN_URL = 'login'

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}S'inscrire - Projet Réservations{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 50px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Créer un compte (Chapitre 10)</h3>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" action="{% url 'signup' %}" class="form-horizontal">
+                        {% csrf_token %}
+
+                        {# Affichage des erreurs générales #}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <div class="row">
+                            {# Login / Username #}
+                            <div class="col-md-12 mb-3">
+                                <label for="{{ form.username.id_for_label }}">Nom d'utilisateur (Login) :</label>
+                                {{ form.username }}
+                                {% if form.username.errors %}<span class="text-danger small">{{ form.username.errors }}</span>{% endif %}
+                            </div>
+
+                            {# Prénom #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}">Prénom :</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}<span class="text-danger small">{{ form.first_name.errors }}</span>{% endif %}
+                            </div>
+
+                            {# Nom #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}">Nom :</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}<span class="text-danger small">{{ form.last_name.errors }}</span>{% endif %}
+                            </div>
+
+                            {# Email #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}">Email :</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}<span class="text-danger small">{{ form.email.errors }}</span>{% endif %}
+                            </div>
+
+                            {# Langue (Exigence Roadmap) #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.language.id_for_label }}">Langue préférée :</label>
+                                {{ form.language }}
+                                {% if form.language.errors %}<span class="text-danger small">{{ form.language.errors }}</span>{% endif %}
+                            </div>
+
+                            {# Mot de passe #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password.id_for_label }}">Mot de passe :</label>
+                                {{ form.password }}
+                                {% if form.password.errors %}<span class="text-danger small">{{ form.password.errors }}</span>{% endif %}
+                            </div>
+
+                            {# Confirmation #}
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.password_confirm.id_for_label }}">Confirmer le mot de passe :</label>
+                                {{ form.password_confirm }}
+                                {% if form.password_confirm.errors %}<span class="text-danger small">{{ form.password_confirm.errors }}</span>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-4 text-center">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">S'inscrire</button>
+                        </div>
+
+                        <div class="mt-3 border-top pt-3 text-center">
+                            <p>Déjà un compte ? <a href="{% url 'login' %}">Connectez-vous ici</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Petit script pour ajouter les classes Bootstrap aux champs générés par Django #}
+<script>
+    document.querySelectorAll('input, select').forEach(function(el) {
+        el.classList.add('form-control');
+    });
+</script>
+{% endblock %}
