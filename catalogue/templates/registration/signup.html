@@ -1,13 +1,33 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div style="max-width: 500px; margin: 50px auto; padding: 30px; border: 1px solid #ddd; border-radius: 10px; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-    <h2 style="color: #2c3e50; text-align: center;">Créer un compte</h2>
-    <form method="post" style="margin-top: 20px;">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" style="width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">S'inscrire</button>
-    </form>
-    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-    <p style="text-align: center;">Déjà inscrit ? <a href="{% url 'login' %}" style="color: #3498db; text-decoration: none;">Connectez-vous ici</a></p>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="text-center mb-5">
+            <h2 class="font-weight-bold">Inscription</h2>
+            <p class="text-muted">Rejoignez la communauté PickShow</p>
+        </div>
+        
+        <form method="post" class="p-2">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group mb-3">
+                    <label class="small font-weight-bold text-uppercase">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="text-danger small">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary btn-block btn-lg shadow-sm mt-4">
+                Créer mon compte
+            </button>
+        </form>
+    </div>
 </div>
+
+<style>
+    input { width: 100%; padding: 12px 20px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
+</style>
 {% endblock %}

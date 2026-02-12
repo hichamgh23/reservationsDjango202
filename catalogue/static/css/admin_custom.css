@@ -1,0 +1,38 @@
+/* Barre de navigation supérieure */
+#header {
+    background: #1a1a1a !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #007bff !important;
+    height: 60px;
+}
+
+/* Titre principal */
+#branding h1 {
+    color: #007bff !important;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/* Boutons d'action (Enregistrer, etc.) */
+.button, input[type=submit] {
+    background: #007bff !important;
+    border-radius: 4px !important;
+    border: none !important;
+    transition: 0.3s;
+}
+
+.button:hover, input[type=submit]:hover {
+    background: #0056b3 !important;
+}
+
+/* Tableaux et Listes */
+.module {
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+/* Sidebar de navigation */
+#content-main {
+    padding: 20px;
+}

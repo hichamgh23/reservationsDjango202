@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,16 +6,19 @@
     <title>PickShow</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <style>
-        body { background-color: #f4f7f6; padding-top: 50px; }
-        .container { background: white; padding: 30px; border-radius: 10px; shadow: 0 0 10px rgba(0,0,0,0.1); }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .main-content { flex: 1; }
     </style>
 </head>
 <body>
+    {% include "includes/header.html" %}
 
-    <div class="container">
+    <div class="container main-content mt-4">
         {% block content %}
         {% endblock %}
     </div>
+
+    {% include "includes/footer.html" %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,28 +1,69 @@
 {% extends "base.html" %}
 
+{% block title %}{{ show.title }}{% endblock %}
+
 {% block content %}
-<div style="max-width: 800px; margin: 0 auto;">
-    <h1>{{ show.title }}</h1>
-    <p><strong>Description :</strong> {{ show.description }}</p>
-    <p><strong>Prix :</strong> {{ show.price }} €</p>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            {% if show.poster_url %}
+                <img src="{{ show.poster_url }}" class="img-fluid rounded shadow-sm" alt="{{ show.title }}">
+            {% else %}
+                <div class="bg-light border rounded text-center py-5 shadow-sm">
+                    <span class="text-muted">Image non disponible</span>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-8">
+            <h1 class="display-4 font-weight-bold">{{ show.title }}</h1>
+            
+            {% if show.description %}
+                <p class="lead text-secondary">{{ show.description }}</p>
+            {% endif %}
 
-    <h2 style="margin-top: 30px;">Prochaines représentations</h2>
-    <ul style="list-style: none; padding: 0;">
-        {% for representation in show.representations.all %}
-        <li style="background: #f4f4f4; margin-bottom: 10px; padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <strong>{{ representation.when|date:"d M Y à H:i" }}</strong> - 
-                <em>{{ representation.location.designation }}</em>
+            <div class="mb-4">
+                <span class="h3 text-primary">{{ show.price }} €</span>
             </div>
-            <a href="{% url 'catalogue:book_representation' representation.id %}" style="background: #27ae60; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px;">Réserver</a>
-        </li>
-        {% empty %}
-        <li>Aucune représentation prévue pour le moment.</li>
-        {% endfor %}
-    </ul>
+            
+            <hr class="my-4">
+            
+            <h3 class="h4 mb-3">Prochaines représentations</h3>
+            
+            <div class="list-group shadow-sm">
+                {% if show.representations.all %}
+                    {% for representation in show.representations.all %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge badge-primary mr-2 p-2">{{ representation.when|date:"d M Y" }}</span>
+                            <span class="font-weight-bold">{{ representation.when|date:"H:i" }}</span> - 
+                            <span class="text-muted">{{ representation.location.designation }}</span>
+                        </div>
+                        
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'catalogue:book_representation' representation.id %}" class="btn btn-success btn-sm px-4 shadow-sm">
+                                Réserver
+                            </a>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-sm">
+                                Connexion requise
+                            </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-light border">
+                        Aucune date de représentation n'est prévue pour ce spectacle pour le moment.
+                    </div>
+                {% endif %}
+            </div>
 
-    <p style="margin-top: 20px;">
-        <a href="{% url 'catalogue:show_index' %}">← Retour au catalogue</a>
-    </p>
+            <div class="mt-4">
+                <a href="{% url 'catalogue:show_index' %}" class="btn btn-link p-0 text-muted">
+                    &larr; Retour au catalogue
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

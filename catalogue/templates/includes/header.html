@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="/"><strong>PICKSHOW</strong></a>
+    
+    <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link" href="{% url 'catalogue:show_index' %}">Spectacles</a>
+        
+        {% if user.is_authenticated %}
+            <span class="nav-item nav-link text-info">Salut, {{ user.username }}</span>
+            <form action="{% url 'logout' %}" method="post" class="form-inline ml-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-light btn-sm">Déconnexion</button>
+            </form>
+        {% else %}
+            <a class="nav-item nav-link" href="{% url 'login' %}">Connexion</a>
+            <a class="nav-item nav-link btn btn-primary btn-sm text-white ml-2" href="{% url 'signup' %}">Inscription</a>
+        {% endif %}
+    </div>
+  </div>
+</nav>

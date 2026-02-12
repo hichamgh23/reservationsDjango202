@@ -1,16 +1,40 @@
 {% extends "base.html" %}
+
+{% block title %}Réserver - {{ representation.show.title }}{% endblock %}
+
 {% block content %}
-<div style="max-width: 600px; margin: 50px auto; padding: 30px; border: 1px solid #3498db; border-radius: 10px;">
-    <h2>Réserver pour : {{ representation.show.title }}</h2>
-    <p>Le {{ representation.when|date:"d/m/Y à H:i" }} au {{ representation.location.designation }}</p>
-    
-    <form method="post" action="{% url 'catalogue:book_representation' representation.id %}">
-        {% csrf_token %}
-        <div style="margin: 20px 0;">
-            <label for="places">Nombre de places :</label>
-            <input type="number" name="places" id="places" value="1" min="1" max="10" style="padding: 10px; width: 60px;">
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Réserver vos places</h2>
+            </div>
+            <div class="card-body">
+                <h3 class="h5">{{ representation.show.title }}</h3>
+                <p class="text-muted">
+                    <strong>Lieu :</strong> {{ representation.location.designation }}<br>
+                    <strong>Date :</strong> {{ representation.when|date:"d/m/Y H:i" }}
+                </p>
+
+                <hr>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="places"><strong>Nombre de places à réserver :</strong></label>
+                        <input type="number" name="places" id="places" class="form-control col-md-3" 
+                               value="1" min="1" max="10" required>
+                        <small class="form-text text-muted">Maximum 10 places par réservation.</small>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">Confirmer la réservation</button>
+                        <a href="{% url 'catalogue:show_detail' representation.show.id %}" class="btn btn-outline-secondary btn-lg">Annuler</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <button type="submit" style="padding: 12px 25px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Confirmer la réservation</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

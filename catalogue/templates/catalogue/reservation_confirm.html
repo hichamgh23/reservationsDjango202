@@ -1,21 +1,19 @@
 {% extends "base.html" %}
-{% block content %}
-<div style="max-width: 800px; margin: 40px auto; padding: 40px; background: #e8f5e9; border: 2px solid #2e7d32; border-radius: 15px; text-align: center;">
-    <h1 style="color: #2e7d32;">✅ Réservation Confirmée !</h1>
-    <hr style="border-top: 1px solid #c8e6c9; margin: 20px 0;">
-    
-    <div style="text-align: left; background: white; padding: 20px; border-radius: 8px;">
-        <h3>Détails de votre commande :</h3>
-        <p><strong>Client :</strong> {{ user.first_name }} {{ user.last_name }} ({{ user.username }})</p>
-        <p><strong>Spectacle :</strong> {{ representation.show.title }}</p>
-        <p><strong>Lieu :</strong> {{ representation.location.designation }}</p>
-        <p><strong>Date :</strong> {{ representation.when|date:"d F Y à H:i" }}</p>
-        <p><strong>Places réservées :</strong> <span style="font-size: 1.2em; color: #2e7d32; font-weight: bold;">{{ places }}</span></p>
-    </div>
 
-    <div style="margin-top: 30px;">
-        <p>Un email de confirmation a été envoyé à <strong>{{ user.email }}</strong>.</p>
-        <a href="{% url 'catalogue:show_index' %}" style="display: inline-block; padding: 12px 25px; background: #2c3e50; color: white; text-decoration: none; border-radius: 5px; margin-top: 10px;">Retour au catalogue</a>
+{% block content %}
+<div class="text-center py-5">
+    <div class="mb-4">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+    </div>
+    <h2 class="font-weight-bold">Réservation confirmée !</h2>
+    <p class="text-muted lead mt-3">Merci <strong>{{ user.username }}</strong>, votre commande pour le spectacle <strong>{{ show.title }}</strong> est bien enregistrée.</p>
+    
+    <div class="mt-5">
+        <a href="{% url 'catalogue:show_index' %}" class="btn btn-outline-secondary mr-3">Retour au catalogue</a>
+        <a href="/" class="btn btn-primary">Accueil</a>
     </div>
 </div>
 {% endblock %}

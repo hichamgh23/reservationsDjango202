@@ -1,14 +1,43 @@
 {% extends "base.html" %}
 
+{% block title %}Nos Spectacles{% endblock %}
+
 {% block content %}
-<h1>Tous les spectacles</h1>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-    {% for show in shows %}
-    <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
-        <h3>{{ show.title }}</h3>
-        <p>Prix: {{ show.price }} €</p>
-        <a href="{% url 'catalogue:show_detail' show.id %}" style="color: blue;">En savoir plus</a>
+<div class="container mt-5">
+    <h1 class="mb-4 font-weight-bold">Catalogue des spectacles</h1>
+    
+    <div class="row">
+        {% for show in shows %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                {% if show.poster_url %}
+                    <img src="{{ show.poster_url }}" class="card-img-top" alt="{{ show.title }}" style="height: 250px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light text-center py-5 border-bottom" style="height: 250px;">
+                        <span class="text-muted">Image non disponible</span>
+                    </div>
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title text-primary font-weight-bold">{{ show.title }}</h5>
+                    <p class="card-text text-muted" style="height: 50px; overflow: hidden;">{{ show.description }}</p>
+                    <p class="font-weight-bold h5 text-dark">{{ show.price }} €</p>
+                </div>
+
+                <div class="card-footer bg-white border-0 pb-3">
+                    <a href="{% url 'catalogue:show_detail' show.id %}" class="btn btn-block btn-primary shadow-sm">
+                        Voir les détails
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                Aucun spectacle n'a été trouvé dans la base de données.
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

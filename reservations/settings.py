@@ -38,10 +38,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'reservations.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [], # Les templates sont cherchés dans les dossiers "templates" des apps
+        'DIRS': [BASE_DIR / 'templates'],  # Syntaxe moderne et robuste
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

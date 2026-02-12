@@ -1,67 +1,41 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Artist, Show, Representation
-from .forms import SignUpForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from .models import Show, Representation, Reservation
 
-# --- PAGE D'ACCUEIL ---
+# 1. Page d'accueil
 def welcome(request):
-    """Affiche la page d'accueil avec les 3 derniers spectacles."""
-    latest_shows = Show.objects.all().order_by('-id')[:3]
-    return render(request, 'catalogue/welcome.html', {
-        'latest_shows': latest_shows
-    })
+    return render(request, 'catalogue/welcome.html', {'user': request.user})
 
-# --- ARTISTES ---
-def index(request):
-    artists = Artist.objects.all()
-    return render(request, 'catalogue/index.html', {'artists': artists, 'resource': 'artistes'})
-
-# --- SPECTACLES ---
-def show_index(request):
-    shows = Show.objects.all()
-    return render(request, 'catalogue/show_index.html', {'shows': shows})
-
-def show_detail(request, show_id):
-    show = get_object_or_404(Show, pk=show_id)
-    return render(request, 'catalogue/show_detail.html', {'show': show})
-
-def show_representations(request, slug):
-    show = get_object_or_404(Show, slug=slug)
-    representations = show.representations.all()
-    return render(request, 'catalogue/show_representations.html', {
-        'show': show,
-        'representations': representations
-    })
-
-# --- AUTHENTIFICATION ---
+# 2. Inscription (Scénario nominal Source 36)
 def signup(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password']) # Hashage du mot de passe
-            user.save()
-            return redirect('login') 
+            form.save() # Hashage et enregistrement auto [cite: 36]
+            messages.success(request, "Inscription réussie !")
+            return redirect('login')
     else:
-        form = SignUpForm()
+        form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-# --- RÉSERVATION ---
+# 3. Catalogue des spectacles (Source 180)
+def show_index(request):
+    shows = Show.objects.all().order_by('title')
+    return render(request, 'catalogue/show_index.html', {'shows': shows, 'titre': 'Catalogue'})
+
+# 4. Détail du spectacle (Source 10)
+def show_detail(request, show_id):
+    show = get_object_or_404(Show, id=show_id)
+    return render(request, 'catalogue/show_detail.html', {'show': show})
+
+# 5. Réservation (Chapitre 10)
 @login_required
 def book_representation(request, representation_id):
-    representation = get_object_or_404(Representation, pk=representation_id)
-    
+    representation = get_object_or_404(Representation, id=representation_id)
     if request.method == 'POST':
-        # On récupère le nombre de places depuis le formulaire
-        places = request.POST.get('places', 1)
-        
-        # On renvoie vers la page de confirmation
-        return render(request, 'catalogue/reservation_confirm.html', {
-            'representation': representation,
-            'places': places,
-            'user': request.user
-        })
-    
-    # Formulaire de choix du nombre de places
+        nb_places = int(request.POST.get('places', 1))
+        Reservation.objects.create(user=request.user, representation=representation, places=nb_places) # [cite: 9]
+        return render(request, 'catalogue/reservation_confirm.html', {'representation': representation, 'places': nb_places})
     return render(request, 'catalogue/book.html', {'representation': representation})
