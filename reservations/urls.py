@@ -22,6 +22,8 @@ from django.conf.urls.static import static # AJOUT
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('catalogue.urls')),
+    path('accounts/', include('django.contrib.auth.urls')), # Gère Login/Logout
+    path('signup/', catalogue_views.signup, name='signup'),
 ]
 
 # AJOUT pour servir les images en mode développement

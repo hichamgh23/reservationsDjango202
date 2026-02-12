@@ -3,6 +3,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Artist, Show, Representation, Reservation
 from .forms import RegistrationForm
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from .forms import SignUpForm
+
 # --- ARTISTES ---
 
 def index(request):
@@ -68,3 +72,16 @@ def book_representation(request, representation_id):
     return render(request, 'catalogue/book_places.html', {
         'representation': representation
     })
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password']) # Hashage du mot de passe 
+            user.save()
+            return redirect('login') # Redirection vers la connexion 
+    else:
+        form = SignUpForm()
+    return render(request, 'registration/signup.html', {'form': form})
