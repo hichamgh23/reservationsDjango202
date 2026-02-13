@@ -1,19 +1,61 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Confirmation - {{ representation.show.title }}{% endblock %}
 
 {% block content %}
-<div class="text-center py-5">
-    <div class="mb-4">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-    </div>
-    <h2 class="font-weight-bold">Réservation confirmée !</h2>
-    <p class="text-muted lead mt-3">Merci <strong>{{ user.username }}</strong>, votre commande pour le spectacle <strong>{{ show.title }}</strong> est bien enregistrée.</p>
-    
-    <div class="mt-5">
-        <a href="{% url 'catalogue:show_index' %}" class="btn btn-outline-secondary mr-3">Retour au catalogue</a>
-        <a href="/" class="btn btn-primary">Accueil</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white text-center py-4">
+                    <h2 class="mb-0"><i class="fa fa-check-circle"></i> Commande enregistrée</h2>
+                </div>
+                <div class="card-body p-5">
+                    <h4 class="text-muted mb-4">Récapitulatif de votre réservation</h4>
+                    
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-uppercase small text-muted">Spectacle</p>
+                            <h5>{{ representation.show.title }}</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-1 text-uppercase small text-muted">Date et Heure</p>
+                            <h5>{{ representation.when|date:"d F Y à H:i" }}</h5>
+                        </div>
+                    </div>
+
+                    <table class="table table-borderless bg-light rounded">
+                        <tbody>
+                            <tr>
+                                <td>Places ({{ places }})</td>
+                                <td class="text-right">{{ total_places }} €</td>
+                            </tr>
+                            <tr>
+                                <td>Frais de dossier</td>
+                                <td class="text-right">{{ admin_fees }} €</td>
+                            </tr>
+                            <tr class="border-top">
+                                <td class="font-weight-bold">MONTANT TOTAL PAYÉ</td>
+                                <td class="text-right font-weight-bold text-success" style="font-size: 1.4em;">
+                                    {{ total_final }} €
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-info mt-4">
+                        <i class="fa fa-info-circle"></i> Un ticket électronique a été généré pour votre compte.
+                    </div>
+
+                    <div class="text-center mt-5">
+                        <a href="{% url 'catalogue:show_index' %}" class="btn btn-primary btn-lg px-5">
+                            Retour au catalogue
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

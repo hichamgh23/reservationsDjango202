@@ -18,4 +18,5 @@ urlpatterns = [
 
     # Processus de réservation (Le nom utilisé dans le HTML ci-dessus)
     path('book/<int:representation_id>/', views.book_representation, name='book_representation'),
+    path('profile/', views.profile, name='profile'),
 ]

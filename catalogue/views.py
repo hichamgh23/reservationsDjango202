@@ -6,9 +6,9 @@ from decimal import Decimal
 from django.db.models import Sum
 from .models import Show, Representation, Reservation
 
-# 1. Page d'accueil
+# 1. Accueil
 def welcome(request):
-    return render(request, 'catalogue/welcome.html', {'user': request.user})
+    return render(request, 'catalogue/welcome.html')
 
 # 2. Inscription
 def signup(request):
@@ -22,69 +22,50 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-# 3. Catalogue des spectacles
+# 3. Liste des spectacles
 def show_index(request):
     shows = Show.objects.all().order_by('title')
-    return render(request, 'catalogue/show_index.html', {'shows': shows, 'titre': 'Liste des spectacles'})
+    return render(request, 'catalogue/show_index.html', {'shows': shows})
 
-# 4. Détail du spectacle
+# 4. Détail du spectacle (C'est celle-ci qui manquait dans ton erreur !)
 def show_detail(request, show_id):
     show = get_object_or_404(Show, id=show_id)
     return render(request, 'catalogue/show_detail.html', {'show': show})
 
-# 5. Réservation (Logique de stock 100% conforme Source 306)
+# 5. Réservation sécurisée (Source 306)
 @login_required
 def book_representation(request, representation_id):
     representation = get_object_or_404(Representation, id=representation_id)
     admin_fees = Decimal('2.00')
     
-    # Calcul des places déjà réservées
-    reserved_seats = Reservation.objects.filter(representation=representation).aggregate(Sum('places'))['places__sum'] or 0
-    
-    # Capacité totale du lieu
+    reserved = Reservation.objects.filter(representation=representation).aggregate(Sum('places'))['places__sum'] or 0
     capacity = representation.location.capacity if representation.location else 0
-    
-    # Calcul places restantes (on bloque à 0 minimum)
-    remaining_seats = max(0, capacity - reserved_seats)
+    remaining = max(0, capacity - reserved)
 
     if request.method == 'POST':
         try:
             places = int(request.POST.get('places', 1))
-            
-            # Vérification stricte du stock
-            if remaining_seats <= 0:
-                messages.error(request, "Désolé, cette séance est complète.")
+            if places > remaining or places < 1:
+                messages.error(request, f"Erreur : {remaining} places restantes.")
                 return redirect('catalogue:show_detail', show_id=representation.show.id)
-                
-            if places > remaining_seats:
-                messages.error(request, f"Désolé, il ne reste que {remaining_seats} places.")
-                return redirect('catalogue:show_detail', show_id=representation.show.id)
-
-            if places < 1:
-                raise ValueError
             
-            # Enregistrement en base de données
-            Reservation.objects.create(
-                user=request.user, 
-                representation=representation, 
-                places=places
-            )
+            Reservation.objects.create(user=request.user, representation=representation, places=places)
             
-            # Calculs pour la confirmation
             total_places = representation.show.price * places
-            total_final = total_places + admin_fees
-            
             return render(request, 'catalogue/reservation_confirm.html', {
                 'representation': representation,
                 'places': places,
                 'total_places': total_places,
                 'admin_fees': admin_fees,
-                'total_final': total_final
+                'total_final': total_places + admin_fees
             })
         except ValueError:
-            messages.error(request, "Veuillez entrer un nombre de places valide.")
+            return redirect('catalogue:show_detail', show_id=representation.show.id)
             
-    return render(request, 'catalogue/book.html', {
-        'representation': representation,
-        'remaining_seats': remaining_seats
-    })
+    return render(request, 'catalogue/book.html', {'representation': representation, 'remaining_seats': remaining})
+
+# 6. Profil & Historique (Source 21 & 40)
+@login_required
+def profile(request):
+    reservations = Reservation.objects.filter(user=request.user).select_related('representation__show').order_by('-id')
+    return render(request, 'catalogue/profile.html', {'reservations': reservations})

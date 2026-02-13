@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Profil de {{ user.username }}</h2>
+    <hr>
+    <h3>Mes Réservations</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Spectacle</th>
+                <th>Date</th>
+                <th>Places</th>
+                <th>Prix Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for res in reservations %}
+            <tr>
+                <td>{{ res.representation.show.title }}</td>
+                <td>{{ res.representation.when|date:"d/m/Y H:i" }}</td>
+                <td>{{ res.places }}</td>
+                <td>{{ res.places|add:"0" }} x {{ res.representation.show.price }} € + 2,00 €</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">Aucune réservation.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
