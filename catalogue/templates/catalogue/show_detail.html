@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ show.title }}{% endblock %}
 
@@ -7,62 +8,65 @@
     <div class="row">
         <div class="col-md-4">
             {% if show.poster_url %}
-                <img src="{{ show.poster_url }}" class="img-fluid rounded shadow-sm" alt="{{ show.title }}">
+                <img src="{{ show.poster_url }}" class="img-fluid rounded shadow" alt="{{ show.title }}">
             {% else %}
-                <div class="bg-light border rounded text-center py-5 shadow-sm">
-                    <span class="text-muted">Image non disponible</span>
-                </div>
+                <img src="{% static 'images/default_poster.jpg' %}" class="img-fluid rounded shadow" alt="Image par défaut">
             {% endif %}
+            
+            <div class="mt-3 text-center">
+                <h3 class="text-primary">{{ show.price }} €</h3>
+                <p class="text-muted">Prix par place</p>
+            </div>
         </div>
-        
+
         <div class="col-md-8">
-            <h1 class="display-4 font-weight-bold">{{ show.title }}</h1>
-            
-            {% if show.description %}
-                <p class="lead text-secondary">{{ show.description }}</p>
-            {% endif %}
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'catalogue:show_index' %}">Catalogue</a></li>
+                    <li class="breadcrumb-item active">{{ show.title }}</li>
+                </ol>
+            </nav>
 
-            <div class="mb-4">
-                <span class="h3 text-primary">{{ show.price }} €</span>
-            </div>
-            
-            <hr class="my-4">
-            
-            <h3 class="h4 mb-3">Prochaines représentations</h3>
-            
-            <div class="list-group shadow-sm">
-                {% if show.representations.all %}
+            <h1>{{ show.title }}</h1>
+            <p class="lead text-justify">{{ show.description }}</p>
+
+            <hr>
+
+            <h3 class="mb-4">Les dates</h3>
+            <table class="table table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Heure</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for representation in show.representations.all %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <span class="badge badge-primary mr-2 p-2">{{ representation.when|date:"d M Y" }}</span>
-                            <span class="font-weight-bold">{{ representation.when|date:"H:i" }}</span> - 
-                            <span class="text-muted">{{ representation.location.designation }}</span>
-                        </div>
-                        
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'catalogue:book_representation' representation.id %}" class="btn btn-success btn-sm px-4 shadow-sm">
-                                Réserver
-                            </a>
-                        {% else %}
-                            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-sm">
-                                Connexion requise
-                            </a>
-                        {% endif %}
-                    </div>
+                    <tr>
+                        <td>{{ representation.when|date:"l d F Y" }}</td>
+                        <td>{{ representation.when|date:"H:i" }}</td>
+                        <td>
+                            {% if show.bookable %}
+                                <a href="{% url 'catalogue:book_representation' representation.id %}" class="btn btn-danger btn-sm">
+                                    Réserver
+                                </a>
+                            {% else %}
+                                <span class="badge badge-secondary">Non réservable</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">Aucune date prévue pour le moment.</td>
+                    </tr>
                     {% endfor %}
-                {% else %}
-                    <div class="alert alert-light border">
-                        Aucune date de représentation n'est prévue pour ce spectacle pour le moment.
-                    </div>
-                {% endif %}
-            </div>
+                </tbody>
+            </table>
 
-            <div class="mt-4">
-                <a href="{% url 'catalogue:show_index' %}" class="btn btn-link p-0 text-muted">
-                    &larr; Retour au catalogue
-                </a>
-            </div>
+            <a href="{% url 'catalogue:show_index' %}" class="btn btn-outline-secondary mt-3">
+                <i class="fa fa-arrow-left"></i> Retour au catalogue
+            </a>
         </div>
     </div>
 </div>

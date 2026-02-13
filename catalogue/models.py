@@ -43,7 +43,7 @@ class Role(models.Model):
     def __str__(self):
         return self.role
 
-# 5. Lieux (Locations) (Source 320)
+# 5. Lieux (Locations) (Source 306, 320)
 class Location(models.Model):
     slug = models.SlugField(max_length=60, unique=True)
     designation = models.CharField(max_length=60)
@@ -51,6 +51,8 @@ class Location(models.Model):
     locality = models.ForeignKey(Locality, on_delete=models.SET_NULL, null=True, related_name='locations')
     website = models.URLField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=30, null=True, blank=True)
+    # AJOUT OBLIGATOIRE POUR LE STOCK (Source 306)
+    capacity = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = "locations"
@@ -85,15 +87,6 @@ class Show(models.Model):
     def __str__(self):
         return self.title
 
-    def get_authors(self):
-        """Récupère les artistes de type 'scénographe' (Source 335, 354)"""
-        authors = []
-        # On utilise une chaîne de caractères 'ArtistTypeShow' pour éviter l'erreur d'ordre
-        for collaboration in ArtistTypeShow.objects.filter(show=self):
-            if collaboration.artist_type.type.type.lower() == "scénographe":
-                authors.append(collaboration.artist_type.artist)
-        return authors
-
 # 8. ArtistTypeShow (Lien final)
 class ArtistTypeShow(models.Model):
     artist_type = models.ForeignKey(ArtistType, on_delete=models.CASCADE)
@@ -117,7 +110,7 @@ class Representation(models.Model):
     def __str__(self):
         return f"{self.show.title} - {self.when}"
 
-# 10. Réservations (Source 8, 9)
+# 10. Réservations (Source 8, 9, 16)
 class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
     representation = models.ForeignKey(Representation, on_delete=models.CASCADE, related_name='reservations')
@@ -127,4 +120,4 @@ class Reservation(models.Model):
         db_table = "reservations"
 
     def __str__(self):
-        return f"Réservation de {self.user.username}"
+        return f"Réservation de {self.user.username} pour {self.representation.show.title}"
