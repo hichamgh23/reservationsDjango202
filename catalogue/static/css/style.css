@@ -1,0 +1,32 @@
+/* --- HEADER (Source 527-535) --- */
+header a#login {
+    margin-right: 10px;
+    background-color: lightgreen;
+    border-color: green;
+    color: darkgreen;
+}
+
+header form#frmSearch {
+    margin-right: 30px;
+}
+
+/* --- FOOTER (Source 536-540) --- */
+footer {
+    border-top: 1px solid #dee2e6 !important;
+    padding: 20px 15px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* --- CONTENT AREA (Source 447) --- */
+#page-content-wrapper {
+    margin: 1em auto;
+    max-width: 1200px;
+    width: 95%;
+    font: 14px/1.5 sans-serif;
+}
+
+#wrapper {
+    display: flex;
+    align-items: stretch;
+}

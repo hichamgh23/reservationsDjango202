@@ -1,0 +1,40 @@
+<nav class="navbar navbar-dark bg-dark sidebar navbar-expand-md" role="navigation">
+    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        &#x2630;
+    </button>
+    
+    <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+        <ul class="nav navbar-nav flex-column">
+            <li class="nav-item" style="color: white; background-color: darkred; font-weight: bold; text-align: center; font-size: 1.2em; width: 100%;">
+                <span>Menu</span>
+            </li>
+            
+            <li class="active nav-item" style="width: 100%; border-bottom: 1px #e5e5e5 solid;">
+                <a href="{% url 'catalogue:show_index' %}" class="nav-link text-white">
+                    Accueil <span style="font-size:16px;" class="float-right fa fa-home"></span>
+                </a>
+            </li>
+            
+            <li class="nav-item" style="width: 100%; border-bottom: 1px #e5e5e5 solid;">
+                <a href="#" class="nav-link text-white">
+                    Prochains spectacles <span style="font-size:16px;" class="float-right fa fa-th-list"></span>
+                </a>
+            </li>
+            
+            {% if user.is_staff %}
+            <li class="nav-item" style="width: 100%; border-bottom: 1px #e5e5e5 solid;">
+                <a href="/admin/" class="nav-link text-white">
+                    Administration <span style="font-size:16px;" class="float-right fa fa-lock"></span>
+                </a>
+            </li>
+            {% endif %}
+            
+            <li class="nav-item" style="width: 100%; border-bottom: 1px #e5e5e5 solid;">
+                <a href="#" class="nav-link text-white">
+                    Contact <span style="font-size:16px;" class="float-right fa fa-copyright"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

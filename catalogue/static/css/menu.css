@@ -1,0 +1,58 @@
+/* --- STRUCTURE DE BASE (Source 571-582) --- */
+body, html {
+    height: 100%;
+}
+
+nav.sidebar.navbar {
+    border-radius: 0px; /* Pas d'arrondis (Source 581) */
+}
+
+nav.sidebar, .main {
+    -webkit-transition: margin 200ms ease-out;
+    -moz-transition: margin 200ms ease-out;
+    -o-transition: margin 200ms ease-out;
+    transition: margin 200ms ease-out; /* Animation fluide (Source 587) */
+}
+
+/* --- LOGIQUE DU MENU ESCAMOTABLE (Source 649-664) --- */
+@media (min-width: 768px) {
+    nav.sidebar {
+        width: 200px;
+        height: 100%;
+        margin-left: -160px; /* Cache le menu de 160px (Source 652) */
+        float: left;
+        z-index: 8000;
+        margin-bottom: 0px;
+    }
+
+    /* Déplace le menu vers la droite au survol (Source 662) */
+    nav.sidebar:hover {
+        margin-left: 0px;
+    }
+
+    /* Empêche le contenu de se superposer (Source 600) */
+    #page-content-wrapper {
+        margin-left: 40px; 
+    }
+}
+
+/* --- STYLE DES LIENS ET BORDURES (Source 618-628) --- */
+nav.sidebar a {
+    padding-right: 13px;
+    color: white;
+}
+
+nav.sidebar .navbar-nav > li {
+    border-bottom: 1px #e5e5e5 solid; /* Ligne de séparation (Source 628) */
+    width: 100%;
+}
+
+/* --- TITRE DU MENU EN ROUGE (Source 701-707) --- */
+nav.navbar ul.navbar-nav li:nth-child(1) {
+    color: white !important;
+    background-color: darkred !important; /* Rouge foncé (Source 703) */
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 10px 0;
+}

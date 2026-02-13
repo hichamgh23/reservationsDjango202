@@ -1,43 +1,74 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Nos Spectacles{% endblock %}
+{% block title %}Liste des spectacles{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css"/>
+
+<style>
+    #page-content-wrapper { margin: 1em auto; max-width: 1000px; width: 95%; font: 14px/1.5 sans-serif; }
+    .wrapper { padding: 20px; }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4 font-weight-bold">Catalogue des spectacles</h1>
-    
-    <div class="row">
-        {% for show in shows %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-0">
-                {% if show.poster_url %}
-                    <img src="{{ show.poster_url }}" class="card-img-top" alt="{{ show.title }}" style="height: 250px; object-fit: cover;">
-                {% else %}
-                    <div class="bg-light text-center py-5 border-bottom" style="height: 250px;">
-                        <span class="text-muted">Image non disponible</span>
-                    </div>
-                {% endif %}
+<div class="wrapper">
+    <h2 class="mb-4">Liste des spectacles</h2>
 
-                <div class="card-body">
-                    <h5 class="card-title text-primary font-weight-bold">{{ show.title }}</h5>
-                    <p class="card-text text-muted" style="height: 50px; overflow: hidden;">{{ show.description }}</p>
-                    <p class="font-weight-bold h5 text-dark">{{ show.price }} €</p>
-                </div>
-
-                <div class="card-footer bg-white border-0 pb-3">
-                    <a href="{% url 'catalogue:show_detail' show.id %}" class="btn btn-block btn-primary shadow-sm">
-                        Voir les détails
+    <table id="table_shows" class="display table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Lieu</th>
+                <th>Représentations</th>
+                <th>Prix</th>
+                <th>Réservable</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for show in shows %}
+            <tr>
+                <td>
+                    <a href="{% url 'catalogue:show_detail' show.id %}">
+                        {{ show.title|title }}
                     </a>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="col-12">
-            <div class="alert alert-warning text-center">
-                Aucun spectacle n'a été trouvé dans la base de données.
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+                </td>
+                <td>{{ show.location.designation }}</td>
+                <td>{{ show.representations.count }}</td>
+                <td>{{ show.price }} &nbsp;&euro;</td>
+                <td>
+                    {% if show.bookable %}
+                        <span class="badge badge-success">Oui</span>
+                    {% else %}
+                        <span class="badge badge-danger">Non</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p class="mt-3 text-muted">Total: {{ shows|length }} spectacles.</p>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.2/js/dataTables.responsive.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#table_shows').DataTable({
+            "responsive": true,
+            "pageLength": 10,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/French.json"
+            }
+        });
+    });
+</script>
 {% endblock %}
