@@ -7,42 +7,59 @@
     <title>{% block title %}PickShow{% endblock %}</title>
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
-    
-    {% block stylesheets %}{% endblock %}
+    <style>
+        body { background-color: #f4f6f9; overflow-x: hidden; }
+        
+        /* Conteneur principal en Flexbox */
+        #wrapper {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* La zone de contenu (Header + Pages) */
+        #main-content {
+            flex-grow: 1;
+            margin-left: 65px; /* Largeur du menu fermé */
+            transition: margin-left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* On pousse le contenu quand le menu est ouvert (optionnel) */
+        #wrapper:has(.sidebar-hover:hover) #main-content {
+            margin-left: 220px;
+        }
+    </style>
 </head>
 <body>
 
-    {% include 'includes/header.html' %}
-
-    <div id="wrapper" class="d-flex">
+    <div id="wrapper">
         {% include 'includes/menu.html' %}
-        
-        <div id="page-content-wrapper" class="container-fluid">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mt-3" role="alert">
-                        {{ message }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
 
-            {% block content %}{% endblock %}
+        <div id="main-content">
+            {% include 'includes/header.html' %}
+
+            <div class="container-fluid py-4">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </div>
+
+            {% include 'includes/footer.html' %}
         </div>
     </div>
 
-    {% include 'includes/footer.html' %}
-
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    
-    {% block javascripts %}{% endblock %}
 </body>
 </html>

@@ -1,40 +1,96 @@
-<nav class="collapse" id="menu-interne" style="background: #f8f9fa; border-right: 1px solid #ccc; width: 220px; min-height: 100vh; padding: 15px;">
-    <ul style="list-style: none; padding: 0;">
-        <li style="margin-bottom: 15px;">
-            <a href="{% url 'catalogue:welcome' %}" style="text-decoration: none; font-weight: bold; color: #333;">
-                <i class="fas fa-home"></i> Accueil
-            </a>
-        </li>
+<nav id="menu-interne" class="bg-dark sidebar-hover shadow">
+    <div class="d-flex align-items-center p-3 border-bottom border-secondary" style="height: 70px;">
+        <i class="fas fa-bars fa-lg text-white" style="width: 30px; text-align: center;"></i>
+        <span class="menu-label ml-3 font-weight-bold text-white text-uppercase">Menu</span>
+    </div>
 
-        <li style="margin-bottom: 10px;">
-            <a href="{% url 'catalogue:show_index' %}" style="text-decoration: none; color: #333;">
-                <i class="fas fa-ticket-alt"></i> Spectacles
-            </a>
-        </li>
+    <div class="p-3">
+        <div class="text-center mb-4 profile-section">
+            {% if user.is_authenticated %}
+                <img src="{{ user.profile.image.url }}" class="rounded-circle border border-secondary" style="width: 40px; height: 40px; object-fit: cover;">
+                <div class="small text-muted mt-2 username-text">{{ user.username }}</div>
+            {% else %}
+                <i class="fas fa-user-circle fa-2x text-secondary"></i>
+            {% endif %}
+        </div>
 
-        <hr> {% if user.is_authenticated %}
-            <li style="margin-bottom: 10px;">
-                <a href="{% url 'catalogue:profile' %}" style="text-decoration: none; color: #007bff;">Mon profil</a>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-3">
+                <a href="{% url 'catalogue:welcome' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                    <i class="fas fa-home fa-fw"></i> <span class="menu-label ml-3">Accueil</span>
+                </a>
+            </li>
+
+            <li class="nav-item mb-3">
+                <a href="{% url 'catalogue:show_index' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                    <i class="fas fa-ticket-alt fa-fw"></i> <span class="menu-label ml-3">Spectacles</span>
+                </a>
             </li>
             
-            {% if user.is_staff %}
-                <li style="margin-bottom: 10px;">
-                    <a href="{% url 'admin:index' %}" style="text-decoration: none; color: #d9534f;">Administration</a>
+            <hr class="border-secondary my-3">
+
+            {% if user.is_authenticated %}
+                <li class="nav-item mb-3">
+                    <a href="{% url 'catalogue:profile' %}" class="nav-link text-info p-0 d-flex align-items-center">
+                        <i class="fas fa-user fa-fw"></i> <span class="menu-label ml-3">Mon profil</span>
+                    </a>
+                </li>
+
+                {% if user.is_staff %}
+                <li class="nav-item mb-3">
+                    <a href="{% url 'admin:index' %}" class="nav-link text-warning p-0 d-flex align-items-center">
+                        <i class="fas fa-user-shield fa-fw"></i> <span class="menu-label ml-3">Administration</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item mt-4">
+                    <form action="{% url 'logout' %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link text-danger p-0 border-0 d-flex align-items-center" style="text-decoration: none; width: 100%; text-align: left;">
+                            <i class="fas fa-sign-out-alt fa-fw"></i> <span class="menu-label ml-3">Déconnexion</span>
+                        </button>
+                    </form>
+                </li>
+            {% else %}
+                <li class="nav-item mb-2">
+                    <a href="{% url 'login' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                        <i class="fas fa-sign-in-alt fa-fw"></i> <span class="menu-label ml-3">Connexion</span>
+                    </a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a href="{% url 'catalogue:signup' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                        <i class="fas fa-user-plus fa-fw"></i> <span class="menu-label ml-3">Inscription</span>
+                    </a>
                 </li>
             {% endif %}
-
-            <li style="margin-top: 20px;">
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" style="background: none; border: none; color: #666; cursor: pointer; text-decoration: underline; padding: 0;">
-                        Déconnexion
-                    </button>
-                </form>
-            </li>
-        {% else %}
-            <li style="margin-bottom: 10px;"><a href="{% url 'login' %}">Connexion</a></li>
-            <li style="margin-bottom: 10px;"><a href="{% url 'catalogue:signup' %}">Inscription</a></li>
-            <li><a href="{% url 'admin:index' %}">Administration</a></li>
-        {% endif %}
-    </ul>
+        </ul>
+    </div>
 </nav>
+
+<style>
+.sidebar-hover {
+    width: 65px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+    transition: width 0.3s ease-in-out;
+    overflow-x: hidden;
+}
+.sidebar-hover:hover {
+    width: 220px;
+}
+.menu-label, .username-text {
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+.sidebar-hover:hover .menu-label, 
+.sidebar-hover:hover .username-text {
+    opacity: 1;
+}
+.nav-link:hover { color: #fff !important; }
+.nav-link i { min-width: 30px; text-align: center; font-size: 1.1rem; }
+</style>
