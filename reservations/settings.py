@@ -14,8 +14,71 @@ SECRET_KEY = 'django-insecure-ik5!h=%np*)@m)j^l1(w9i(!z34d*#&kbbb(rmc8f9gk=skr=6
 DEBUG = True
 ALLOWED_HOSTS = []
 
+
+JAZZMIN_SETTINGS = {
+    # Titres
+    "site_title": "Réservations PID",
+    "site_header": "PID Admin",
+    "site_brand": "Gestion Théâtre",
+    "welcome_sign": "Bienvenue hicham",
+    "copyright": "Projet PID 2026",
+
+    # 1. On vide le menu du haut (Top Menu) pour qu'il soit propre
+    "topmenu_links": [],
+
+    # 2. ON FORCE L'AFFICHAGE DANS LA BARRE LATÉRALE (Sidebar)
+    # Ils apparaîtront tout en bas de la section "catalogue" à gauche
+    "custom_links": {
+        "catalogue": [
+            {
+                "name": "VOIR LE SITE", 
+                "url": "/", 
+                "icon": "fas fa-eye",
+            },
+            {
+                "name": "DÉCONNEXION", 
+                "url": "/accounts/logout/", 
+                "icon": "fas fa-sign-out-alt",
+            },
+        ],
+    },
+
+    # 3. Configuration de la barre latérale
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    # 4. Icônes pour faire propre
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "catalogue.Artist": "fas fa-paint-brush",
+        "catalogue.Show": "fas fa-theater-masks",
+        "catalogue.Reservation": "fas fa-ticket-alt",
+        "catalogue.Location": "fas fa-map-marker-alt",
+        "catalogue.Locality": "fas fa-map-pin",
+    },
+    
+    # Menu utilisateur (en haut à droite) au cas où tu en as besoin
+    "user_menu_links": [
+        {"name": "Se déconnecter", "url": "/accounts/logout/", "icon": "fas fa-sign-out-alt"},
+    ],
+}
+
+# Thème visuel (Flatly est le plus propre)
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "navbar": "navbar-dark",
+    "sidebar": "sidebar-dark-primary",
+}
+
+# IMPORTANT : Pour que le bouton déconnexion fonctionne sans erreur 405
+LOGOUT_ON_GET = True
+
+
 # Définition des applications
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

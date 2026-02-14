@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm # Ajout PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash # Ajout pour rester connecté après changement mdp
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash, logout as auth_logout # Ajout logout
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Sum
-from .models import Show, Representation, Reservation, Profile # Ajout Profile
+from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile
 
 # 1. Accueil
 def welcome(request):
@@ -80,34 +80,37 @@ def reservation_delete(request, reservation_id):
         messages.success(request, "Votre réservation a été annulée avec succès.")
     return redirect('catalogue:profile')
 
-# --- AJOUTS CHIRURGICAUX POUR LE PROFIL COMPLET ---
+# 8. LA SOLUTION POUR JAZZMIN : Fonction de déconnexion forcée
+def logout_user(request):
+    auth_logout(request)
+    messages.info(request, "Vous avez été déconnecté.")
+    return redirect('welcome')
 
-# 8. Changer le mot de passe (Source Django Auth)
+# 9. Changer le mot de passe
 @login_required
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            update_session_auth_hash(request, user)  # Important pour ne pas être déconnecté
+            update_session_auth_hash(request, user)
             messages.success(request, 'Votre mot de passe a été mis à jour !')
             return redirect('catalogue:profile')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'catalogue/change_password.html', {'form': form})
 
-# 9. Mettre à jour la photo de profil
+# 10. Mettre à jour la photo de profil
 @login_required
 def profile_update(request):
     if request.method == 'POST' and request.FILES.get('image'):
-        # On récupère ou crée le profil s'il n'existe pas
         profile, created = Profile.objects.get_or_create(user=request.user)
         profile.image = request.FILES['image']
         profile.save()
         messages.success(request, 'Photo de profil mise à jour !')
     return redirect('catalogue:profile')
 
-# 10. Supprimer la photo de profil (Retour au défaut)
+# 11. Supprimer la photo de profil
 @login_required
 def delete_profile_image(request):
     profile, created = Profile.objects.get_or_create(user=request.user)
