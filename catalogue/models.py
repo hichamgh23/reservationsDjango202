@@ -121,3 +121,14 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"Réservation de {self.user.username} pour {self.representation.show.title}"
+
+# 11. Profil utilisateur (Pour la photo de profil)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+
+    class Meta:
+        db_table = "profiles"
+
+    def __str__(self):
+        return f"Profil de {self.user.username}"

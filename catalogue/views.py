@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm # Ajout PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash # Ajout pour rester connecté après changement mdp
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Sum
-from .models import Show, Representation, Reservation
+from .models import Show, Representation, Reservation, Profile # Ajout Profile
 
 # 1. Accueil
 def welcome(request):
@@ -27,12 +28,12 @@ def show_index(request):
     shows = Show.objects.all().order_by('title')
     return render(request, 'catalogue/show_index.html', {'shows': shows})
 
-# 4. Détail du spectacle (C'est celle-ci qui manquait dans ton erreur !)
+# 4. Détail du spectacle
 def show_detail(request, show_id):
     show = get_object_or_404(Show, id=show_id)
     return render(request, 'catalogue/show_detail.html', {'show': show})
 
-# 5. Réservation sécurisée (Source 306)
+# 5. Réservation sécurisée
 @login_required
 def book_representation(request, representation_id):
     representation = get_object_or_404(Representation, id=representation_id)
@@ -64,8 +65,53 @@ def book_representation(request, representation_id):
             
     return render(request, 'catalogue/book.html', {'representation': representation, 'remaining_seats': remaining})
 
-# 6. Profil & Historique (Source 21 & 40)
+# 6. Profil & Historique
 @login_required
 def profile(request):
     reservations = Reservation.objects.filter(user=request.user).select_related('representation__show').order_by('-id')
     return render(request, 'catalogue/profile.html', {'reservations': reservations})
+
+# 7. Annulation d'une réservation
+@login_required
+def reservation_delete(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id, user=request.user)
+    if request.method == 'POST':
+        reservation.delete()
+        messages.success(request, "Votre réservation a été annulée avec succès.")
+    return redirect('catalogue:profile')
+
+# --- AJOUTS CHIRURGICAUX POUR LE PROFIL COMPLET ---
+
+# 8. Changer le mot de passe (Source Django Auth)
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important pour ne pas être déconnecté
+            messages.success(request, 'Votre mot de passe a été mis à jour !')
+            return redirect('catalogue:profile')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'catalogue/change_password.html', {'form': form})
+
+# 9. Mettre à jour la photo de profil
+@login_required
+def profile_update(request):
+    if request.method == 'POST' and request.FILES.get('image'):
+        # On récupère ou crée le profil s'il n'existe pas
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.image = request.FILES['image']
+        profile.save()
+        messages.success(request, 'Photo de profil mise à jour !')
+    return redirect('catalogue:profile')
+
+# 10. Supprimer la photo de profil (Retour au défaut)
+@login_required
+def delete_profile_image(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    profile.image = 'default.jpg'
+    profile.save()
+    messages.success(request, 'Photo de profil supprimée.')
+    return redirect('catalogue:profile')
