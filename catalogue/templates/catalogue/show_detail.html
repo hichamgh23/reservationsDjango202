@@ -1,73 +1,181 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ show.title }}{% endblock %}
-
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-4">
-            {% if show.poster_url %}
-                <img src="{{ show.poster_url }}" class="img-fluid rounded shadow" alt="{{ show.title }}">
-            {% else %}
-                <img src="{% static 'images/default_poster.jpg' %}" class="img-fluid rounded shadow" alt="Image par défaut">
-            {% endif %}
-            
-            <div class="mt-3 text-center">
-                <h3 class="text-primary">{{ show.price }} €</h3>
-                <p class="text-muted">Prix par place</p>
-            </div>
-        </div>
+<div class="tto-detail-page">
+    <div class="container">
+        <div class="tto-main-card">
+            <div class="row no-gutters">
+                
+                <div class="col-md-5">
+                    <div class="tto-image-side">
+                        {% if show.poster %}
+                            <img src="{{ show.poster.url }}" alt="{{ show.title }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1503095396549-807039045047?q=80&w=800" alt="Default">
+                        {% endif %}
+                    </div>
+                </div>
 
-        <div class="col-md-8">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'catalogue:show_index' %}">Catalogue</a></li>
-                    <li class="breadcrumb-item active">{{ show.title }}</li>
-                </ol>
-            </nav>
+                <div class="col-md-7">
+                    <div class="tto-info-side">
+                        <div class="tto-breadcrumb">
+                            <a href="{% url 'catalogue:show_index' %}">SPECTACLES</a> / {{ show.title|upper }}
+                        </div>
 
-            <h1>{{ show.title }}</h1>
-            <p class="lead text-justify">{{ show.description }}</p>
+                        <h1 class="tto-detail-title">{{ show.title|upper }}</h1>
+                        
+                        <div class="tto-detail-location">
+                            <i class="fas fa-map-marker-alt"></i> {{ show.location.designation|upper }}
+                        </div>
 
-            <hr>
+                        <div class="tto-price-section">
+                            <span class="tto-price-value">{{ show.price|floatformat:2 }} €</span>
+                        </div>
 
-            <h3 class="mb-4">Les dates</h3>
-            <table class="table table-hover">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Date</th>
-                        <th>Heure</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for representation in show.representations.all %}
-                    <tr>
-                        <td>{{ representation.when|date:"l d F Y" }}</td>
-                        <td>{{ representation.when|date:"H:i" }}</td>
-                        <td>
-                            {% if show.bookable %}
-                                <a href="{% url 'catalogue:book_representation' representation.id %}" class="btn btn-danger btn-sm">
-                                    Réserver
-                                </a>
-                            {% else %}
-                                <span class="badge badge-secondary">Non réservable</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3" class="text-center">Aucune date prévue pour le moment.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        <div class="tto-description">
+                            <h5 class="tto-section-label">RÉSUMÉ</h5>
+                            <div class="tto-text">
+                                {{ show.description|linebreaks }}
+                            </div>
+                        </div>
 
-            <a href="{% url 'catalogue:show_index' %}" class="btn btn-outline-secondary mt-3">
-                <i class="fa fa-arrow-left"></i> Retour au catalogue
-            </a>
-        </div>
-    </div>
-</div>
+                        <div class="tto-booking-box">
+                            <form action="#" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="tto-label">CHOISISSEZ VOTRE SÉANCE</label>
+                                    <select class="form-control tto-select">
+                                        <option>Du {{ show.date_debut|date:"d/m/Y" }} au {{ show.date_fin|date:"d/m/Y" }}</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn tto-btn-red">
+                                    RÉSERVER MAINTENANT
+                                </button>
+                            </form>
+                        </div>
+                    </div> </div> </div> </div> </div> </div> <style>
+    /* FOND NOIR DU SITE */
+    .tto-detail-page {
+        background-color: #050505;
+        padding: 120px 0 60px 0;
+        min-height: 100vh;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* LE BLOC BLANC (Comme sur Utick) */
+    .tto-main-card {
+        background: #ffffff;
+        border-radius: 0; /* Utick utilise des angles vifs */
+        overflow: hidden;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+    }
+
+    /* IMAGE A GAUCHE */
+    .tto-image-side {
+        height: 100%;
+        min-height: 600px;
+        background: #000;
+    }
+
+    .tto-image-side img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* CONTENU A DROITE */
+    .tto-info-side {
+        padding: 60px;
+        color: #111;
+    }
+
+    .tto-breadcrumb {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        color: #999;
+        margin-bottom: 20px;
+    }
+
+    .tto-breadcrumb a { color: #e74c3c; text-decoration: none; }
+
+    .tto-detail-title {
+        font-weight: 900;
+        font-size: 3rem;
+        line-height: 1;
+        margin-bottom: 15px;
+        letter-spacing: -1px;
+    }
+
+    .tto-detail-location {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #444;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+    }
+
+    .tto-price-section {
+        margin-bottom: 40px;
+    }
+
+    .tto-price-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #e74c3c;
+    }
+
+    .tto-section-label {
+        font-size: 0.8rem;
+        font-weight: 900;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+        color: #000;
+    }
+
+    .tto-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #555;
+        margin-bottom: 40px;
+    }
+
+    /* BOUTON ET SELECT TTO STYLE */
+    .tto-booking-box {
+        background: #f9f9f9;
+        padding: 30px;
+        border: 1px solid #eee;
+    }
+
+    .tto-label {
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: #888;
+    }
+
+    .tto-select {
+        border-radius: 0;
+        border: 1px solid #ddd;
+        height: 45px;
+        font-size: 0.9rem;
+    }
+
+    .tto-btn-red {
+        background-color: #e74c3c;
+        color: white;
+        border-radius: 0;
+        padding: 15px;
+        font-weight: 900;
+        width: 100%;
+        letter-spacing: 2px;
+        transition: 0.3s;
+        border: none;
+        margin-top: 10px;
+    }
+
+    .tto-btn-red:hover {
+        background-color: #000;
+        color: #fff;
+    }
+</style>
 {% endblock %}

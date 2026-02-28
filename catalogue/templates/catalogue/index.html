@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="catalogue-wrapper">
+    <div class="text-center mb-5 animate-header" style="opacity: 0;">
+        <h2 class="display-4 font-weight-bold glitch-text" data-text="EXPLORATION">EXPLORATION</h2>
+        <p class="text-danger letter-spacing">GÉREZ ET CONSULTEZ TOUTES LES RESSOURCES</p>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row px-5">
+            <div class="col-md-4 mb-4 stagger-card">
+                <a href="{% url 'catalogue:show_index' %}" class="text-decoration-none">
+                    <div class="cyber-card active-card">
+                        <div class="icon-box">🎭</div>
+                        <h4 class="card-title">SPECTACLES</h4>
+                        <p class="card-desc">Consultez la liste complète des pièces et concerts.</p>
+                        <div class="card-status status-online">DISPONIBLE</div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4 mb-4 stagger-card">
+                <div class="cyber-card locked-card">
+                    <div class="icon-box">👤</div>
+                    <h4 class="card-title">ARTISTES</h4>
+                    <p class="card-desc">Découvrez les talents derrière les scènes.</p>
+                    <div class="card-status status-offline">BIENTÔT</div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 stagger-card">
+                <div class="cyber-card locked-card">
+                    <div class="icon-box">📍</div>
+                    <h4 class="card-title">LIEUX</h4>
+                    <p class="card-desc">Explorez les salles et théâtres partenaires.</p>
+                    <div class="card-status status-offline">BIENTÔT</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .catalogue-wrapper {
+        padding: 60px 0;
+        min-height: 100vh;
+        background: #050505;
+    }
+
+    .letter-spacing { letter-spacing: 5px; font-weight: bold; font-size: 0.8rem; }
+
+    /* DESIGN DES CARTES CYBER */
+    .cyber-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 40px 30px;
+        text-align: center;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        backdrop-filter: blur(10px);
+    }
+
+    .active-card:hover {
+        background: rgba(231, 76, 60, 0.05);
+        border-color: #e74c3c;
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(231, 76, 60, 0.2);
+    }
+
+    .locked-card { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+
+    .icon-box { font-size: 4rem; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+
+    .card-title { color: white; font-weight: 900; letter-spacing: 2px; margin-bottom: 15px; }
+
+    .card-desc { color: #888; font-size: 0.9rem; margin-bottom: 25px; }
+
+    .card-status {
+        font-size: 0.7rem; font-weight: bold; letter-spacing: 2px;
+        padding: 5px 15px; border-radius: 50px; display: inline-block;
+    }
+    .status-online { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
+    .status-offline { background: rgba(255, 255, 255, 0.05); color: #888; border: 1px solid #444; }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animation du Header avec Anime.js
+        anime({
+            targets: '.animate-header',
+            translateY: [-50, 0],
+            opacity: [0, 1],
+            duration: 1200,
+            easing: 'easeOutExpo'
+        });
+
+        // Animation de cascade (Staggering) pour les cartes
+        anime({
+            targets: '.stagger-card',
+            scale: [0.9, 1],
+            opacity: [0, 1],
+            translateY: [40, 0],
+            delay: anime.stagger(200, {start: 500}), // 200ms de décalage entre chaque carte
+            easing: 'easeOutElastic(1, .8)',
+            duration: 1500
+        });
+    });
+</script>
+{% endblock %}

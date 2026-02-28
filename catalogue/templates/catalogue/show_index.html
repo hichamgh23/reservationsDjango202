@@ -1,143 +1,145 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Album des Spectacles{% endblock %}
-
-{% block stylesheets %}
-<style>
-    /* 1. Reset et Fond sombre pour le style Album */
-    body { background-color: #080808; color: #eee; font-family: 'Poppins', sans-serif; }
-    
-    .wrapper { padding: 40px; }
-    h2 { color: #e74c3c; font-weight: bold; text-transform: uppercase; letter-spacing: 3px; }
-
-    /* 2. La Grille CSS (L'Album) */
-    .shows-album {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Cartes responsives */
-        gap: 30px;
-        padding-top: 20px;
-        opacity: 0; /* Pour l'animation JS */
-    }
-
-    /* 3. Style de la Carte de Spectacle (Show Card) */
-    .show-card {
-        background: #111;
-        border-radius: 15px;
-        overflow: hidden;
-        border: 1px solid #222;
-        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        opacity: 0; /* Caché au départ pour l'animation */
-        transform: translateY(30px);
-    }
-
-    /* Effet hover sur la carte */
-    .show-card:hover {
-        transform: translateY(-12px) scale(1.03);
-        box-shadow: 0 20px 40px rgba(231, 76, 60, 0.25);
-        border-color: #e74c3c;
-    }
-
-    /* 4. L'Image de l'Affiche (Le Cœur de l'Album) */
-    .card-poster {
-        width: 100%;
-        height: 380px; /* Hauteur fixe pour l'affiche */
-        object-fit: cover; /* L'image s'adapte sans se déformer */
-        transition: 0.5s;
-    }
-
-    .show-card:hover .card-poster {
-        transform: scale(1.05); /* Zoom léger sur l'image */
-    }
-
-    /* 5. Contenu de la Carte (Infos) */
-    .card-body { padding: 20px; }
-    
-    .card-title a {
-        color: white;
-        text-decoration: none !important;
-        font-weight: 700;
-        font-size: 1.2rem;
-        transition: 0.3s;
-    }
-    .show-card:hover .card-title a { color: #e74c3c; }
-
-    .card-meta { font-size: 0.85rem; color: #888; margin-bottom: 15px; }
-    .card-price { font-size: 1.3rem; font-weight: 800; color: #eee; }
-
-    /* Badges modernisés */
-    .badge-reservable {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        padding: 6px 15px;
-        border-radius: 20px;
-        font-size: 0.75rem;
-        font-weight: bold;
-        z-index: 2;
-    }
-    .bg-yes { background-color: #e74c3c; color: white; } /* Rouge si réservable */
-    .bg-no { background-color: #333; color: #888; }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="wrapper">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-images mr-3"></i>Album des Spectacles</h2>
-        <span class="text-muted small">Total: <strong class="text-danger">{{ shows|length }}</strong> spectacles</span>
+<div class="tto-wrapper">
+    <div class="container mb-5">
+        <h2 class="tto-page-title">Spectacles</h2>
+        <div class="tto-line"></div>
     </div>
 
-    <div class="shows-album" id="album-container">
-        {% for show in shows %}
-        <div class="show-card">
-            {% if show.bookable %}
-                <span class="badge-reservable bg-yes shadow-lg"><i class="fas fa-ticket-alt"></i></span>
-            {% else %}
-                <span class="badge-reservable bg-no">Complet</span>
-            {% endif %}
+    <div class="container">
+        <div class="row">
+            {% for show in shows %}
+            <div class="col-md-4 col-sm-6 mb-5">
+                <div class="tto-card">
+                    <div class="tto-poster-box">
+                        <a href="{% url 'catalogue:show_detail' show.id %}">
+                            {% if show.poster %}
+                                <img src="{{ show.poster.url }}" alt="{{ show.title }}" class="tto-img">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1513106580661-8d88bb233f7d?q=80&w=800" class="tto-img">
+                            {% endif %}
+                        </a>
+                        {% if show.bookable %}
+                            <div class="tto-badge">Réserver</div>
+                        {% endif %}
+                    </div>
 
-            <img src="{{ show.poster.url }}" alt="{{ show.title }}" class="card-poster">
-
-            <div class="card-body">
-                <h4 class="card-title">
-                    <a href="{% url 'catalogue:show_detail' show.id %}">{{ show.title|title }}</a>
-                </h4>
-                <div class="card-meta">
-                    <i class="fas fa-map-marker-alt mr-2 text-danger"></i> {{ show.location.designation }}
-                </div>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="card-price">{{ show.price|floatformat:2 }} &nbsp;&euro;</span>
-                    <a href="{% url 'catalogue:show_detail' show.id %}" class="btn btn-outline-danger btn-sm rounded-pill px-4">
-                        Détails
-                    </a>
+                    <div class="tto-card-info">
+                        <h4 class="tto-title">
+                            <a href="{% url 'catalogue:show_detail' show.id %}">{{ show.title|upper }}</a>
+                        </h4>
+                        <div class="tto-subtitle">
+                            {{ show.location.designation }}
+                        </div>
+                        <div class="tto-date">
+                            Du {{ show.date_debut|date:"d/m/y" }} au {{ show.date_fin|date:"d/m/y" }}
+                        </div>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
-{% endblock %}
 
-{% block javascripts %}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Animation d'apparition en cascade (Staggered animation)
-        const album = document.getElementById('album-container');
-        const cards = document.querySelectorAll('.show-card');
+<style>
+    /* RESET ET FOND */
+    .tto-wrapper {
+        background-color: #050505; /* Ton fond de site reste noir */
+        padding-top: 100px;
+        min-height: 100vh;
+    }
 
-        // On montre le conteneur
-        album.style.opacity = "1";
-        album.style.transition = "opacity 0.5s ease";
+    .tto-page-title {
+        color: white;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+    }
 
-        // On fait apparaître les cartes une par une
-        cards.forEach((card, index) => {
-            setTimeout(() => {
-                card.style.transition = "all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-                card.style.opacity = "1";
-                card.style.transform = "translateY(0)";
-            }, 300 + (index * 150)); // Délai de 150ms entre chaque carte
-        });
-    });
-</script>
+    .tto-line {
+        width: 50px;
+        height: 2px;
+        background: #e74c3c;
+        margin-top: 10px;
+    }
+
+    /* LA CARTE STYLE UTICK */
+    .tto-card {
+        background: white; /* Fond blanc pur comme sur Utick */
+        border-radius: 0; /* Pas d'arrondi sur Utick */
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+
+    .tto-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .tto-poster-box {
+        position: relative;
+        width: 100%;
+        height: 400px; /* Ratio portrait */
+        overflow: hidden;
+    }
+
+    .tto-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.3s;
+    }
+
+    .tto-card:hover .tto-img {
+        opacity: 0.9;
+    }
+
+    .tto-badge {
+        position: absolute;
+        bottom: 15px;
+        right: 0;
+        background: #e74c3c;
+        color: white;
+        padding: 5px 15px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    /* TEXTE ET INFOS */
+    .tto-card-info {
+        padding: 20px;
+        text-align: left;
+    }
+
+    .tto-title a {
+        color: #111;
+        font-weight: 800;
+        text-decoration: none !important;
+        font-size: 1.1rem;
+        line-height: 1.2;
+    }
+
+    .tto-card:hover .tto-title a {
+        color: #e74c3c;
+    }
+
+    .tto-subtitle {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 8px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .tto-date {
+        color: #999;
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+</style>
 {% endblock %}
