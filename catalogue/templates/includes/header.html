@@ -1,36 +1,114 @@
-<header class="navbar navbar-expand navbar-light bg-white border-bottom shadow-sm" style="height: 70px; position: sticky; top: 0; z-index: 1000;">
-    
-    <div class="d-flex align-items-center" style="min-width: 200px;">
-        <a class="navbar-brand d-flex align-items-center font-weight-bold" href="{% url 'catalogue:welcome' %}" style="color: #333; font-size: 1.5rem;">
-            <i class="fas fa-university mr-2 text-dark"></i> 
-            <span>PickShow</span>
+<nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-lg fixed-top" style="height: 70px; background: #000; border-bottom: 1px solid #222;">
+    <div class="container-fluid d-flex align-items-center">
+        
+        <a class="navbar-brand font-weight-bold d-flex align-items-center ml-lg-5" href="{% url 'catalogue:welcome' %}" style="min-width: 250px;">
+            <i class="fas fa-ticket-alt text-danger mr-2"></i>
+            <span style="letter-spacing: 1px; font-size: 1.4rem;">Projet <span class="text-danger">Réservations</span></span>
         </a>
-    </div>
 
-    <div class="flex-grow-1 d-flex justify-content-center">
-        <form action="{% url 'catalogue:show_index' %}" method="get" style="width: 100%; max-width: 500px;">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control form-control-lg border-secondary" 
-                       placeholder="Rechercher un spectacle, un artiste..." 
-                       style="border-radius: 25px 0 0 25px; font-size: 1rem; height: 45px;">
-                <div class="input-group-append">
-                    <button class="btn btn-dark px-4" type="submit" style="border-radius: 0 25px 25px 0; height: 45px;">
-                        <i class="fas fa-search"></i>
-                    </button>
+        <div class="flex-grow-1 d-flex justify-content-center">
+            <form class="form-inline d-none d-md-flex search-box" action="{% url 'catalogue:show_index' %}" method="get">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control search-input" placeholder="Trouver un spectacle..." aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-search" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
 
-    <div class="d-flex align-items-center justify-content-end" style="min-width: 200px;">
-        {% if user.is_authenticated %}
-            <div class="badge badge-light border px-3 py-2 shadow-sm" style="border-radius: 15px;">
-                <i class="fas fa-user-circle mr-1 text-primary"></i> 
-                <span class="text-dark">{{ user.username }}</span>
-            </div>
-        {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-dark btn-sm font-weight-bold">Connexion</a>
-        {% endif %}
-    </div>
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center pr-lg-5">
+                {% if user.is_authenticated %}
+                    <li class="nav-item mx-2">
+                        <span class="nav-link text-white-50 small">
+                             <i class="fas fa-circle text-success mr-1"></i> <strong>{{ user.username }}</strong>
+                        </span>
+                    </li>
+                {% else %}
+                    <li class="nav-item mx-2">
+                        <a class="nav-link btn-login-neon px-4" href="{% url 'login' %}">
+                            <span>Connexion</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item mx-2">
+                        <a class="nav-link btn-signup-header px-4" href="{% url 'catalogue:signup' %}">
+                            <i class="fas fa-user-plus mr-1"></i> Inscription
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
 
-</header>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+
+<style>
+    .bg-black { background-color: #000 !important; }
+
+    /* --- NOUVEAU STYLE BOUTON CONNEXION --- */
+    .btn-login-neon {
+        color: #e74c3c !important;
+        background: transparent;
+        border: 1px solid #e74c3c;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login-neon:hover {
+        background: rgba(231, 76, 60, 0.1) !important;
+        box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+        transform: scale(1.05);
+        color: #ff4d4d !important;
+    }
+
+    /* --- STYLE BOUTON INSCRIPTION (SOLIDE) --- */
+    .btn-signup-header {
+        color: #fff !important;
+        background: #e74c3c;
+        border: 1px solid #e74c3c;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.4s ease;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+    }
+
+    .btn-signup-header:hover {
+        background: #ff4d4d !important;
+        border-color: #ff4d4d !important;
+        box-shadow: 0 0 20px rgba(255, 77, 77, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* --- RECHERCHE --- */
+    .search-input {
+        background: #111 !important;
+        border: 1px solid #333 !important;
+        border-radius: 20px 0 0 20px !important;
+        color: white !important;
+        height: 38px;
+    }
+    .btn-search {
+        background: #111;
+        border: 1px solid #333;
+        border-left: none;
+        border-radius: 0 20px 20px 0;
+        color: #666;
+        height: 38px;
+    }
+</style>

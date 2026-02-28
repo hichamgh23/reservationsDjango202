@@ -1,73 +1,142 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Liste des spectacles{% endblock %}
+{% block title %}Album des Spectacles{% endblock %}
 
 {% block stylesheets %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.2/css/responsive.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css"/>
-
 <style>
-    #page-content-wrapper { margin: 1em auto; max-width: 1000px; width: 95%; font: 14px/1.5 sans-serif; }
-    .wrapper { padding: 20px; }
+    /* 1. Reset et Fond sombre pour le style Album */
+    body { background-color: #080808; color: #eee; font-family: 'Poppins', sans-serif; }
+    
+    .wrapper { padding: 40px; }
+    h2 { color: #e74c3c; font-weight: bold; text-transform: uppercase; letter-spacing: 3px; }
+
+    /* 2. La Grille CSS (L'Album) */
+    .shows-album {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Cartes responsives */
+        gap: 30px;
+        padding-top: 20px;
+        opacity: 0; /* Pour l'animation JS */
+    }
+
+    /* 3. Style de la Carte de Spectacle (Show Card) */
+    .show-card {
+        background: #111;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #222;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        opacity: 0; /* Caché au départ pour l'animation */
+        transform: translateY(30px);
+    }
+
+    /* Effet hover sur la carte */
+    .show-card:hover {
+        transform: translateY(-12px) scale(1.03);
+        box-shadow: 0 20px 40px rgba(231, 76, 60, 0.25);
+        border-color: #e74c3c;
+    }
+
+    /* 4. L'Image de l'Affiche (Le Cœur de l'Album) */
+    .card-poster {
+        width: 100%;
+        height: 380px; /* Hauteur fixe pour l'affiche */
+        object-fit: cover; /* L'image s'adapte sans se déformer */
+        transition: 0.5s;
+    }
+
+    .show-card:hover .card-poster {
+        transform: scale(1.05); /* Zoom léger sur l'image */
+    }
+
+    /* 5. Contenu de la Carte (Infos) */
+    .card-body { padding: 20px; }
+    
+    .card-title a {
+        color: white;
+        text-decoration: none !important;
+        font-weight: 700;
+        font-size: 1.2rem;
+        transition: 0.3s;
+    }
+    .show-card:hover .card-title a { color: #e74c3c; }
+
+    .card-meta { font-size: 0.85rem; color: #888; margin-bottom: 15px; }
+    .card-price { font-size: 1.3rem; font-weight: 800; color: #eee; }
+
+    /* Badges modernisés */
+    .badge-reservable {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        z-index: 2;
+    }
+    .bg-yes { background-color: #e74c3c; color: white; } /* Rouge si réservable */
+    .bg-no { background-color: #333; color: #888; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="wrapper">
-    <h2 class="mb-4">Liste des spectacles</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-images mr-3"></i>Album des Spectacles</h2>
+        <span class="text-muted small">Total: <strong class="text-danger">{{ shows|length }}</strong> spectacles</span>
+    </div>
 
-    <table id="table_shows" class="display table table-striped table-bordered dt-responsive nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>Titre</th>
-                <th>Lieu</th>
-                <th>Représentations</th>
-                <th>Prix</th>
-                <th>Réservable</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for show in shows %}
-            <tr>
-                <td>
-                    <a href="{% url 'catalogue:show_detail' show.id %}">
-                        {{ show.title|title }}
+    <div class="shows-album" id="album-container">
+        {% for show in shows %}
+        <div class="show-card">
+            {% if show.bookable %}
+                <span class="badge-reservable bg-yes shadow-lg"><i class="fas fa-ticket-alt"></i></span>
+            {% else %}
+                <span class="badge-reservable bg-no">Complet</span>
+            {% endif %}
+
+            <img src="{{ show.poster.url }}" alt="{{ show.title }}" class="card-poster">
+
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a href="{% url 'catalogue:show_detail' show.id %}">{{ show.title|title }}</a>
+                </h4>
+                <div class="card-meta">
+                    <i class="fas fa-map-marker-alt mr-2 text-danger"></i> {{ show.location.designation }}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="card-price">{{ show.price|floatformat:2 }} &nbsp;&euro;</span>
+                    <a href="{% url 'catalogue:show_detail' show.id %}" class="btn btn-outline-danger btn-sm rounded-pill px-4">
+                        Détails
                     </a>
-                </td>
-                <td>{{ show.location.designation }}</td>
-                <td>{{ show.representations.count }}</td>
-                <td>{{ show.price }} &nbsp;&euro;</td>
-                <td>
-                    {% if show.bookable %}
-                        <span class="badge badge-success">Oui</span>
-                    {% else %}
-                        <span class="badge badge-danger">Non</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <p class="mt-3 text-muted">Total: {{ shows|length }} spectacles.</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.2/js/dataTables.responsive.min.js"></script>
-
 <script>
-    $(document).ready(function() {
-        $('#table_shows').DataTable({
-            "responsive": true,
-            "pageLength": 10,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.18/i18n/French.json"
-            }
+    document.addEventListener("DOMContentLoaded", function() {
+        // Animation d'apparition en cascade (Staggered animation)
+        const album = document.getElementById('album-container');
+        const cards = document.querySelectorAll('.show-card');
+
+        // On montre le conteneur
+        album.style.opacity = "1";
+        album.style.transition = "opacity 0.5s ease";
+
+        // On fait apparaître les cartes une par une
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.transition = "all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+            }, 300 + (index * 150)); // Délai de 150ms entre chaque carte
         });
     });
 </script>

@@ -1,44 +1,46 @@
 <nav id="menu-interne" class="bg-dark sidebar-hover shadow">
-    <div class="d-flex align-items-center p-3 border-bottom border-secondary" style="height: 70px;">
-        <i class="fas fa-bars fa-lg text-white" style="width: 30px; text-align: center;"></i>
-        <span class="menu-label ml-3 font-weight-bold text-white text-uppercase">Menu</span>
+    <div class="d-flex align-items-center p-3 border-bottom border-secondary" style="height: 70px; background: #0a0a0a;">
+        <i class="fas fa-bars fa-lg text-danger" style="width: 30px; text-align: center;"></i>
+        <span class="menu-label ml-3 font-weight-bold text-white text-uppercase" style="letter-spacing: 2px;">Menu</span>
     </div>
 
     <div class="p-3">
         <div class="text-center mb-4 profile-section">
             {% if user.is_authenticated %}
-                <img src="{{ user.profile.image.url }}" class="rounded-circle border border-secondary" style="width: 40px; height: 40px; object-fit: cover;">
-                <div class="small text-muted mt-2 username-text">{{ user.username }}</div>
+                <img src="{{ user.profile.image.url }}" class="rounded-circle border border-danger shadow-sm" style="width: 45px; height: 45px; object-fit: cover; transition: 0.3s;">
+                <div class="small text-white-50 mt-2 username-text font-weight-bold">{{ user.username }}</div>
             {% else %}
-                <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                <div class="py-2">
+                    <i class="fas fa-user-circle fa-2x text-secondary"></i>
+                </div>
             {% endif %}
         </div>
 
         <ul class="nav flex-column">
             <li class="nav-item mb-3">
-                <a href="{% url 'catalogue:welcome' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                <a href="{% url 'catalogue:welcome' %}" class="nav-link text-white-50 p-0 d-flex align-items-center hover-red">
                     <i class="fas fa-home fa-fw"></i> <span class="menu-label ml-3">Accueil</span>
                 </a>
             </li>
 
             <li class="nav-item mb-3">
-                <a href="{% url 'catalogue:show_index' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                <a href="{% url 'catalogue:show_index' %}" class="nav-link text-white-50 p-0 d-flex align-items-center hover-red">
                     <i class="fas fa-ticket-alt fa-fw"></i> <span class="menu-label ml-3">Spectacles</span>
                 </a>
             </li>
             
-            <hr class="border-secondary my-3">
+            <hr class="border-secondary my-3" style="opacity: 0.2;">
 
             {% if user.is_authenticated %}
                 <li class="nav-item mb-3">
-                    <a href="{% url 'catalogue:profile' %}" class="nav-link text-info p-0 d-flex align-items-center">
-                        <i class="fas fa-user fa-fw"></i> <span class="menu-label ml-3">Mon profil</span>
+                    <a href="{% url 'catalogue:profile' %}" class="nav-link text-info p-0 d-flex align-items-center hover-blue">
+                        <i class="fas fa-user-cog fa-fw"></i> <span class="menu-label ml-3">Mon profil</span>
                     </a>
                 </li>
 
                 {% if user.is_staff %}
                 <li class="nav-item mb-3">
-                    <a href="{% url 'admin:index' %}" class="nav-link text-warning p-0 d-flex align-items-center">
+                    <a href="{% url 'admin:index' %}" class="nav-link text-warning p-0 d-flex align-items-center hover-gold" target="_blank">
                         <i class="fas fa-user-shield fa-fw"></i> <span class="menu-label ml-3">Administration</span>
                     </a>
                 </li>
@@ -47,19 +49,19 @@
                 <li class="nav-item mt-4">
                     <form action="{% url 'logout' %}" method="post" class="m-0">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-link text-danger p-0 border-0 d-flex align-items-center" style="text-decoration: none; width: 100%; text-align: left;">
-                            <i class="fas fa-sign-out-alt fa-fw"></i> <span class="menu-label ml-3">Déconnexion</span>
+                        <button type="submit" class="btn btn-link text-danger p-0 border-0 d-flex align-items-center" style="text-decoration: none; width: 100%; text-align: left; transition: 0.3s;">
+                            <i class="fas fa-power-off fa-fw"></i> <span class="menu-label ml-3 font-weight-bold">Quitter</span>
                         </button>
                     </form>
                 </li>
             {% else %}
-                <li class="nav-item mb-2">
-                    <a href="{% url 'login' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                <li class="nav-item mb-3">
+                    <a href="{% url 'login' %}" class="nav-link text-white-50 p-0 d-flex align-items-center hover-red">
                         <i class="fas fa-sign-in-alt fa-fw"></i> <span class="menu-label ml-3">Connexion</span>
                     </a>
                 </li>
-                <li class="nav-item mb-2">
-                    <a href="{% url 'catalogue:signup' %}" class="nav-link text-white-50 p-0 d-flex align-items-center">
+                <li class="nav-item mb-3">
+                    <a href="{% url 'catalogue:signup' %}" class="nav-link text-white-50 p-0 d-flex align-items-center hover-red">
                         <i class="fas fa-user-plus fa-fw"></i> <span class="menu-label ml-3">Inscription</span>
                     </a>
                 </li>
@@ -69,28 +71,57 @@
 </nav>
 
 <style>
+/* Structure du Menu */
 .sidebar-hover {
     width: 65px;
     height: 100vh;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1100;
-    transition: width 0.3s ease-in-out;
+    z-index: 2000;
+    background-color: #0a0a0a !important; /* Noir profond */
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-x: hidden;
+    border-right: 1px solid #222;
 }
+
 .sidebar-hover:hover {
-    width: 220px;
+    width: 240px;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.8);
 }
+
+/* Texte et Labels */
 .menu-label, .username-text {
     opacity: 0;
     white-space: nowrap;
-    transition: opacity 0.2s;
+    transition: opacity 0.3s ease;
 }
+
 .sidebar-hover:hover .menu-label, 
 .sidebar-hover:hover .username-text {
     opacity: 1;
 }
-.nav-link:hover { color: #fff !important; }
-.nav-link i { min-width: 30px; text-align: center; font-size: 1.1rem; }
+
+/* Effets au Survol des liens */
+.nav-link { 
+    transition: 0.3s; 
+    padding: 10px 0;
+}
+
+.hover-red:hover { color: #e74c3c !important; transform: translateX(5px); }
+.hover-blue:hover { color: #3498db !important; transform: translateX(5px); }
+.hover-gold:hover { color: #f1c40f !important; transform: translateX(5px); }
+
+/* Icônes fixes */
+.nav-link i { 
+    min-width: 35px; 
+    text-align: center; 
+    font-size: 1.2rem; 
+}
+
+/* Photo de profil qui "pop" */
+.sidebar-hover:hover .profile-section img {
+    transform: scale(1.1);
+    border-color: #e74c3c !important;
+}
 </style>

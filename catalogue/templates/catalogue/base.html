@@ -2,21 +2,80 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>PickShow</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PickShow{% endblock %}</title>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <style>
-        body { background-color: #f4f7f6; padding-top: 50px; }
-        .container { background: white; padding: 30px; border-radius: 10px; shadow: 0 0 10px rgba(0,0,0,0.1); }
+        /* RESET RADICAL */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #000 !important; /* Plus de blanc possible */
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Structure Flex pour coller le footer en bas */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex: 1 0 auto; /* Prend tout l'espace restant */
+        }
+
+        .content-area {
+            flex-grow: 1;
+            margin-left: 65px; /* Espace pour le menu latéral */
+            display: flex;
+            flex-direction: column;
+            background-color: #000;
+        }
+
+        /* Supprimer les paddings Bootstrap qui créent des cadres */
+        .page-body {
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        footer {
+            flex-shrink: 0;
+            background-color: #0a0a0a;
+            border-top: 1px solid #222;
+            padding: 20px 0;
+            z-index: 100;
+        }
     </style>
+    {% block stylesheets %}{% endblock %}
 </head>
 <body>
 
-    <div class="container">
-        {% block content %}
-        {% endblock %}
+    <div class="app-container">
+        {% include 'includes/header.html' %}
+
+        <div class="main-wrapper">
+            {% include 'includes/menu.html' %}
+
+            <main class="content-area">
+                <div class="page-body">
+                    {% block content %}{% endblock %}
+                </div>
+                
+                {% include 'includes/footer.html' %}
+            </main>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    {% block javascripts %}{% endblock %}
 </body>
 </html>

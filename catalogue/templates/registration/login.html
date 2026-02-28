@@ -1,39 +1,174 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="text-center mb-5">
-            <h2 class="font-weight-bold">Connexion</h2>
-            <p class="text-muted">Accédez à votre espace PickShow</p>
-        </div>
-        
-        <form method="post" class="p-2">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="form-group mb-4">
-                    <label class="small font-weight-bold text-uppercase">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="text-danger small">{{ field.errors }}</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+<div class="login-container">
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="row justify-content-center w-100 m-0">
+        <div class="col-md-6 col-lg-4 shadow-lg p-5" id="login-card">
             
-            <button type="submit" class="btn btn-primary btn-block btn-lg shadow-sm mt-4">
-                Se connecter
-            </button>
-        </form>
-        
-        <div class="text-center mt-4">
-            <p class="small text-muted">Pas encore de compte ? <a href="{% url 'signup' %}" class="text-danger font-weight-bold">Créer un compte</a></p>
+            <div class="text-center mb-5 content-wrapper">
+                <h2 class="font-weight-bold text-white">Connexion</h2>
+                <p class="text-muted">Accédez à votre espace PickShow</p>
+            </div>
+            
+            <form method="post" class="content-wrapper">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group mb-4">
+                        <label class="small font-weight-bold text-uppercase text-secondary">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-danger btn-block btn-lg shadow-sm mt-4 font-weight-bold">
+                    SE CONNECTER
+                </button>
+            </form>
+            
+            <div class="text-center mt-4 content-wrapper">
+                <p class="small text-muted">Pas encore de compte ? 
+                    <a href="{% url 'signup' %}" class="text-danger font-weight-bold">Créer un compte</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* On force le style des inputs Django pour qu'ils soient beaux avec Bootstrap */
-    input { width: 100%; padding: 12px 20px; border: 1px solid #ddd; border-radius: 25px; outline: none; transition: 0.3s; }
-    input:focus { border-color: #e74c3c; box-shadow: 0 0 8px rgba(231, 76, 60, 0.2); }
+    .login-container {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background-color: #050505; /* Fond noir profond */
+        overflow: hidden;
+    }
+
+    #bg-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    #login-card {
+        background-color: rgba(26, 26, 26, 0.9); /* Légère transparence */
+        backdrop-filter: blur(10px); /* Effet de flou sur l'arrière-plan */
+        border-radius: 20px;
+        border: 1px solid #333;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.1s ease-out;
+        transform-style: preserve-3d;
+        z-index: 2;
+    }
+
+    /* La Lampe (Glow) */
+    .lamp {
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(231, 76, 60, 0.3) 0%, rgba(231, 76, 60, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .content-wrapper { position: relative; z-index: 3; }
+
+    input { 
+        width: 100%; padding: 12px 20px; 
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid #444 !important;
+        border-radius: 12px !important; 
+        color: white !important;
+    }
+
+    input:focus { border-color: #e74c3c !important; box-shadow: 0 0 10px rgba(231, 76, 60, 0.3); }
 </style>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const card = document.getElementById('login-card');
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // --- ANIMATION ARRIÈRE-PLAN (PARTICULES) ---
+        let particles = [];
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(231, 76, 60, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 100; i++) particles.push(new Particle());
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // --- ANIMATION LAMPE & TILT ---
+        const lamp = document.createElement('div');
+        lamp.className = 'lamp';
+        card.appendChild(lamp);
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            lamp.style.opacity = "1";
+            lamp.style.left = x + 'px';
+            lamp.style.top = y + 'px';
+            
+            const rotateX = (y - (rect.height / 2)) / 20;
+            const rotateY = ((rect.width / 2) - x) / 20;
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            lamp.style.opacity = "0";
+            card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+        });
+    });
+</script>
 {% endblock %}

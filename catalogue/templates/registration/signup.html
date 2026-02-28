@@ -1,33 +1,156 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="text-center mb-5">
-            <h2 class="font-weight-bold">Inscription</h2>
-            <p class="text-muted">Rejoignez la communauté PickShow</p>
+<div class="signup-wrapper" id="spotlight-area">
+    <div id="spotlight"></div>
+
+    <div class="signup-box animate-in">
+        <div class="text-center mb-4">
+            <h2 class="glitch-text" data-text="INSCRIPTION">INSCRIPTION</h2>
+            <p class="text-muted small letter-spacing">REJOIGNEZ L'UNIVERS PICKSHOW</p>
         </div>
         
-        <form method="post" class="p-2">
+        <form method="post" class="custom-form">
             {% csrf_token %}
             {% for field in form %}
-                <div class="form-group mb-3">
-                    <label class="small font-weight-bold text-uppercase">{{ field.label }}</label>
-                    {{ field }}
+                <div class="form-group-custom mb-4">
+                    <label class="label-style">{{ field.label }}</label>
+                    <div class="input-wrapper">
+                        {{ field }}
+                        <span class="focus-border"></span>
+                    </div>
                     {% if field.errors %}
-                        <div class="text-danger small">{{ field.errors }}</div>
+                        <div class="error-msg mt-1">{{ field.errors|striptags }}</div>
                     {% endif %}
                 </div>
             {% endfor %}
             
-            <button type="submit" class="btn btn-primary btn-block btn-lg shadow-sm mt-4">
-                Créer mon compte
+            <button type="submit" class="btn-signup mt-4">
+                CRÉER MON COMPTE
+                <i class="fas fa-rocket ml-2"></i>
             </button>
         </form>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'login' %}" class="back-link">Déjà inscrit ? Connectez-vous</a>
+        </div>
     </div>
 </div>
 
 <style>
-    input { width: 100%; padding: 12px 20px; border: 1px solid #ddd; border-radius: 25px; outline: none; }
+    /* 1. Reset et Fond Noir */
+    .signup-wrapper {
+        position: relative;
+        width: 100%;
+        min-height: calc(100vh - 70px);
+        background: #050505;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        cursor: crosshair;
+    }
+
+    /* 2. L'EFFET LAMPE (Spotlight) */
+    #spotlight {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(231, 76, 60, 0.15) 0%, rgba(231, 76, 60, 0) 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        transition: width 0.3s, height 0.3s;
+    }
+
+    /* 3. La Boîte d'Inscription */
+    .signup-box {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 450px;
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 50px 40px;
+        border-radius: 30px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    }
+
+    /* 4. Champs de saisie (Inputs) */
+    .custom-form input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        padding: 12px 15px !important;
+        color: white !important;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .custom-form input:focus {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: #e74c3c !important;
+        box-shadow: 0 0 15px rgba(231, 76, 60, 0.3) !important;
+    }
+
+    .label-style {
+        color: #888;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    /* 5. Le Bouton */
+    .btn-signup {
+        width: 100%;
+        padding: 15px;
+        background: #e74c3c;
+        border: none;
+        border-radius: 15px;
+        color: white;
+        font-weight: bold;
+        letter-spacing: 2px;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-signup:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(231, 76, 60, 0.5);
+        background: #ff4d4d;
+    }
+
+    .back-link { color: #666; font-size: 0.8rem; text-decoration: none; transition: 0.3s; }
+    .back-link:hover { color: #e74c3c; text-decoration: none; }
+
+    .error-msg { color: #ff4d4d; font-size: 0.7rem; font-weight: bold; }
+
+    /* Animation d'entrée */
+    .animate-in {
+        animation: fadeInUp 1s ease-out;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 </style>
+
+<script>
+    // SCRIPT DE LA LAMPE (Comme sur ton login)
+    document.addEventListener('mousemove', (e) => {
+        const spotlight = document.getElementById('spotlight');
+        const area = document.getElementById('spotlight-area');
+        const rect = area.getBoundingClientRect();
+        
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        spotlight.style.left = x + 'px';
+        spotlight.style.top = y + 'px';
+    });
+</script>
 {% endblock %}
