@@ -2,180 +2,105 @@
 {% load static %}
 
 {% block content %}
-<div class="tto-detail-page">
+<div class="utick-detail-page">
     <div class="container">
-        <div class="tto-main-card">
+        <div class="utick-main-wrapper">
             <div class="row no-gutters">
                 
                 <div class="col-md-5">
-                    <div class="tto-image-side">
-                        {% if show.poster %}
-                            <img src="{{ show.poster.url }}" alt="{{ show.title }}">
-                        {% else %}
-                            <img src="https://images.unsplash.com/photo-1503095396549-807039045047?q=80&w=800" alt="Default">
-                        {% endif %}
+                    <div class="utick-visual-side">
+                        <img src="{{ show.poster_url }}" alt="{{ show.title }}">
                     </div>
                 </div>
 
                 <div class="col-md-7">
-                    <div class="tto-info-side">
-                        <div class="tto-breadcrumb">
-                            <a href="{% url 'catalogue:show_index' %}">SPECTACLES</a> / {{ show.title|upper }}
+                    <div class="utick-content-side">
+                        <div class="utick-breadcrumb">
+                            <a href="{% url 'catalogue:show_index' %}">CATALOGUE</a> / {{ show.title|upper }}
                         </div>
 
-                        <h1 class="tto-detail-title">{{ show.title|upper }}</h1>
-                        
-                        <div class="tto-detail-location">
+                        <h1 class="utick-title">{{ show.title|upper }}</h1>
+                        <div class="utick-location-label">
                             <i class="fas fa-map-marker-alt"></i> {{ show.location.designation|upper }}
                         </div>
 
-                        <div class="tto-price-section">
-                            <span class="tto-price-value">{{ show.price|floatformat:2 }} €</span>
+                        <div class="utick-description-box">
+                            <p>{{ show.description|linebreaks }}</p>
                         </div>
 
-                        <div class="tto-description">
-                            <h5 class="tto-section-label">RÉSUMÉ</h5>
-                            <div class="tto-text">
-                                {{ show.description|linebreaks }}
-                            </div>
-                        </div>
-
-                        <div class="tto-booking-box">
-                            <form action="#" method="POST">
+                        <div class="utick-booking-card">
+                            <div class="booking-header">RÉSERVER VOS PLACES</div>
+                            
+                            <form action="{% url 'catalogue:book_representation' 0 %}" method="POST" id="utickBookingForm">
                                 {% csrf_token %}
-                                <div class="form-group">
-                                    <label class="tto-label">CHOISISSEZ VOTRE SÉANCE</label>
-                                    <select class="form-control tto-select">
-                                        <option>Du {{ show.date_debut|date:"d/m/Y" }} au {{ show.date_fin|date:"d/m/Y" }}</option>
-                                    </select>
+                                
+                                <div class="booking-inner">
+                                    <div class="form-group">
+                                        <label class="small font-weight-bold">CHOISISSEZ UNE SÉANCE</label>
+                                        <select id="repSelect" class="form-control utick-input" required>
+                                            <option value="" disabled selected>-- Sélectionner une date --</option>
+                                            {% for rep in representations %}
+                                                <option value="{{ rep.id }}">
+                                                    {{ rep.when|date:"d F Y à H:i" }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="small font-weight-bold">NOMBRE DE PERSONNES</label>
+                                        <div class="input-group">
+                                            <input type="number" name="places" class="form-control utick-input" value="1" min="1" max="10">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text bg-white border-left-0">{{ show.price }} € / pers.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn utick-btn-buy">
+                                        AJOUTER AU PANIER
+                                    </button>
                                 </div>
-                                <button type="submit" class="btn tto-btn-red">
-                                    RÉSERVER MAINTENANT
-                                </button>
                             </form>
                         </div>
-                    </div> </div> </div> </div> </div> </div> <style>
-    /* FOND NOIR DU SITE */
-    .tto-detail-page {
-        background-color: #050505;
-        padding: 120px 0 60px 0;
-        min-height: 100vh;
-        font-family: 'Poppins', sans-serif;
-    }
+                    </div>
+                </div>
 
-    /* LE BLOC BLANC (Comme sur Utick) */
-    .tto-main-card {
-        background: #ffffff;
-        border-radius: 0; /* Utick utilise des angles vifs */
-        overflow: hidden;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-    }
+            </div>
+        </div>
+    </div>
+</div>
 
-    /* IMAGE A GAUCHE */
-    .tto-image-side {
-        height: 100%;
-        min-height: 600px;
-        background: #000;
-    }
-
-    .tto-image-side img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* CONTENU A DROITE */
-    .tto-info-side {
-        padding: 60px;
-        color: #111;
-    }
-
-    .tto-breadcrumb {
-        font-size: 0.7rem;
-        letter-spacing: 2px;
-        color: #999;
-        margin-bottom: 20px;
-    }
-
-    .tto-breadcrumb a { color: #e74c3c; text-decoration: none; }
-
-    .tto-detail-title {
-        font-weight: 900;
-        font-size: 3rem;
-        line-height: 1;
-        margin-bottom: 15px;
-        letter-spacing: -1px;
-    }
-
-    .tto-detail-location {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #444;
-        letter-spacing: 1px;
-        margin-bottom: 30px;
-    }
-
-    .tto-price-section {
-        margin-bottom: 40px;
-    }
-
-    .tto-price-value {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #e74c3c;
-    }
-
-    .tto-section-label {
-        font-size: 0.8rem;
-        font-weight: 900;
-        letter-spacing: 2px;
-        margin-bottom: 15px;
-        color: #000;
-    }
-
-    .tto-text {
-        font-size: 0.95rem;
-        line-height: 1.6;
-        color: #555;
-        margin-bottom: 40px;
-    }
-
-    /* BOUTON ET SELECT TTO STYLE */
-    .tto-booking-box {
-        background: #f9f9f9;
-        padding: 30px;
-        border: 1px solid #eee;
-    }
-
-    .tto-label {
-        font-size: 0.7rem;
-        font-weight: 800;
-        color: #888;
-    }
-
-    .tto-select {
-        border-radius: 0;
-        border: 1px solid #ddd;
-        height: 45px;
-        font-size: 0.9rem;
-    }
-
-    .tto-btn-red {
-        background-color: #e74c3c;
-        color: white;
-        border-radius: 0;
-        padding: 15px;
-        font-weight: 900;
-        width: 100%;
-        letter-spacing: 2px;
-        transition: 0.3s;
-        border: none;
-        margin-top: 10px;
-    }
-
-    .tto-btn-red:hover {
-        background-color: #000;
-        color: #fff;
-    }
+<style>
+    /* RESET ET FOND NOIR */
+    .utick-detail-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Montserrat', sans-serif; }
+    .utick-main-wrapper { background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+    .utick-visual-side img { width: 100%; height: 100%; object-fit: cover; min-height: 600px; }
+    .utick-content-side { padding: 60px; color: #111; }
+    .utick-title { font-size: 3rem; font-weight: 900; line-height: 1; margin-bottom: 10px; }
+    .utick-location-label { font-weight: 700; color: #e74c3c; margin-bottom: 30px; }
+    .utick-booking-card { border: 1px solid #eee; background: #fcfcfc; }
+    .booking-header { background: #111; color: #fff; padding: 15px 25px; font-weight: 800; font-size: 0.8rem; letter-spacing: 2px; }
+    .booking-inner { padding: 30px; }
+    .utick-input { border-radius: 0; height: 50px; border: 1px solid #ddd; font-weight: 600; }
+    .utick-btn-buy { background: #e74c3c; color: #fff; width: 100%; padding: 18px; font-weight: 900; border-radius: 0; transition: 0.3s; }
+    .utick-btn-buy:hover { background: #000; }
 </style>
+
+<script>
+document.getElementById('utickBookingForm').addEventListener('submit', function(e) {
+    const select = document.getElementById('repSelect');
+    const repId = select.value;
+    
+    if (!repId) {
+        e.preventDefault();
+        alert('Veuillez sélectionner une séance.');
+        return;
+    }
+
+    // On récupère l'URL avec l'ID '0' et on remplace par le vrai ID
+    let actionUrl = this.getAttribute('action');
+    this.action = actionUrl.replace('/0/', '/' + repId + '/');
+});
+</script>
 {% endblock %}

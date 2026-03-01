@@ -23,15 +23,27 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-# 3. Liste des spectacles
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Min, Max, Sum
+from .models import Show, Representation, Reservation
+# ... (garde tes autres imports : login, messages, etc.)
+
 def show_index(request):
-    shows = Show.objects.all().order_by('title')
+    # On récupère les spectacles avec le calcul auto des dates début/fin
+    shows = Show.objects.annotate(
+        date_debut=Min('representations__when'),
+        date_fin=Max('representations__when')
+    ).order_by('title')
     return render(request, 'catalogue/show_index.html', {'shows': shows})
 
-# 4. Détail du spectacle
 def show_detail(request, show_id):
     show = get_object_or_404(Show, id=show_id)
-    return render(request, 'catalogue/show_detail.html', {'show': show})
+    # On récupère les 4 dates créées dans la migration
+    representations = show.representations.all().order_by('when')
+    return render(request, 'catalogue/show_detail.html', {
+        'show': show, 
+        'representations': representations
+    })
 
 # 5. Réservation sécurisée
 @login_required
