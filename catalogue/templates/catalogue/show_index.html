@@ -4,7 +4,6 @@
 {% block content %}
 <div class="utick-catalogue-page">
     <div class="container">
-        
         <div class="utick-simple-header">
             <h1 class="utick-page-title">SPECTACLES</h1>
             <div class="utick-red-line"></div>
@@ -14,10 +13,10 @@
             {% for show in shows %}
             <a href="{% url 'catalogue:show_detail' show.id %}" class="utick-item-row animate-in" style="animation-delay: {{ forloop.counter0 }}0ms">
                 <div class="utick-item-poster">
-                    {% if show.poster_url %}
-                        <img src="{{ show.poster_url }}" alt="{{ show.title }}">
+                    {% if show.poster %}
+                        <img src="{{ show.poster.url }}" alt="{{ show.title }}">
                     {% else %}
-                        <img src="https://via.placeholder.com/110" alt="No Image">
+                        <img src="https://via.placeholder.com/110x110/000000/FFFFFF?text=IMAGE" alt="No Image">
                     {% endif %}
                 </div>
                 
@@ -53,44 +52,14 @@
 </div>
 
 <style>
-    /* FOND ET STRUCTURE */
-    .utick-catalogue-page {
-        background-color: #050505;
-        min-height: 100vh;
-        padding: 120px 0 60px;
-        font-family: 'Arial', sans-serif;
-    }
+    .utick-catalogue-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Arial', sans-serif; }
+    .utick-page-title { color: white; font-weight: 900; letter-spacing: 2px; font-size: 2.5rem; margin: 0; }
+    .utick-red-line { width: 50px; height: 4px; background: #e74c3c; margin-top: 10px; margin-bottom: 40px; }
 
-    .utick-simple-header {
-        margin-bottom: 40px;
-    }
-
-    .utick-page-title {
-        color: white;
-        font-weight: 900;
-        letter-spacing: 2px;
-        font-size: 2.5rem;
-        margin: 0;
-    }
-
-    .utick-red-line {
-        width: 50px;
-        height: 4px;
-        background: #e74c3c;
-        margin-top: 10px;
-    }
-
-    /* LA LIGNE DE SPECTACLE */
     .utick-item-row {
-        background: #fff;
-        display: flex;
-        align-items: center;
-        margin-bottom: 12px;
-        text-decoration: none !important;
-        transition: all 0.2s ease-in-out;
-        min-height: 110px;
-        border-left: 0px solid #e74c3c;
-        overflow: hidden;
+        background: #fff; display: flex; align-items: center; margin-bottom: 12px;
+        text-decoration: none !important; transition: all 0.2s ease-in-out;
+        min-height: 110px; border-left: 0px solid #e74c3c; overflow: hidden;
     }
 
     .utick-item-row:hover {
@@ -99,90 +68,22 @@
         box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
 
-    /* POSTER */
-    .utick-item-poster {
-        width: 110px;
-        height: 110px;
-        background: #000;
-        flex-shrink: 0;
-    }
+    .utick-item-poster { width: 110px; height: 110px; background: #000; flex-shrink: 0; }
+    .utick-item-poster img { width: 100%; height: 100%; object-fit: cover; }
 
-    .utick-item-poster img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* CONTENU */
-    .utick-item-info {
-        flex-grow: 1;
-        padding: 15px 30px;
-        color: #111;
-    }
-
-    .utick-item-top {
-        display: flex;
-        gap: 15px;
-        font-size: 0.75rem;
-        font-weight: 800;
-        margin-bottom: 3px;
-    }
-
+    .utick-item-info { flex-grow: 1; padding: 15px 30px; color: #111; }
+    .utick-item-top { display: flex; gap: 15px; font-size: 0.75rem; font-weight: 800; margin-bottom: 3px; }
     .utick-item-category { color: #e74c3c; }
     .utick-item-location { color: #888; text-transform: uppercase; }
-
-    .utick-item-title {
-        font-size: 1.4rem;
-        font-weight: 900;
-        margin: 0;
-        color: #000;
-        line-height: 1.1;
-    }
-
-    .utick-item-dates {
-        font-size: 0.85rem;
-        color: #555;
-        font-weight: 600;
-        margin-top: 6px;
-    }
-
+    .utick-item-title { font-size: 1.4rem; font-weight: 900; margin: 0; color: #000; line-height: 1.1; }
+    .utick-item-dates { font-size: 0.85rem; color: #555; font-weight: 600; margin-top: 6px; }
     .utick-item-dates i { color: #e74c3c; margin-right: 6px; }
 
-    /* ACTION */
-    .utick-item-action {
-        display: flex;
-        align-items: center;
-        padding-right: 30px;
-    }
+    .utick-item-action { display: flex; align-items: center; padding-right: 30px; }
+    .utick-item-price { font-size: 1.5rem; font-weight: 900; color: #000; margin-right: 25px; }
+    .utick-item-arrow { color: #e74c3c; font-size: 1.3rem; transition: 0.3s; }
 
-    .utick-item-price {
-        font-size: 1.5rem;
-        font-weight: 900;
-        color: #000;
-        margin-right: 25px;
-    }
-
-    .utick-item-arrow {
-        color: #e74c3c;
-        font-size: 1.3rem;
-        transition: 0.3s;
-    }
-
-    /* ANIMATION */
-    .animate-in {
-        animation: fadeInRight 0.5s ease forwards;
-        opacity: 0;
-    }
-
-    @keyframes fadeInRight {
-        from { opacity: 0; transform: translateX(-30px); }
-        to { opacity: 1; transform: translateX(0); }
-    }
-
-    @media (max-width: 768px) {
-        .utick-item-row { flex-direction: column; align-items: flex-start; min-height: auto; }
-        .utick-item-poster { width: 100%; height: 200px; }
-        .utick-item-action { width: 100%; padding: 15px 30px; background: #f9f9f9; justify-content: space-between; }
-    }
+    .animate-in { animation: fadeInRight 0.5s ease forwards; opacity: 0; }
+    @keyframes fadeInRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
 </style>
 {% endblock %}
