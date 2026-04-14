@@ -5,8 +5,8 @@ from django.contrib.auth import update_session_auth_hash, logout as auth_logout 
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Sum
-from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile
-
+from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation,Profile
+from .forms import SignUpForm
 # 1. Accueil
 def welcome(request):
     return render(request, 'catalogue/welcome.html')
@@ -14,13 +14,15 @@ def welcome(request):
 # 2. Inscription
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
             messages.success(request, "Inscription réussie !")
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
 from django.shortcuts import render, get_object_or_404, redirect
