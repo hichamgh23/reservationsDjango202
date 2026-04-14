@@ -1,0 +1,40 @@
+{% extends 'catalogue/base.html' %}
+
+{% block title %}{{ artist.firstname }} {{ artist.lastname }}{% endblock %}
+
+{% block content %}
+<div class="catalogue-page">
+    <div class="container">
+        <div class="page-header anim-fade-up">
+            <h1 class="page-title">{{ artist.firstname }} {{ artist.lastname }}</h1>
+            <div class="title-bar"></div>
+        </div>
+
+        <div class="bg-white border rounded p-4 mb-3">
+            <p><strong>Prénom :</strong> {{ artist.firstname }}</p>
+            <p><strong>Nom :</strong> {{ artist.lastname }}</p>
+
+            {% if artist_types %}
+            <p><strong>Fonctions :</strong>
+                {% for at in artist_types %}
+                <span class="badge badge-warning">{{ at.type.type }}</span>
+                {% endfor %}
+            </p>
+            {% endif %}
+
+            {% if user.is_staff %}
+            <a href="{% url 'catalogue:artist_edit' artist.id %}" class="btn btn-warning">Modifier</a>
+            <form method="post" action="{% url 'catalogue:artist_delete' artist.id %}" 
+                  onsubmit="return confirm('Supprimer cet artiste ?')" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'catalogue:artist_index' %}" class="text-danger">
+            <i class="fas fa-arrow-left mr-1"></i>Retour à la liste
+        </a>
+    </div>
+</div>
+{% endblock %}

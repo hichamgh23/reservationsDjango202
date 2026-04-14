@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash, logout as auth_logout # Ajout logout
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash, logout as auth_logout
 from django.contrib import messages
 from decimal import Decimal
-from django.db.models import Sum
-from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation,Profile
-from .forms import SignUpForm
+from django.db.models import Min, Max, Sum
+from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile, ArtistType
+from .forms import SignUpForm, ArtistForm
+
 # 1. Accueil
 def welcome(request):
     return render(request, 'catalogue/welcome.html')
@@ -25,34 +26,29 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Min, Max, Sum
-from .models import Show, Representation, Reservation
-# ... (garde tes autres imports : login, messages, etc.)
-
+# 3. Catalogue des spectacles
 def show_index(request):
-    # On récupère les spectacles avec le calcul auto des dates début/fin
     shows = Show.objects.annotate(
         date_debut=Min('representations__when'),
         date_fin=Max('representations__when')
     ).order_by('title')
     return render(request, 'catalogue/show_index.html', {'shows': shows})
 
+# 4. Détail d'un spectacle
 def show_detail(request, show_id):
     show = get_object_or_404(Show, id=show_id)
-    # On récupère les 4 dates créées dans la migration
     representations = show.representations.all().order_by('when')
     return render(request, 'catalogue/show_detail.html', {
-        'show': show, 
+        'show': show,
         'representations': representations
     })
 
-# 5. Réservation sécurisée
+# 5. Réservation
 @login_required
 def book_representation(request, representation_id):
     representation = get_object_or_404(Representation, id=representation_id)
     admin_fees = Decimal('2.00')
-    
+
     reserved = Reservation.objects.filter(representation=representation).aggregate(Sum('places'))['places__sum'] or 0
     capacity = representation.location.capacity if representation.location else 0
     remaining = max(0, capacity - reserved)
@@ -63,9 +59,7 @@ def book_representation(request, representation_id):
             if places > remaining or places < 1:
                 messages.error(request, f"Erreur : {remaining} places restantes.")
                 return redirect('catalogue:show_detail', show_id=representation.show.id)
-            
             Reservation.objects.create(user=request.user, representation=representation, places=places)
-            
             total_places = representation.show.price * places
             return render(request, 'catalogue/reservation_confirm.html', {
                 'representation': representation,
@@ -76,25 +70,28 @@ def book_representation(request, representation_id):
             })
         except ValueError:
             return redirect('catalogue:show_detail', show_id=representation.show.id)
-            
-    return render(request, 'catalogue/book.html', {'representation': representation, 'remaining_seats': remaining})
 
-# 6. Profil & Historique
+    return render(request, 'catalogue/book.html', {
+        'representation': representation,
+        'remaining_seats': remaining
+    })
+
+# 6. Profil
 @login_required
 def profile(request):
     reservations = Reservation.objects.filter(user=request.user).select_related('representation__show').order_by('-id')
     return render(request, 'catalogue/profile.html', {'reservations': reservations})
 
-# 7. Annulation d'une réservation
+# 7. Annulation réservation
 @login_required
 def reservation_delete(request, reservation_id):
     reservation = get_object_or_404(Reservation, id=reservation_id, user=request.user)
     if request.method == 'POST':
         reservation.delete()
-        messages.success(request, "Votre réservation a été annulée avec succès.")
+        messages.success(request, "Réservation annulée avec succès.")
     return redirect('catalogue:profile')
 
-# 8. LA SOLUTION POUR JAZZMIN : Fonction de déconnexion forcée
+# 8. Déconnexion
 def logout_user(request):
     auth_logout(request)
     messages.info(request, "Vous avez été déconnecté.")
@@ -108,7 +105,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Votre mot de passe a été mis à jour !')
+            messages.success(request, 'Mot de passe mis à jour !')
             return redirect('catalogue:profile')
     else:
         form = PasswordChangeForm(request.user)
@@ -132,3 +129,59 @@ def delete_profile_image(request):
     profile.save()
     messages.success(request, 'Photo de profil supprimée.')
     return redirect('catalogue:profile')
+
+# --- CRUD ARTIST ---
+
+def artist_index(request):
+    artists = Artist.objects.all().order_by('lastname')
+    return render(request, 'catalogue/artist_index.html', {'artists': artists})
+
+def artist_show(request, id):
+    artist = get_object_or_404(Artist, id=id)
+    artist_types = ArtistType.objects.filter(artist=artist).select_related('type')
+    return render(request, 'catalogue/artist_show.html', {
+        'artist': artist,
+        'artist_types': artist_types
+    })
+
+@login_required
+def artist_create(request):
+    form = ArtistForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Artiste ajouté avec succès !")
+            return redirect('catalogue:artist_index')
+        else:
+            messages.error(request, "Échec de l'ajout !")
+    return render(request, 'catalogue/artist_form.html', {
+        'form': form,
+        'action': 'Ajouter',
+        'artist': None
+    })
+
+@login_required
+def artist_edit(request, id):
+    artist = get_object_or_404(Artist, id=id)
+    form = ArtistForm(request.POST or None, instance=artist)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Artiste modifié avec succès !")
+            return redirect('catalogue:artist_show', id=artist.id)
+        else:
+            messages.error(request, "Échec de la modification !")
+    return render(request, 'catalogue/artist_form.html', {
+        'form': form,
+        'action': 'Modifier',
+        'artist': artist
+    })
+
+@login_required
+def artist_delete(request, id):
+    artist = get_object_or_404(Artist, id=id)
+    if request.method == 'POST':
+        artist.delete()
+        messages.success(request, "Artiste supprimé avec succès !")
+        return redirect('catalogue:artist_index')
+    return render(request, 'catalogue/artist_confirm_delete.html', {'artist': artist})

@@ -33,4 +33,11 @@ urlpatterns = [
     
     # Suppression de la photo de profil
     path('profile/image/delete/', views.delete_profile_image, name='delete_profile_image'),
+
+    # --- CRUD ARTIST ---
+path('artist/', views.artist_index, name='artist_index'),
+path('artist/create/', views.artist_create, name='artist_create'),
+path('artist/<int:id>/', views.artist_show, name='artist_show'),
+path('artist/<int:id>/edit/', views.artist_edit, name='artist_edit'),
+path('artist/<int:id>/delete/', views.artist_delete, name='artist_delete'),
 ]

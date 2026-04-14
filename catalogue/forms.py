@@ -40,3 +40,15 @@ class SignUpForm(forms.ModelForm):
             raise forms.ValidationError("La correspondance des mots de passe a échoué.")
         
         return cleaned_data
+    
+  
+from .models import Artist
+
+class ArtistForm(forms.ModelForm):
+    class Meta:
+        model = Artist
+        fields = ['firstname', 'lastname']
+        labels = {
+            'firstname': 'Prénom',
+            'lastname': 'Nom',
+        }

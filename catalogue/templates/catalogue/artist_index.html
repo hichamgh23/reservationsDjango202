@@ -1,0 +1,56 @@
+{% extends 'catalogue/base.html' %}
+
+{% block title %}Liste des artistes{% endblock %}
+
+{% block content %}
+<div class="catalogue-page">
+    <div class="container">
+        <div class="page-header anim-fade-up">
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <h1 class="page-title">Artistes</h1>
+                    <div class="title-bar"></div>
+                    <p class="page-subtitle">{{ artists|length }} artiste{{ artists|length|pluralize }} enregistré{{ artists|length|pluralize }}</p>
+                </div>
+                {% if user.is_staff %}
+                <a href="{% url 'catalogue:artist_create' %}" class="btn btn-danger">
+                    <i class="fas fa-plus mr-2"></i>Ajouter un artiste
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <table class="table table-bordered bg-white">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for artist in artists %}
+                <tr>
+                    <td>{{ artist.firstname }}</td>
+                    <td>
+                        <a href="{% url 'catalogue:artist_show' artist.id %}">{{ artist.lastname }}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'catalogue:artist_edit' artist.id %}" class="btn btn-sm btn-warning">Modifier</a>
+                        <form method="post" action="{% url 'catalogue:artist_delete' artist.id %}" 
+                              onsubmit="return confirm('Supprimer cet artiste ?')" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">Aucun artiste dans la base de données.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
