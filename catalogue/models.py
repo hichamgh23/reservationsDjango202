@@ -132,3 +132,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profil de {self.user.username}"
+    
+    # UserMeta - Extension du modèle User
+class UserMeta(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    langue = models.CharField(max_length=2)
+
+    class Meta:
+        db_table = "user_meta"
+
+    def __str__(self):
+        return self.user.first_name + " " + self.user.last_name
