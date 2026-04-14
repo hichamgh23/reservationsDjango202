@@ -1,12 +1,22 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash, logout as auth_logout
+from django.contrib.auth.models import Group
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Min, Max, Sum
 from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile, ArtistType
 from .forms import SignUpForm, ArtistForm
+
+# Vérification du groupe
+def group_required(*group_names):
+    def in_groups(user):
+        if user.is_authenticated:
+            if user.groups.filter(name__in=group_names).exists() or user.is_superuser:
+                return True
+        return False
+    return user_passes_test(in_groups)
 
 # 1. Accueil
 def welcome(request):
@@ -20,8 +30,12 @@ def signup(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
+            memberGroup = Group.objects.get(name='MEMBER')
+            memberGroup.user_set.add(user)
             messages.success(request, "Inscription réussie !")
             return redirect('login')
+        else:
+            messages.error(request, "Erreur dans le formulaire.")
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -145,6 +159,7 @@ def artist_show(request, id):
     })
 
 @login_required
+@group_required('ADMIN')
 def artist_create(request):
     form = ArtistForm(request.POST or None)
     if request.method == 'POST':
@@ -161,6 +176,7 @@ def artist_create(request):
     })
 
 @login_required
+@group_required('ADMIN')
 def artist_edit(request, id):
     artist = get_object_or_404(Artist, id=id)
     form = ArtistForm(request.POST or None, instance=artist)
@@ -178,6 +194,7 @@ def artist_edit(request, id):
     })
 
 @login_required
+@group_required('ADMIN')
 def artist_delete(request, id):
     artist = get_object_or_404(Artist, id=id)
     if request.method == 'POST':
