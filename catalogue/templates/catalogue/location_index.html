@@ -1,0 +1,42 @@
+{% extends 'catalogue/base.html' %}
+{% block title %}Lieux de spectacle{% endblock %}
+{% block content %}
+<div class="catalogue-page">
+    <div class="container">
+        <div class="page-header anim-fade-up">
+            <h1 class="page-title">Lieux de spectacle</h1>
+            <div class="title-bar"></div>
+            <p class="page-subtitle">{{ locations|length }} lieu{{ locations|length|pluralize:"x" }} enregistré{{ locations|length|pluralize }}</p>
+        </div>
+
+        <table class="table table-bordered bg-white">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Désignation</th>
+                    <th>Adresse</th>
+                    <th>Localité</th>
+                    <th>Téléphone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for location in locations %}
+                <tr>
+                    <td><strong>{{ location.designation }}</strong></td>
+                    <td>{{ location.address }}</td>
+                    <td>{{ location.locality }}</td>
+                    <td>{{ location.phone|default:"-" }}</td>
+                    <td>
+                        <a href="{% url 'catalogue:location_show' location.id %}" class="btn btn-sm btn-danger">Voir</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">Aucun lieu enregistré.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

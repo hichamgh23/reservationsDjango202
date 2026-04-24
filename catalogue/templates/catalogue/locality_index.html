@@ -1,0 +1,43 @@
+{% extends 'catalogue/base.html' %}
+{% block title %}Localites{% endblock %}
+{% block content %}
+<div class="catalogue-page">
+    <div class="container">
+        <div class="page-header anim-fade-up">
+            <h1 class="page-title">Localites</h1>
+            <div class="title-bar"></div>
+            <p class="page-subtitle">{{ localities|length }} localité{{ localities|length|pluralize }} enregistrée{{ localities|length|pluralize }}</p>
+        </div>
+
+        <table class="table table-bordered bg-white">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Code postal</th>
+                    <th>Localité</th>
+                    <th>Lieux</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for locality in localities %}
+                <tr>
+                    <td>{{ locality.postal_code }}</td>
+                    <td>{{ locality.locality }}</td>
+                    <td>{{ locality.locations.count }} lieu{{ locality.locations.count|pluralize:"x" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">Aucune localité enregistrée.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<style>
+.catalogue-page{background:#F8F7F4;min-height:100vh;padding:100px 0 60px}
+.page-title{font-size:2rem;font-weight:800;color:#1A1A2E;margin:0}
+.title-bar{width:44px;height:4px;background:#E8621A;border-radius:2px;margin:10px 0 12px}
+.page-subtitle{color:#9999AA;font-size:0.9rem;font-weight:500;margin:0}
+.page-header{margin-bottom:36px}
+</style>
+{% endblock %}

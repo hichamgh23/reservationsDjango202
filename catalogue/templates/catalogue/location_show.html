@@ -1,0 +1,47 @@
+{% extends 'catalogue/base.html' %}
+{% block title %}{{ location.designation }}{% endblock %}
+{% block content %}
+<div class="catalogue-page">
+    <div class="container">
+        <div class="breadcrumb-bar anim-fade-in">
+            <a href="{% url 'catalogue:location_index' %}">Lieux</a>
+            <i class="fas fa-chevron-right mx-2" style="font-size:0.65rem;color:#9999AA;"></i>
+            <span>{{ location.designation }}</span>
+        </div>
+
+        <div class="book-card anim-fade-up" style="max-width:650px;">
+            <div class="book-header">
+                <div class="book-tag">Lieu de spectacle</div>
+                <h2 class="book-title">{{ location.designation }}</h2>
+            </div>
+            <div style="padding:24px 32px;">
+                <p><strong>Adresse :</strong> {{ location.address }}</p>
+                <p><strong>Localité :</strong> {{ location.locality }}</p>
+                {% if location.phone %}
+                <p><strong>Téléphone :</strong> {{ location.phone }}</p>
+                {% endif %}
+                {% if location.website %}
+                <p><strong>Site web :</strong> <a href="{{ location.website }}" target="_blank" style="color:#E8621A;">{{ location.website }}</a></p>
+                {% endif %}
+                <hr>
+                <h4 style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#1A1A2E;margin-bottom:12px;">Spectacles dans ce lieu</h4>
+                {% if shows %}
+                    {% for show in shows %}
+                    <div style="padding:10px 0;border-bottom:1px solid #F0EEE9;">
+                        <a href="{% url 'catalogue:show_detail' show.id %}" style="color:#E8621A;font-weight:600;">{{ show.title }}</a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="color:#9999AA;font-size:0.88rem;">Aucun spectacle dans ce lieu.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <a href="{% url 'catalogue:location_index' %}" style="color:#E8621A;font-size:0.85rem;font-weight:600;text-decoration:none;">
+                <i class="fas fa-arrow-left mr-1"></i>Retour aux lieux
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

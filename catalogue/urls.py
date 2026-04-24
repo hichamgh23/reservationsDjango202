@@ -40,4 +40,10 @@ path('artist/create/', views.artist_create, name='artist_create'),
 path('artist/<int:id>/', views.artist_show, name='artist_show'),
 path('artist/<int:id>/edit/', views.artist_edit, name='artist_edit'),
 path('artist/<int:id>/delete/', views.artist_delete, name='artist_delete'),
+# Locations
+path('locations/', views.location_index, name='location_index'),
+path('location/<int:location_id>/', views.location_show, name='location_show'),
+
+# Localities
+path('localities/', views.locality_index, name='locality_index'),
 ]

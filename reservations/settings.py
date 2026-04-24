@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 
+
 # Force Django à accepter pymysql
 import pymysql.constants.CLIENT
 pymysql.version_info = (2, 2, 1, "final", 0)

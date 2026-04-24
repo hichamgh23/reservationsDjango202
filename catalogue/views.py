@@ -202,3 +202,21 @@ def artist_delete(request, id):
         messages.success(request, "Artiste supprimé avec succès !")
         return redirect('catalogue:artist_index')
     return render(request, 'catalogue/artist_confirm_delete.html', {'artist': artist})
+
+# --- LOCATIONS ---
+def location_index(request):
+    locations = Location.objects.all().select_related('locality').order_by('designation')
+    return render(request, 'catalogue/location_index.html', {'locations': locations})
+
+def location_show(request, location_id):
+    location = get_object_or_404(Location, id=location_id)
+    shows = Show.objects.filter(location=location)
+    return render(request, 'catalogue/location_show.html', {
+        'location': location,
+        'shows': shows
+    })
+
+# --- LOCALITIES ---
+def locality_index(request):
+    localities = Locality.objects.all().order_by('locality')
+    return render(request, 'catalogue/locality_index.html', {'localities': localities})
