@@ -46,4 +46,5 @@ path('location/<int:location_id>/', views.location_show, name='location_show'),
 
 # Localities
 path('localities/', views.locality_index, name='locality_index'),
+
 ]

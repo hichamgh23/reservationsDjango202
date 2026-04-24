@@ -22,6 +22,9 @@ urlpatterns = [
     
     # Inclusion des urls de l'app catalogue
     path('', include('catalogue.urls')),
+
+
+    path('api/', include('api.catalogue.urls')),
 ]
 
 if settings.DEBUG:

@@ -12,6 +12,6 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     def get_links(self, obj): 
         request = self.context.get('request') 
         return { 
-            'self': reverse('catalogue:artist-detail', kwargs={'pk': obj.id}, request=request), 
-            'all_artists': reverse('catalogue:artist-list', request=request), 
+        'self': reverse('artist-detail', kwargs={'pk': obj.id}, request=request),
+         'all_artists': reverse('artist-list', request=request),
         } 
