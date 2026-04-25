@@ -21,12 +21,32 @@
 
                         <h1 class="utick-title">{{ show.title|upper }}</h1>
                         <div class="utick-location-label">
-                            <i class="fas fa-map-marker-alt"></i> {{ show.location.designation|upper }}
+                         <i class="fas fa-map-marker-alt"></i> 
+                               {{ show.location.designation|upper }}
+                               {% if show.location.locality %}
+        —                      {{ show.location.locality.postal_code }} {{ show.location.locality.locality|upper }}
+                                {% endif %}
                         </div>
 
                         <div class="utick-description-box">
                             <p>{{ show.description|linebreaks }}</p>
                         </div>
+
+                        {% if artistes_show %}
+                        <div class="utick-distribution">
+                            <h4 class="distribution-title">DISTRIBUTION</h4>
+                            <div class="artistes-list">
+                                {% for ats in artistes_show %}
+                                <div class="artiste-item">
+                                    <a href="{% url 'catalogue:artist_show' ats.artist_type.artist.id %}" class="artiste-name">
+                                        {{ ats.artist_type.artist.firstname }} {{ ats.artist_type.artist.lastname }}
+                                    </a>
+                                    <span class="artiste-role">{{ ats.artist_type.type.type|upper }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
 
                         <div class="utick-booking-card">
                             <div class="booking-header">RÉSERVER VOS PLACES</div>
@@ -85,6 +105,15 @@
     .utick-input { border-radius: 0; height: 50px; border: 1px solid #ddd; font-weight: 600; }
     .utick-btn-buy { background: #e74c3c; color: #fff; width: 100%; padding: 18px; font-weight: 900; border-radius: 0; transition: 0.3s; }
     .utick-btn-buy:hover { background: #000; }
+    
+    /* DISTRIBUTION */
+    .utick-distribution { margin-bottom: 30px; padding-top: 20px; border-top: 1px solid #eee; }
+    .distribution-title { font-size: 0.8rem; font-weight: 800; letter-spacing: 2px; color: #111; margin-bottom: 12px; }
+    .artistes-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .artiste-item { display: flex; align-items: center; gap: 8px; background: #f5f5f5; padding: 6px 12px; border: 1px solid #eee; }
+    .artiste-name { color: #111; font-weight: 700; font-size: 0.85rem; text-decoration: none; }
+    .artiste-name:hover { color: #e74c3c; text-decoration: none; }
+    .artiste-role { color: #e74c3c; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; }
 </style>
 
 <script>

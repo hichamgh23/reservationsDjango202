@@ -41,8 +41,7 @@ class SignUpForm(forms.ModelForm):
         
         return cleaned_data
     
-  
-from .models import Artist
+from .models import Artist, Locality
 
 class ArtistForm(forms.ModelForm):
     class Meta:
@@ -51,4 +50,16 @@ class ArtistForm(forms.ModelForm):
         labels = {
             'firstname': 'Prénom',
             'lastname': 'Nom',
+        }
+
+
+     
+
+class LocalityForm(forms.ModelForm):
+    class Meta:
+        model = Locality
+        fields = ['postal_code', 'locality']
+        labels = {
+            'postal_code': 'Code postal',
+            'locality': 'Localité',
         }

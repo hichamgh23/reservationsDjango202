@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group
 from django.contrib import messages
 from decimal import Decimal
 from django.db.models import Min, Max, Sum
-from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile, ArtistType
+from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile, ArtistType, ArtistTypeShow
 from .forms import SignUpForm, ArtistForm
 import csv
 from django.http import HttpResponse
@@ -67,7 +67,7 @@ def show_index(request):
     shows = Show.objects.annotate(
         date_debut=Min('representations__when'),
         date_fin=Max('representations__when')
-    ).order_by('title')
+    ).prefetch_related('artisttypeshow_set__artist_type__artist', 'artisttypeshow_set__artist_type__type').order_by('title')
     
     if search:
         shows = shows.filter(title__icontains=search)
@@ -81,9 +81,11 @@ def show_index(request):
 def show_detail(request, show_id):
     show = get_object_or_404(Show, id=show_id)
     representations = show.representations.all().order_by('when')
+    artistes_show = ArtistTypeShow.objects.filter(show=show).select_related('artist_type__artist', 'artist_type__type')
     return render(request, 'catalogue/show_detail.html', {
         'show': show,
-        'representations': representations
+        'representations': representations,
+        'artistes_show': artistes_show
     })
 
 # 5. Réservation
@@ -299,3 +301,60 @@ class LatestRepresentationsFeed(Feed):
 
     def item_link(self, item):
         return reverse('catalogue:show_detail', args=[item.show.id])
+    
+
+    # --- CRUD LOCALITY ---
+from .forms import LocalityForm
+
+@login_required
+@group_required('ADMIN')
+def locality_create(request):
+    form = LocalityForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Localité ajoutée avec succès !")
+            return redirect('catalogue:locality_index')
+        else:
+            messages.error(request, "Échec de l'ajout !")
+    return render(request, 'catalogue/locality_form.html', {
+        'form': form,
+        'action': 'Ajouter',
+        'locality': None
+    })
+
+@login_required
+@group_required('ADMIN')
+def locality_edit(request, id):
+    locality = get_object_or_404(Locality, id=id)
+    form = LocalityForm(request.POST or None, instance=locality)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Localité modifiée avec succès !")
+            return redirect('catalogue:locality_show', id=locality.id)
+        else:
+            messages.error(request, "Échec de la modification !")
+    return render(request, 'catalogue/locality_form.html', {
+        'form': form,
+        'action': 'Modifier',
+        'locality': locality
+    })
+
+@login_required
+@group_required('ADMIN')
+def locality_delete(request, id):
+    locality = get_object_or_404(Locality, id=id)
+    if request.method == 'POST':
+        locality.delete()
+        messages.success(request, "Localité supprimée avec succès !")
+        return redirect('catalogue:locality_index')
+    return render(request, 'catalogue/locality_confirm_delete.html', {'locality': locality})
+
+def locality_show(request, id):
+    locality = get_object_or_404(Locality, id=id)
+    locations = locality.locations.all()
+    return render(request, 'catalogue/locality_show.html', {
+        'locality': locality,
+        'locations': locations
+    })

@@ -1,0 +1,58 @@
+{% extends 'catalogue/base.html' %}
+{% block title %}{{ locality.postal_code }} {{ locality.locality }}{% endblock %}
+{% block content %}
+<div class="utick-detail-page">
+    <div class="container">
+        <div class="utick-main-wrapper" style="padding: 50px;">
+            
+            <div class="utick-breadcrumb mb-3">
+                <a href="{% url 'catalogue:locality_index' %}">LOCALITÉS</a> / {{ locality.locality|upper }}
+            </div>
+
+            <h1 class="utick-title">{{ locality.postal_code }} {{ locality.locality|upper }}</h1>
+            <div class="utick-location-label">
+                <i class="fas fa-map-marker-alt"></i> CODE POSTAL : {{ locality.postal_code }}
+            </div>
+
+            <div class="utick-shows-section">
+                <h4 class="section-title">LIEUX DE SPECTACLE DANS CETTE LOCALITÉ</h4>
+                {% if locations %}
+                <div class="shows-list">
+                    {% for location in locations %}
+                    <a href="{% url 'catalogue:location_show' location.id %}" class="show-link-item">
+                        <span class="show-link-title">{{ location.designation|upper }}</span>
+                        <span class="show-link-arrow"><i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="empty-msg">Aucun lieu dans cette localité.</p>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'catalogue:locality_index' %}" class="back-link" style="margin-top:30px;display:inline-block;">
+                <i class="fas fa-arrow-left mr-1"></i> RETOUR
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .utick-detail-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Arial', sans-serif; }
+    .utick-main-wrapper { background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+    .utick-breadcrumb { font-size: 0.75rem; font-weight: 700; color: #888; letter-spacing: 1.5px; }
+    .utick-breadcrumb a { color: #e74c3c; text-decoration: none; }
+    .utick-title { font-size: 2.5rem; font-weight: 900; line-height: 1; margin: 8px 0; color: #111; }
+    .utick-location-label { font-weight: 700; color: #e74c3c; margin-bottom: 30px; font-size: 0.9rem; }
+    .utick-shows-section { padding-top: 30px; border-top: 2px solid #111; }
+    .section-title { font-size: 0.9rem; font-weight: 900; letter-spacing: 2px; color: #111; margin-bottom: 20px; }
+    .shows-list { display: flex; flex-direction: column; gap: 8px; }
+    .show-link-item { display: flex; justify-content: space-between; align-items: center; background: #f7f7f7; padding: 14px 20px; text-decoration: none !important; color: #111; transition: all 0.2s; border-left: 3px solid transparent; }
+    .show-link-item:hover { background: #111; color: #fff; border-left-color: #e74c3c; transform: translateX(5px); }
+    .show-link-title { font-weight: 800; font-size: 0.9rem; }
+    .show-link-arrow { color: #e74c3c; }
+    .empty-msg { color: #888; font-style: italic; padding: 16px 0; }
+    .back-link { color: #e74c3c; font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; text-decoration: none; padding: 10px 20px; background: #f7f7f7; }
+    .back-link:hover { background: #111; color: #fff; text-decoration: none; }
+</style>
+{% endblock %}

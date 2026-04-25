@@ -48,5 +48,10 @@ path('location/<int:location_id>/', views.location_show, name='location_show'),
 path('localities/', views.locality_index, name='locality_index'),
 path('export/reservations/', views.export_reservations_csv, name='export_reservations_csv'),
 path('feed/representations/', views.LatestRepresentationsFeed(), name='feed_representations'),
+# --- CRUD LOCALITY ---
+path('locality/create/', views.locality_create, name='locality_create'),
+path('locality/<int:id>/', views.locality_show, name='locality_show'),
+path('locality/<int:id>/edit/', views.locality_edit, name='locality_edit'),
+path('locality/<int:id>/delete/', views.locality_delete, name='locality_delete'),
 
 ]
