@@ -13,6 +13,12 @@
         <h1 class="main-title">PROJET</h1>
         <h1 class="main-title text-danger">RÉSERVATIONS</h1>
         <p class="hero-lead">LE SPECTACLE COMMENCE ICI</p>
+        {% if citation %}
+<div class="citation-box mt-4">
+    <p class="citation-text">« {{ citation }} »</p>
+    <p class="citation-author">— {{ auteur }}</p>
+</div>
+{% endif %}
         <a href="{% url 'catalogue:show_index' %}" class="btn-theatre mt-4">
             PRENDRE PLACE <i class="fas fa-mask ml-2"></i>
         </a>
@@ -142,6 +148,29 @@
         border-top: none !important;
         margin-top: 0 !important;
     }
+
+    .citation-box {
+    max-width: 500px;
+    margin: 30px auto 0;
+    padding: 20px;
+    background: rgba(232,98,26,0.05);
+    border-left: 3px solid #E8621A;
+    border-radius: 4px;
+    text-align: left;
+}
+.citation-text {
+    color: rgba(255,255,255,0.85);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+.citation-author {
+    color: #E8621A;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: right;
+    margin: 0;
+}
 </style>
 <script>
     // On ajoute la classe 'opened' après 500ms pour lancer l'animation CSS

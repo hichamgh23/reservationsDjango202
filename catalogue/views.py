@@ -24,8 +24,24 @@ def group_required(*group_names):
     return user_passes_test(in_groups)
 
 # 1. Accueil
+import requests
+
 def welcome(request):
-    return render(request, 'catalogue/welcome.html')
+    citation = None
+    auteur = None
+    try:
+        response = requests.get('https://dummyjson.com/quotes/random', timeout=3, verify=False)
+        if response.status_code == 200:
+            data = response.json()
+            citation = data.get('quote')
+            auteur = data.get('author')
+    except Exception:
+        pass
+    
+    return render(request, 'catalogue/welcome.html', {
+        'citation': citation,
+        'auteur': auteur
+    })
 
 # 2. Inscription
 def signup(request):
