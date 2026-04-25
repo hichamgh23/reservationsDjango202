@@ -8,6 +8,8 @@ from decimal import Decimal
 from django.db.models import Min, Max, Sum
 from .models import Artist, Type, Locality, Role, Location, Show, Representation, Reservation, Profile, ArtistType
 from .forms import SignUpForm, ArtistForm
+import csv
+from django.http import HttpResponse
 
 # Vérification du groupe
 def group_required(*group_names):
@@ -202,6 +204,36 @@ def artist_delete(request, id):
         messages.success(request, "Artiste supprimé avec succès !")
         return redirect('catalogue:artist_index')
     return render(request, 'catalogue/artist_confirm_delete.html', {'artist': artist})
+
+
+
+# --- EXPORT CSV ---
+@login_required
+@group_required('ADMIN')
+def export_reservations_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="reservations.csv"'
+    
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(['ID', 'Utilisateur', 'Email', 'Spectacle', 'Date représentation', 'Lieu', 'Places', 'Prix unitaire', 'Total'])
+    
+    reservations = Reservation.objects.select_related('user', 'representation__show', 'representation__location').all()
+    
+    for res in reservations:
+        total = res.places * res.representation.show.price + Decimal('2.00')
+        writer.writerow([
+            res.id,
+            res.user.username,
+            res.user.email,
+            res.representation.show.title,
+            res.representation.when.strftime('%d/%m/%Y %H:%M'),
+            res.representation.location.designation if res.representation.location else '-',
+            res.places,
+            res.representation.show.price,
+            total
+        ])
+    
+    return response
 
 # --- LOCATIONS ---
 def location_index(request):
