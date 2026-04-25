@@ -10,6 +10,9 @@ from .models import Artist, Type, Locality, Role, Location, Show, Representation
 from .forms import SignUpForm, ArtistForm
 import csv
 from django.http import HttpResponse
+from django.contrib.syndication.views import Feed
+from django.urls import reverse
+from django.utils import timezone
 
 # Vérification du groupe
 def group_required(*group_names):
@@ -44,11 +47,19 @@ def signup(request):
 
 # 3. Catalogue des spectacles
 def show_index(request):
+    search = request.GET.get('search', '')
     shows = Show.objects.annotate(
         date_debut=Min('representations__when'),
         date_fin=Max('representations__when')
     ).order_by('title')
-    return render(request, 'catalogue/show_index.html', {'shows': shows})
+    
+    if search:
+        shows = shows.filter(title__icontains=search)
+    
+    return render(request, 'catalogue/show_index.html', {
+        'shows': shows,
+        'search': search
+    })
 
 # 4. Détail d'un spectacle
 def show_detail(request, show_id):
@@ -252,3 +263,23 @@ def location_show(request, location_id):
 def locality_index(request):
     localities = Locality.objects.all().order_by('locality')
     return render(request, 'catalogue/locality_index.html', {'localities': localities})
+
+
+# --- FLUX RSS ---
+class LatestRepresentationsFeed(Feed):
+    title = "PickShow - Représentations à venir"
+    link = "/shows/"
+    description = "Les prochaines représentations programmées sur PickShow"
+
+    def items(self):
+        return Representation.objects.filter(when__gte=timezone.now()).order_by('when')[:20]
+
+    def item_title(self, item):
+        return item.show.title
+
+    def item_description(self, item):
+        lieu = item.location.designation if item.location else 'Lieu non défini'
+        return f"Le {item.when.strftime('%d/%m/%Y à %H:%M')} - {lieu}"
+
+    def item_link(self, item):
+        return reverse('catalogue:show_detail', args=[item.show.id])

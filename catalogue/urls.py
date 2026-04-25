@@ -47,5 +47,6 @@ path('location/<int:location_id>/', views.location_show, name='location_show'),
 # Localities
 path('localities/', views.locality_index, name='locality_index'),
 path('export/reservations/', views.export_reservations_csv, name='export_reservations_csv'),
+path('feed/representations/', views.LatestRepresentationsFeed(), name='feed_representations'),
 
 ]
