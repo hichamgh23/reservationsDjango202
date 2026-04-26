@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # 1. Artistes (Source 731)
 class Artist(models.Model):
     firstname = models.CharField(max_length=60)
@@ -134,6 +135,7 @@ class Profile(models.Model):
         return f"Profil de {self.user.username}"
     
     # UserMeta - Extension du modèle User
+# UserMeta - Extension du modèle User
 class UserMeta(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     langue = models.CharField(max_length=2)
@@ -143,3 +145,20 @@ class UserMeta(models.Model):
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
+
+
+# 12. Reviews (Avis sur les spectacles)
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, null=False, related_name='reviews')
+    show = models.ForeignKey(Show, on_delete=models.RESTRICT, null=False, related_name='reviews')
+    review = models.TextField()
+    stars = models.PositiveSmallIntegerField()
+    validated = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "reviews"
+
+    def __str__(self):
+        return f"{self.user.username} - {self.show.title} : {self.stars}"
