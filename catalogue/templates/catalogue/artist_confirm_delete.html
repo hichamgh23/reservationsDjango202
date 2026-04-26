@@ -1,22 +1,33 @@
 {% extends 'catalogue/base.html' %}
-
 {% block title %}Supprimer {{ artist.firstname }} {{ artist.lastname }}{% endblock %}
-
 {% block content %}
-<div class="catalogue-page">
+<div class="utick-detail-page">
     <div class="container">
-        <div class="bg-white border rounded p-5 text-center" style="max-width:480px;margin:60px auto;">
-            <i class="fas fa-trash fa-3x text-danger mb-3"></i>
-            <h4>Êtes-vous sûr de vouloir supprimer</h4>
-            <h3 class="text-danger">{{ artist.firstname }} {{ artist.lastname }} ?</h3>
-            <p class="text-muted">Cette action est irréversible.</p>
-            <form method="post" class="mt-4">
+        <div class="utick-main-wrapper" style="padding:50px;max-width:500px;margin:0 auto;text-align:center;">
+            <div class="warn-icon"><i class="fas fa-trash"></i></div>
+            <h1 class="warn-title">SUPPRIMER L'ARTISTE ?</h1>
+            <p class="warn-name">{{ artist.firstname }} {{ artist.lastname }}</p>
+            <p class="warn-msg">Cette action est irréversible.</p>
+            <form method="post">
                 {% csrf_token %}
-                <input type="hidden" name="_method" value="DELETE">
-                <a href="{% url 'catalogue:artist_index' %}" class="btn btn-secondary mr-2">Annuler</a>
-                <button type="submit" class="btn btn-danger">Supprimer</button>
+                <a href="{% url 'catalogue:artist_index' %}" class="btn-cancel-warn">ANNULER</a>
+                <button type="submit" class="btn-confirm-warn">CONFIRMER LA SUPPRESSION</button>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .utick-detail-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Arial', sans-serif; }
+    .utick-main-wrapper { background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+    .warn-icon { width: 70px; height: 70px; background: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+    .warn-icon i { font-size: 1.8rem; color: #dc2626; }
+    .warn-title { font-size: 1.5rem; font-weight: 900; color: #111; margin-bottom: 12px; }
+    .warn-name { font-size: 1.4rem; font-weight: 900; color: #e74c3c; margin-bottom: 8px; }
+    .warn-msg { color: #888; margin-bottom: 30px; }
+    .btn-cancel-warn { padding: 12px 24px; background: #f0f0f0; color: #111; font-weight: 800; font-size: 0.78rem; letter-spacing: 1.5px; text-decoration: none !important; margin-right: 8px; }
+    .btn-cancel-warn:hover { background: #111; color: #fff; text-decoration: none; }
+    .btn-confirm-warn { padding: 12px 24px; background: #dc2626; color: #fff; font-weight: 800; font-size: 0.78rem; letter-spacing: 1.5px; border: none; cursor: pointer; }
+    .btn-confirm-warn:hover { background: #111; }
+</style>
 {% endblock %}

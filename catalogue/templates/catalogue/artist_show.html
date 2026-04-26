@@ -1,40 +1,83 @@
 {% extends 'catalogue/base.html' %}
-
 {% block title %}{{ artist.firstname }} {{ artist.lastname }}{% endblock %}
-
 {% block content %}
-<div class="catalogue-page">
+<div class="utick-detail-page">
     <div class="container">
-        <div class="page-header anim-fade-up">
-            <h1 class="page-title">{{ artist.firstname }} {{ artist.lastname }}</h1>
-            <div class="title-bar"></div>
-        </div>
+        <div class="utick-main-wrapper" style="padding: 50px;">
+            
+            <div class="utick-breadcrumb mb-3">
+                <a href="{% url 'catalogue:artist_index' %}">ARTISTES</a> / {{ artist.firstname|upper }} {{ artist.lastname|upper }}
+            </div>
 
-        <div class="bg-white border rounded p-4 mb-3">
-            <p><strong>Prénom :</strong> {{ artist.firstname }}</p>
-            <p><strong>Nom :</strong> {{ artist.lastname }}</p>
+            <h1 class="utick-title">{{ artist.firstname|upper }} {{ artist.lastname|upper }}</h1>
+            <div class="utick-red-line-form"></div>
+
+            <div class="utick-info-grid">
+                <div class="info-block">
+                    <div class="info-label">PRÉNOM</div>
+                    <div class="info-value">{{ artist.firstname }}</div>
+                </div>
+                <div class="info-block">
+                    <div class="info-label">NOM</div>
+                    <div class="info-value">{{ artist.lastname }}</div>
+                </div>
+            </div>
 
             {% if artist_types %}
-            <p><strong>Fonctions :</strong>
-                {% for at in artist_types %}
-                <span class="badge badge-warning">{{ at.type.type }}</span>
-                {% endfor %}
-            </p>
+            <div class="utick-shows-section">
+                <h4 class="section-title">FONCTIONS</h4>
+                <div class="types-list">
+                    {% for at in artist_types %}
+                    <span class="type-badge">{{ at.type.type|upper }}</span>
+                    {% endfor %}
+                </div>
+            </div>
             {% endif %}
 
-            {% if user.is_staff %}
-            <a href="{% url 'catalogue:artist_edit' artist.id %}" class="btn btn-warning">Modifier</a>
-            <form method="post" action="{% url 'catalogue:artist_delete' artist.id %}" 
-                  onsubmit="return confirm('Supprimer cet artiste ?')" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Supprimer</button>
-            </form>
-            {% endif %}
+            <div style="display:flex;gap:8px;margin-top:30px;flex-wrap:wrap;">
+                <a href="{% url 'catalogue:artist_index' %}" class="back-link">
+                    <i class="fas fa-arrow-left mr-1"></i> RETOUR
+                </a>
+                {% if user.is_superuser %}
+                <a href="{% url 'catalogue:artist_edit' artist.id %}" class="btn-action btn-edit-action">
+                    <i class="fas fa-pen"></i> MODIFIER
+                </a>
+                <form action="{% url 'catalogue:artist_delete' artist.id %}" method="post" style="display:inline;" onsubmit="return confirm('Supprimer cet artiste ?');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-action btn-delete-action">
+                        <i class="fas fa-trash"></i> SUPPRIMER
+                    </button>
+                </form>
+                {% endif %}
+            </div>
         </div>
-
-        <a href="{% url 'catalogue:artist_index' %}" class="text-danger">
-            <i class="fas fa-arrow-left mr-1"></i>Retour à la liste
-        </a>
     </div>
 </div>
+
+<style>
+    .utick-detail-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Arial', sans-serif; }
+    .utick-main-wrapper { background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+    .utick-breadcrumb { font-size: 0.75rem; font-weight: 700; color: #888; letter-spacing: 1.5px; }
+    .utick-breadcrumb a { color: #e74c3c; text-decoration: none; }
+    .utick-title { font-size: 2.5rem; font-weight: 900; line-height: 1; margin: 8px 0; color: #111; }
+    .utick-red-line-form { width: 50px; height: 4px; background: #e74c3c; margin: 10px 0 30px; }
+
+    .utick-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px; }
+    .info-block { background: #f7f7f7; padding: 16px 20px; border-left: 3px solid #e74c3c; }
+    .info-label { font-size: 0.7rem; font-weight: 800; color: #888; letter-spacing: 1.5px; margin-bottom: 4px; }
+    .info-value { font-weight: 700; color: #111; }
+
+    .utick-shows-section { padding-top: 30px; border-top: 2px solid #111; }
+    .section-title { font-size: 0.9rem; font-weight: 900; letter-spacing: 2px; color: #111; margin-bottom: 20px; }
+    .types-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .type-badge { background: #111; color: #fff; padding: 6px 14px; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; }
+
+    .back-link { color: #e74c3c; font-size: 0.8rem; font-weight: 800; letter-spacing: 1.5px; text-decoration: none; padding: 10px 20px; background: #f7f7f7; border: none; }
+    .back-link:hover { background: #111; color: #fff; text-decoration: none; }
+    .btn-action { padding: 10px 20px; font-size: 0.78rem; font-weight: 800; letter-spacing: 1.5px; text-decoration: none !important; border: none; cursor: pointer; transition: 0.2s; }
+    .btn-edit-action { background: #d97706; color: #fff; }
+    .btn-edit-action:hover { background: #111; color: #fff; }
+    .btn-delete-action { background: #dc2626; color: #fff; }
+    .btn-delete-action:hover { background: #111; color: #fff; }
+</style>
 {% endblock %}

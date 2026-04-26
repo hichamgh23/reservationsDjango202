@@ -1,38 +1,54 @@
 {% extends 'catalogue/base.html' %}
-
 {% block title %}{{ action }} un artiste{% endblock %}
-
 {% block content %}
-<div class="catalogue-page">
+<div class="utick-detail-page">
     <div class="container">
-        <div class="page-header anim-fade-up">
-            <h1 class="page-title">{{ action }} un artiste</h1>
-            <div class="title-bar"></div>
-        </div>
+        <div class="utick-main-wrapper" style="padding:50px;max-width:600px;margin:0 auto;">
+            
+            <div class="utick-breadcrumb mb-3">
+                <a href="{% url 'catalogue:artist_index' %}">ARTISTES</a> / {{ action|upper }}
+            </div>
 
-        <div class="bg-white border rounded p-4" style="max-width:500px;">
-            <form method="post">
+            <h1 class="utick-title">{{ action|upper }} UN ARTISTE</h1>
+            <div class="utick-red-line-form"></div>
+
+            <form method="post" class="form-locality">
                 {% csrf_token %}
-                {% if action == 'Modifier' %}
-                <input type="hidden" name="_method" value="PUT">
-                {% endif %}
-
                 {% for field in form %}
-                <div class="form-group">
-                    <label class="font-weight-bold">{{ field.label }}</label>
+                <div class="form-group-locality">
+                    <label class="form-label">{{ field.label|upper }}</label>
                     {{ field }}
                     {% if field.errors %}
-                    <div class="text-danger small">{{ field.errors|striptags }}</div>
+                    <div class="form-error">{{ field.errors|striptags }}</div>
                     {% endif %}
                 </div>
                 {% endfor %}
 
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-danger">{{ action }}</button>
-                    <a href="{% url 'catalogue:artist_index' %}" class="btn btn-secondary ml-2">Annuler</a>
+                <div class="form-actions">
+                    <a href="{% url 'catalogue:artist_index' %}" class="btn-cancel">ANNULER</a>
+                    <button type="submit" class="btn-submit">{{ action|upper }} <i class="fas fa-check ml-1"></i></button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .utick-detail-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Arial', sans-serif; }
+    .utick-main-wrapper { background: #fff; box-shadow: 0 40px 100px rgba(0,0,0,0.8); }
+    .utick-breadcrumb { font-size: 0.75rem; font-weight: 700; color: #888; letter-spacing: 1.5px; }
+    .utick-breadcrumb a { color: #e74c3c; text-decoration: none; }
+    .utick-title { font-size: 2rem; font-weight: 900; line-height: 1; margin: 8px 0; color: #111; }
+    .utick-red-line-form { width: 50px; height: 4px; background: #e74c3c; margin: 10px 0 30px; }
+    .form-group-locality { margin-bottom: 24px; }
+    .form-label { font-size: 0.75rem; font-weight: 800; letter-spacing: 1.5px; color: #111; display: block; margin-bottom: 8px; }
+    .form-locality input { width: 100%; padding: 12px 16px; border: 2px solid #e5e5e5; font-size: 0.95rem; font-weight: 600; transition: border 0.2s; }
+    .form-locality input:focus { border-color: #e74c3c; outline: none; }
+    .form-error { color: #dc2626; font-size: 0.78rem; font-weight: 600; margin-top: 6px; }
+    .form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 30px; padding-top: 20px; border-top: 2px solid #111; }
+    .btn-cancel { padding: 12px 24px; background: #f0f0f0; color: #111; font-weight: 800; font-size: 0.78rem; letter-spacing: 1.5px; text-decoration: none !important; transition: 0.2s; }
+    .btn-cancel:hover { background: #111; color: #fff; text-decoration: none; }
+    .btn-submit { padding: 12px 28px; background: #e74c3c; color: #fff; font-weight: 800; font-size: 0.78rem; letter-spacing: 1.5px; border: none; cursor: pointer; transition: 0.2s; }
+    .btn-submit:hover { background: #111; }
+</style>
 {% endblock %}
