@@ -1,23 +1,34 @@
+<!-- =========================================================
+     footer.html — Pied de page premium
+     Styles : footer.css | Scripts : footer.js (chargés depuis base.html)
+     ========================================================= -->
 <footer class="footer-premium mt-5">
+
+    <!-- Trait rouge animé (effet scan laser) -->
     <div class="laser-scanner">
         <div class="laser-beam"></div>
     </div>
 
     <div class="container py-5">
         <div class="footer-inner text-center">
-            
+
+            <!-- Identité du projet -->
             <div class="footer-brand mb-4">
-                <h3 class="brand-name">Projet<span class="text-danger">Réservations</span></h3>
+                <h3 class="brand-name">
+                    Projet<span class="text-danger">Réservations</span>
+                </h3>
                 <div class="brand-line"></div>
             </div>
 
+            <!-- Navigation (flux RSS) -->
             <div class="footer-nav mb-4">
-              
                 <a href="{% url 'catalogue:feed_representations' %}" class="f-link" target="_blank">
-                   <i class="fas fa-rss"></i>  RSS   </a>
-                      <span class="f-sep"> |  </span>
+                    <i class="fas fa-rss"></i> RSS
+                </a>
+                <span class="f-sep"> | </span>
             </div>
 
+            <!-- Copyright + statut système -->
             <div class="footer-info">
                 <div class="mb-2 font-weight-bold text-white">
                     &copy; <span id="year"></span> Projet Réservations ICC / EPFC
@@ -32,123 +43,3 @@
         </div>
     </div>
 </footer>
-
-<style>
-    /* STRUCTURE GLOBALE */
-    .footer-premium {
-        position: relative;
-        background: #050505; /* Noir profond */
-        border-top: 1px solid #1a1a1a;
-        overflow: hidden;
-        color: white;
-    }
-
-    /* --- ANIMATION DU TRAIT ROUGE (LE SCAN) --- */
-    .laser-scanner {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.03);
-    }
-
-    .laser-beam {
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 40%; /* Largeur du faisceau */
-        height: 100%;
-        background: linear-gradient(90deg, 
-            transparent 0%, 
-            #e74c3c 50%, 
-            transparent 100%);
-        box-shadow: 0 0 15px #e74c3c;
-        animation: laser-move 4s linear infinite;
-    }
-
-    @keyframes laser-move {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
-
-    /* --- STYLES DES ÉLÉMENTS --- */
-    .brand-name {
-        font-weight: 900;
-        letter-spacing: 4px;
-        font-size: 1.4rem;
-    }
-
-    .brand-line {
-        width: 30px;
-        height: 2px;
-        background: #e74c3c;
-        margin: 5px auto;
-        box-shadow: 0 0 8px #e74c3c;
-    }
-
-    .footer-inner {
-        opacity: 0; /* Caché au départ pour l'animation JS */
-        transform: translateY(20px);
-    }
-
-    .f-link {
-        color: #777;
-        text-decoration: none !important;
-        font-size: 0.9rem;
-        transition: 0.3s;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .f-link:hover {
-        color: #e74c3c;
-        text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
-    }
-
-    .f-separator {
-        color: #222;
-        margin: 0 10px;
-    }
-
-    /* STATUS PULSE (LE POINT VERT) */
-    .status-pulse {
-        color: #2ecc71;
-        font-weight: bold;
-        font-size: 0.7rem;
-        letter-spacing: 2px;
-        text-shadow: 0 0 5px #2ecc71;
-        animation: status-blink 2s infinite;
-    }
-
-    @keyframes status-blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.4; }
-    }
-
-    .tracking-widest { letter-spacing: 3px; }
-</style>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // 1. Mise à jour de l'année
-    const yearEl = document.getElementById('year');
-    if(yearEl) yearEl.textContent = new Date().getFullYear();
-
-    // 2. Animation d'apparition au Scroll
-    const footerContent = document.querySelector('.footer-inner');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // On déclenche l'animation de montée
-                footerContent.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
-                footerContent.style.opacity = "1";
-                footerContent.style.transform = "translateY(0)";
-            }
-        });
-    }, { threshold: 0.2 });
-
-    observer.observe(footerContent);
-});
-</script>

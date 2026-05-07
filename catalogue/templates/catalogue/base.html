@@ -1,126 +1,84 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PickShow{% endblock %}</title>
-    
+
+    <!-- Dépendances CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
-    <style>
-        /* RESET RADICAL */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: #000 !important; /* Plus de blanc possible */
-            color: white;
-            font-family: 'Poppins', sans-serif;
-        }
 
-        /* Structure Flex pour coller le footer en bas */
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    <!-- Feuilles de style du projet -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
 
-        .main-wrapper {
-            display: flex;
-            flex: 1 0 auto; /* Prend tout l'espace restant */
-        }
-
-        .content-area {
-            flex-grow: 1;
-            margin-left: 65px; /* Espace pour le menu latéral */
-            display: flex;
-            flex-direction: column;
-            background-color: #000;
-        }
-
-        /* Supprimer les paddings Bootstrap qui créent des cadres */
-        .page-body {
-            flex-grow: 1;
-            width: 100%;
-        }
-
-        footer {
-            flex-shrink: 0;
-            background-color: #0a0a0a;
-            border-top: 1px solid #222;
-            padding: 20px 0;
-            z-index: 100;
-        }
-    </style>
+    <!-- Feuilles de style spécifiques à la page (surchargées par les enfants) -->
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
 
-    <div class="app-container">
-        {% include 'includes/header.html' %}
+<div class="app-container">
+    {% include 'includes/header.html' %}
 
-        <div class="main-wrapper">
-            {% include 'includes/menu.html' %}
+    <div class="main-wrapper">
+        {% include 'includes/menu.html' %}
 
-            <main class="content-area">
-                <div class="page-body">
-                    {% if messages %}
-        <div style="margin-left:65px; padding: 10px 20px;">
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert">
-                    <span>&times;</span>
-                </button>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+        <main class="content-area">
+            <div class="page-body">
 
-        {% block content %}{% endblock %}
+                <!-- Messages Flash (succès, erreur, info) -->
+                {% if messages %}
+                <div style="margin-left:65px; padding: 10px 20px;">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
                 </div>
-                
-                {% include 'includes/footer.html' %}
-            </main>
-        </div>
-    </div>
+                {% endif %}
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    {% block javascripts %}{% endblock %}
+                {% block content %}{% endblock %}
 
+            </div>
 
-
-
-    <div id="cookie-banner" style="position:fixed; bottom:0; left:0; right:0; background:#111; color:#fff; padding:20px 30px; z-index:9999; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; display:none;">
-    <div style="flex:1; min-width:280px;">
-        <strong style="color:#e74c3c; font-size:0.85rem; letter-spacing:1.5px;">🍪 COOKIES</strong>
-        <p style="margin:5px 0 0; font-size:0.85rem; color:#ccc;">
-            Ce site utilise des cookies pour améliorer votre expérience. En continuant la navigation, vous acceptez leur utilisation.
-        </p>
-    </div>
-    <div style="display:flex; gap:8px;">
-        <button onclick="refuserCookies()" style="background:transparent; color:#fff; border:1px solid #555; padding:10px 20px; font-weight:700; font-size:0.78rem; letter-spacing:1px; cursor:pointer;">REFUSER</button>
-        <button onclick="accepterCookies()" style="background:#e74c3c; color:#fff; border:none; padding:10px 20px; font-weight:700; font-size:0.78rem; letter-spacing:1px; cursor:pointer;">ACCEPTER</button>
+            {% include 'includes/footer.html' %}
+        </main>
     </div>
 </div>
 
-<script>
-    function accepterCookies() {
-        document.cookie = "cookies_accepted=true; max-age=" + (60*60*24*365) + "; path=/";
-        document.getElementById('cookie-banner').style.display = 'none';
-    }
-    function refuserCookies() {
-        document.cookie = "cookies_accepted=false; max-age=" + (60*60*24*365) + "; path=/";
-        document.getElementById('cookie-banner').style.display = 'none';
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-        if (!document.cookie.includes('cookies_accepted')) {
-            document.getElementById('cookie-banner').style.display = 'flex';
-        }
-    });
-</script>
+<!-- Dépendances JS CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+<!-- Scripts du projet -->
+<script src="{% static 'js/cookies.js' %}"></script>
+<script src="{% static 'js/footer.js' %}"></script>
+
+<!-- Scripts spécifiques à la page (surchargés par les enfants) -->
+{% block javascripts %}{% endblock %}
+
+<!-- Bandeau RGPD -->
+<div id="cookie-banner">
+    <div class="cookie-text">
+        <strong class="cookie-label">🍪 COOKIES</strong>
+        <p class="cookie-desc">
+            Ce site utilise des cookies pour améliorer votre expérience.
+            En continuant la navigation, vous acceptez leur utilisation.
+        </p>
+    </div>
+    <div class="cookie-actions">
+        <button onclick="refuserCookies()" class="btn-cookie-refuse">REFUSER</button>
+        <button onclick="accepterCookies()" class="btn-cookie-accept">ACCEPTER</button>
+    </div>
+</div>
+
 </body>
 </html>

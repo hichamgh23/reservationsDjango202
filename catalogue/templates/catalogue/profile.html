@@ -1,35 +1,61 @@
 {% extends 'catalogue/base.html' %}
 {% load static %}
 
+{% block title %}Mon profil — PickShow{% endblock %}
+
+{% block stylesheets %}
+<!-- Styles de la page profil -->
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="reservation-profile-container">
     <div class="container">
+
+        <!-- =====================================================
+             EN-TÊTE : Avatar + infos utilisateur
+             ===================================================== -->
         <div class="profile-header-box mb-5">
             <div class="row align-items-center">
+
+                <!-- Photo de profil avec bouton de changement -->
                 <div class="col-md-3 text-center">
                     <div class="avatar-container">
                         {% if user.profile.image %}
-                            <img src="{{ user.profile.image.url }}" class="user-avatar">
+                            <img src="{{ user.profile.image.url }}" class="user-avatar" alt="Photo de profil">
                         {% else %}
-                            <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=333&color=fff&size=150" class="user-avatar">
+                            <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=333&color=fff&size=150"
+                                 class="user-avatar" alt="Avatar par défaut">
                         {% endif %}
-                        
+
+                        <!-- Bouton caméra (déclenche le champ file caché) -->
                         <div class="avatar-overlay">
-                            <form action="{% url 'catalogue:profile_update' %}" method="POST" enctype="multipart/form-data" id="avatarForm">
+                            <form action="{% url 'catalogue:profile_update' %}" method="POST"
+                                  enctype="multipart/form-data" id="avatarForm">
                                 {% csrf_token %}
-                                <input type="file" name="image" id="profilePicInput" class="d-none" onchange="document.getElementById('avatarForm').submit()">
-                                <button type="button" class="btn-change-pic" onclick="document.getElementById('profilePicInput').click();">
+                                <input type="file" name="image" id="profilePicInput" class="d-none"
+                                       onchange="document.getElementById('avatarForm').submit()">
+                                <button type="button" class="btn-change-pic"
+                                        onclick="document.getElementById('profilePicInput').click();">
                                     <i class="fas fa-camera"></i>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
+
+                <!-- Nom d'utilisateur, email, badge de rôle -->
                 <div class="col-md-6 text-white">
                     <h1 class="font-weight-bold">{{ user.username }}</h1>
-                    <p class="text-muted"><i class="fas fa-envelope mr-2"></i> {{ user.email }}</p>
-                    <span class="status-label">{% if user.is_staff %}ADMINISTRATEUR{% else %}MEMBRE{% endif %}</span>
+                    <p class="text-muted">
+                        <i class="fas fa-envelope mr-2"></i> {{ user.email }}
+                    </p>
+                    <span class="status-label">
+                        {% if user.is_staff %}ADMINISTRATEUR{% else %}MEMBRE{% endif %}
+                    </span>
                 </div>
+
+                <!-- Bouton changement de mot de passe -->
                 <div class="col-md-3 text-right mt-3">
                     <a href="{% url 'catalogue:change_password' %}" class="btn btn-outline-light btn-sm">
                         <i class="fas fa-key mr-2"></i> MODIFIER LE MOT DE PASSE
@@ -38,6 +64,9 @@
             </div>
         </div>
 
+        <!-- =====================================================
+             TABLEAU DES RÉSERVATIONS
+             ===================================================== -->
         <div class="reservation-list-card">
             <h3 class="text-white mb-4">MES RÉSERVATIONS</h3>
             <div class="table-responsive">
@@ -57,9 +86,13 @@
                             <td class="font-weight-bold">{{ res.representation.show.title }}</td>
                             <td>{{ res.representation.when|date:"d/m/Y H:i" }}</td>
                             <td>{{ res.places }}</td>
-                            <td class="text-right font-weight-bold">{{ res.places }} x {{ res.representation.show.price }} € + 2,00 €</td>
+                            <td class="text-right font-weight-bold">
+                                {{ res.places }} × {{ res.representation.show.price }} € + 2,00 €
+                            </td>
                             <td class="text-center">
-                                <form action="{% url 'catalogue:reservation_delete' res.id %}" method="post" onsubmit="return confirm('Annuler cette réservation ?');">
+                                <!-- Annulation avec confirmation -->
+                                <form action="{% url 'catalogue:reservation_delete' res.id %}" method="post"
+                                      onsubmit="return confirm('Annuler cette réservation ?');">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-outline-danger">
                                         ANNULER
@@ -78,75 +111,7 @@
                 </table>
             </div>
         </div>
+
     </div>
 </div>
-
-<style>
-    .reservation-profile-container {
-        background-color: #121212;
-        min-height: 100vh;
-        padding: 100px 0 50px 0;
-        color: white;
-    }
-
-    .user-avatar {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #444;
-    }
-
-    .avatar-container {
-        position: relative;
-        display: inline-block;
-    }
-
-    .btn-change-pic {
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
-        background: #007bff;
-        border: none;
-        color: white;
-        border-radius: 50%;
-        width: 35px;
-        height: 35px;
-    }
-
-    .status-label {
-        background: #333;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-    }
-
-    .reservation-list-card {
-        background: #1e1e1e;
-        padding: 30px;
-        border-radius: 8px;
-    }
-
-    .custom-table {
-        background: transparent;
-    }
-
-    .custom-table thead th {
-        border-bottom: 2px solid #333;
-        color: #888;
-        text-transform: uppercase;
-        font-size: 0.8rem;
-    }
-
-    .custom-table td {
-        border-top: 1px solid #333;
-        vertical-align: middle;
-        padding: 15px;
-    }
-
-    .btn-outline-danger {
-        font-size: 0.75rem;
-        border-radius: 0;
-    }
-</style>
 {% endblock %}

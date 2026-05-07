@@ -1,15 +1,27 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-lg fixed-top" style="height: 70px; background: #000; border-bottom: 1px solid #222;">
+<!-- =========================================================
+     header.html — Barre de navigation supérieure fixe
+     Styles : header.css (chargé depuis base.html)
+     ========================================================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-black shadow-lg fixed-top"
+     style="height: 70px; border-bottom: 1px solid #222;">
     <div class="container-fluid d-flex align-items-center">
-        
-        <a class="navbar-brand font-weight-bold d-flex align-items-center ml-lg-5" href="{% url 'catalogue:welcome' %}" style="min-width: 250px;">
+
+        <!-- Logo / Nom du projet -->
+        <a class="navbar-brand font-weight-bold d-flex align-items-center ml-lg-5"
+           href="{% url 'catalogue:welcome' %}" style="min-width: 250px;">
             <i class="fas fa-ticket-alt text-danger mr-2"></i>
-            <span style="letter-spacing: 1px; font-size: 1.4rem;">Projet <span class="text-danger">Réservations</span></span>
+            <span style="letter-spacing: 1px; font-size: 1.4rem;">
+                Projet <span class="text-danger">Réservations</span>
+            </span>
         </a>
 
+        <!-- Barre de recherche (centrée, masquée sur mobile) -->
         <div class="flex-grow-1 d-flex justify-content-center">
-            <form class="form-inline d-none d-md-flex search-box" action="{% url 'catalogue:show_index' %}" method="get">
+            <form class="form-inline d-none d-md-flex search-box"
+                  action="{% url 'catalogue:show_index' %}" method="get">
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control search-input" placeholder="Trouver un spectacle..." aria-label="Search">
+                    <input type="text" name="search" class="form-control search-input"
+                           placeholder="Trouver un spectacle..." aria-label="Recherche">
                     <div class="input-group-append">
                         <button class="btn btn-search" type="submit">
                             <i class="fas fa-search"></i>
@@ -19,126 +31,40 @@
             </form>
         </div>
 
+        <!-- Liens utilisateur (connexion / inscription) -->
         <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
             <ul class="navbar-nav ml-auto align-items-center pr-lg-5">
                 {% if user.is_authenticated %}
-                    <li class="nav-item mx-2">
-                        <span class="nav-link text-white-50 small">
-                             <i class="fas fa-circle text-success mr-1"></i> <strong>{{ user.username }}</strong>
-                        </span>
-                    </li>
+                <li class="nav-item mx-2">
+                    <span class="nav-link text-white-50 small">
+                        <i class="fas fa-circle text-success mr-1"></i>
+                        <strong>{{ user.username }}</strong>
+                    </span>
+                </li>
                 {% else %}
-                    <li class="nav-item mx-2">
-                        <a class="nav-link btn-login-neon px-4" href="{% url 'login' %}">
-                            <span>Connexion</span>
-                        </a>
-                    </li>
-                    
-                    <li class="nav-item mx-2">
-                        <a class="nav-link btn-signup-header px-4" href="{% url 'catalogue:signup' %}">
-                            <i class="fas fa-user-plus mr-1"></i> Inscription
-                        </a>
-                    </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link btn-login-neon px-4" href="{% url 'login' %}">
+                        <span>Connexion</span>
+                    </a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link btn-signup-header px-4" href="{% url 'catalogue:signup' %}">
+                        <i class="fas fa-user-plus mr-1"></i> Inscription
+                    </a>
+                </li>
                 {% endif %}
             </ul>
         </div>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <!-- Bouton toggle mobile -->
+        <button class="navbar-toggler" type="button"
+                data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 
+    <!-- Trait rouge animé (effet laser) -->
     <div class="header-laser-line">
         <div class="header-laser-beam"></div>
     </div>
 </nav>
-
-<style>
-    .bg-black { background-color: #000 !important; }
-
-    /* --- ANIMATION DU LASER (HEADER) --- */
-    .header-laser-line {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: rgba(255, 255, 255, 0.02);
-        overflow: hidden;
-    }
-
-    .header-laser-beam {
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 30%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, #e74c3c, transparent);
-        box-shadow: 0 0 12px #e74c3c;
-        /* On le fait aller un peu plus lentement (5s) que le footer (4s) pour le style */
-        animation: header-scan 5s linear infinite;
-    }
-
-    @keyframes header-scan {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
-
-    /* --- STYLES DES BOUTONS (TON CODE) --- */
-    .btn-login-neon {
-        color: #e74c3c !important;
-        background: transparent;
-        border: 1px solid #e74c3c;
-        border-radius: 30px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: all 0.4s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-login-neon:hover {
-        background: rgba(231, 76, 60, 0.1) !important;
-        box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
-        transform: scale(1.05);
-        color: #ff4d4d !important;
-    }
-
-    .btn-signup-header {
-        color: #fff !important;
-        background: #e74c3c;
-        border: 1px solid #e74c3c;
-        border-radius: 30px;
-        font-size: 0.85rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: all 0.4s ease;
-        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
-    }
-
-    .btn-signup-header:hover {
-        background: #ff4d4d !important;
-        border-color: #ff4d4d !important;
-        box-shadow: 0 0 20px rgba(255, 77, 77, 0.5);
-        transform: translateY(-2px);
-    }
-
-    .search-input {
-        background: #111 !important;
-        border: 1px solid #333 !important;
-        border-radius: 20px 0 0 20px !important;
-        color: white !important;
-        height: 38px;
-    }
-    .btn-search {
-        background: #111;
-        border: 1px solid #333;
-        border-left: none;
-        border-radius: 0 20px 20px 0;
-        color: #666;
-        height: 38px;
-    }
-</style>

@@ -1,19 +1,38 @@
 {% extends 'catalogue/base.html' %}
 {% load static %}
 
+{% block title %}Spectacles — PickShow{% endblock %}
+
+{% block stylesheets %}
+<!-- Styles de la grille de spectacles -->
+<link rel="stylesheet" href="{% static 'css/catalogue.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+<!-- Stagger d'animation sur les cartes -->
+<script src="{% static 'js/catalogue.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="utick-catalogue-page">
     <div class="container">
+
+        <!-- En-tête avec compteur de résultats -->
         <div class="utick-simple-header">
             <h1 class="utick-page-title">SPECTACLES</h1>
             <div class="utick-red-line"></div>
-            <p class="utick-subtitle">{{ shows|length }} spectacle{{ shows|length|pluralize }} à l'affiche</p>
+            <p class="utick-subtitle">
+                {{ shows|length }} spectacle{{ shows|length|pluralize }} à l'affiche
+            </p>
         </div>
 
+        <!-- Grille de cartes (une par spectacle) -->
         <div class="utick-grid-wrapper">
             {% for show in shows %}
-            <div class="utick-card animate-in" style="animation-delay: {{ forloop.counter0 }}0ms">
+            <div class="utick-card animate-in" data-animate-index="{{ forloop.counter0 }}">
                 <a href="{% url 'catalogue:show_detail' show.id %}" class="utick-card-link">
+
+                    <!-- Affiche du spectacle -->
                     <div class="utick-card-poster">
                         {% if show.poster_url %}
                             <img src="{{ show.poster_url }}" alt="{{ show.title }}">
@@ -25,16 +44,21 @@
                         <div class="utick-card-badge">{{ show.price|floatformat:2 }} €</div>
                     </div>
 
+                    <!-- Infos textuelles de la carte -->
                     <div class="utick-card-content">
                         <div class="utick-card-category">SPECTACLE</div>
                         <h3 class="utick-card-title">{{ show.title|upper }}</h3>
+
                         <div class="utick-card-location">
-                           <i class="fas fa-map-marker-alt"></i> 
-                               {{ show.location.designation }}
-                                  {% if show.location.locality %}
-   $        <span style="color:#999;font-weight:500;"> — {{ show.location.locality.postal_code }} {{ show.location.locality.locality }}</span>
-                        {% endif %}
-</div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            {{ show.location.designation }}
+                            {% if show.location.locality %}
+                            <span style="color:#999; font-weight:500;">
+                                — {{ show.location.locality.postal_code }} {{ show.location.locality.locality }}
+                            </span>
+                            {% endif %}
+                        </div>
+
                         <div class="utick-card-dates">
                             <i class="far fa-calendar-alt"></i>
                             {% if show.date_debut %}
@@ -44,18 +68,24 @@
                             {% endif %}
                         </div>
 
+                        <!-- Distribution (max 3 artistes affichés) -->
                         {% with ats_list=show.artisttypeshow_set.all %}
                         {% if ats_list %}
                         <div class="utick-card-distribution">
                             <div class="distribution-label">DISTRIBUTION</div>
                             {% for ats in ats_list|slice:":3" %}
                             <div class="distribution-line">
-                                <span class="dist-name">{{ ats.artist_type.artist.firstname }} {{ ats.artist_type.artist.lastname }}</span>
+                                <span class="dist-name">
+                                    {{ ats.artist_type.artist.firstname }}
+                                    {{ ats.artist_type.artist.lastname }}
+                                </span>
                                 <span class="dist-role">{{ ats.artist_type.type.type|upper }}</span>
                             </div>
                             {% endfor %}
                             {% if ats_list|length > 3 %}
-                            <div class="distribution-more">+ {{ ats_list|length|add:"-3" }} autre{{ ats_list|length|add:"-3"|pluralize }}</div>
+                            <div class="distribution-more">
+                                + {{ ats_list|length|add:"-3" }} autre{{ ats_list|length|add:"-3"|pluralize }}
+                            </div>
                             {% endif %}
                         </div>
                         {% endif %}
@@ -63,104 +93,21 @@
                     </div>
                 </a>
 
+                <!-- Bouton de réservation -->
                 <div class="utick-card-footer">
                     <a href="{% url 'catalogue:show_detail' show.id %}" class="utick-btn-reserve">
                         RÉSERVER <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
             </div>
+
             {% empty %}
             <div class="text-white p-5 text-center text-muted" style="grid-column: 1 / -1;">
                 Aucun spectacle disponible pour le moment.
             </div>
             {% endfor %}
         </div>
+
     </div>
 </div>
-
-<style>
-    .utick-catalogue-page { background-color: #050505; min-height: 100vh; padding: 120px 0 60px; font-family: 'Arial', sans-serif; }
-    .utick-page-title { color: white; font-weight: 900; letter-spacing: 2px; font-size: 2.5rem; margin: 0; }
-    .utick-red-line { width: 50px; height: 4px; background: #e74c3c; margin-top: 10px; margin-bottom: 12px; }
-    .utick-subtitle { color: #888; font-size: 0.9rem; margin-bottom: 40px; }
-
-    .utick-grid-wrapper {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 22px;
-    }
-
-    .utick-card {
-        background: #fff;
-        transition: all 0.3s ease;
-        overflow: hidden;
-        border-bottom: 4px solid transparent;
-        display: flex;
-        flex-direction: column;
-    }
-    .utick-card:hover {
-        transform: translateY(-6px);
-        border-bottom-color: #e74c3c;
-        box-shadow: 0 15px 35px rgba(231,76,60,0.3);
-    }
-
-    .utick-card-link { text-decoration: none !important; color: inherit; display: block; flex-grow: 1; }
-    .utick-card-link:hover { text-decoration: none; color: inherit; }
-
-    .utick-card-poster { position: relative; width: 100%; height: 220px; background: #000; overflow: hidden; }
-    .utick-card-poster img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
-    .utick-card:hover .utick-card-poster img { transform: scale(1.08); }
-
-    .utick-card-no-image { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a1a, #050505); }
-    .utick-card-no-image i { font-size: 3rem; color: rgba(231,76,60,0.4); }
-
-    .utick-card-badge { position: absolute; top: 12px; right: 12px; background: #e74c3c; color: white; padding: 6px 14px; font-size: 0.95rem; font-weight: 900; }
-
-    .utick-card-content { padding: 18px 20px; }
-
-    .utick-card-category { font-size: 0.7rem; font-weight: 800; color: #e74c3c; letter-spacing: 2px; margin-bottom: 6px; }
-    .utick-card-title { font-size: 1.15rem; font-weight: 900; color: #000; margin: 0 0 10px; line-height: 1.2; }
-
-    .utick-card-location { font-size: 0.82rem; color: #555; font-weight: 600; margin-bottom: 6px; }
-    .utick-card-location i { color: #e74c3c; margin-right: 4px; }
-
-    .utick-card-dates { font-size: 0.8rem; color: #777; margin-bottom: 14px; }
-    .utick-card-dates i { color: #e74c3c; margin-right: 4px; }
-
-    .utick-card-distribution {
-        background: #f7f7f7;
-        padding: 10px 12px;
-        margin-top: 8px;
-        border-left: 3px solid #e74c3c;
-    }
-    .distribution-label { font-size: 0.65rem; font-weight: 800; color: #888; letter-spacing: 1.5px; margin-bottom: 6px; }
-    .distribution-line { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; padding: 2px 0; }
-    .dist-name { color: #111; font-weight: 700; }
-    .dist-role { color: #e74c3c; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px; }
-    .distribution-more { font-size: 0.7rem; color: #999; font-style: italic; margin-top: 4px; }
-
-    .utick-card-footer { padding: 0; }
-    .utick-btn-reserve {
-        display: block;
-        background: #000;
-        color: white !important;
-        text-align: center;
-        padding: 14px;
-        font-weight: 900;
-        font-size: 0.85rem;
-        letter-spacing: 1.5px;
-        text-decoration: none !important;
-        transition: background 0.2s;
-    }
-    .utick-btn-reserve:hover { background: #e74c3c; color: white; text-decoration: none; }
-
-    .animate-in { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    @media (max-width: 768px) {
-        .utick-grid-wrapper { grid-template-columns: 1fr; gap: 12px; }
-        .utick-card-poster { height: 200px; }
-        .utick-page-title { font-size: 1.8rem; }
-    }
-</style>
 {% endblock %}
