@@ -71,12 +71,16 @@ WSGI_APPLICATION = 'reservations.wsgi.application'
 # Base de données MariaDB
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'reservations',
-        'USER': 'rooot',
-        'PASSWORD': 'rooot',  
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE':   'django.db.backends.mysql',
+        'NAME':     'reservations',
+        'USER':     'rooot',
+        'PASSWORD': 'rooot',
+        'HOST':     '127.0.0.1',
+        'PORT':     '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',  # Encodage complet (accents, emoji…)
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
