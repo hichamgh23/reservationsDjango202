@@ -1,0 +1,141 @@
+/* =============================================================
+   DETAIL.CSS — Pages de détail entité (artiste, localité, lieu…)
+   Utilisé par : artist_show.html, locality_show.html, location_show.html
+   ============================================================= */
+
+/* --- FOND ET CONTENEUR --- */
+.utick-detail-page {
+    background-color: #050505;
+    min-height: 100vh;
+    padding: 120px 0 60px;
+    font-family: 'Arial', sans-serif;
+}
+
+.utick-main-wrapper {
+    background: #fff;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+}
+
+/* --- FIL D'ARIANE --- */
+.utick-breadcrumb {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 1.5px;
+}
+
+.utick-breadcrumb a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+/* --- TITRE --- */
+.utick-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin: 8px 0;
+    color: #111;
+}
+
+/* Trait rouge décoratif */
+.utick-red-line-form {
+    width: 50px;
+    height: 4px;
+    background: #e74c3c;
+    margin: 10px 0 30px;
+}
+
+/* --- GRILLE D'INFORMATIONS (ex : prénom / nom) --- */
+.utick-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.info-block {
+    background: #f7f7f7;
+    padding: 16px 20px;
+    border-left: 3px solid #e74c3c;
+}
+
+.info-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #888;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-weight: 700;
+    color: #111;
+}
+
+/* --- SECTION DE LISTE (fonctions, types, etc.) --- */
+.utick-shows-section {
+    padding-top: 30px;
+    border-top: 2px solid #111;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+/* Badges (ex : types d'artiste) */
+.types-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-badge {
+    background: #111;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+/* --- BOUTONS D'ACTION (retour, modifier, supprimer) --- */
+.back-link {
+    color: #e74c3c;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    padding: 10px 20px;
+    background: #f7f7f7;
+    border: none;
+    display: inline-block;
+}
+
+.back-link:hover {
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-action {
+    padding: 10px 20px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-decoration: none !important;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+.btn-edit-action   { background: #d97706; color: #fff; }
+.btn-edit-action:hover   { background: #111; color: #fff; }
+
+.btn-delete-action { background: #dc2626; color: #fff; }
+.btn-delete-action:hover { background: #111; color: #fff; }

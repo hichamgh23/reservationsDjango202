@@ -1,0 +1,89 @@
+/* =============================================================
+   PROFILE.CSS — Page profil utilisateur et liste des réservations
+   ============================================================= */
+
+/* --- CONTENEUR GÉNÉRAL --- */
+.reservation-profile-container {
+    background-color: #121212;
+    min-height: 100vh;
+    padding: 100px 0 50px;
+    color: white;
+}
+
+/* =====================================================
+   SECTION AVATAR / PHOTO DE PROFIL
+   ===================================================== */
+.user-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #444;
+}
+
+.avatar-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Bouton caméra (positionné sur l'avatar pour changer la photo) */
+.btn-change-pic {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #007bff;
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-change-pic:hover {
+    background: #0056b3;
+}
+
+/* Badge rôle (MEMBRE / ADMINISTRATEUR) */
+.status-label {
+    background: #333;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+/* =====================================================
+   TABLEAU DES RÉSERVATIONS
+   ===================================================== */
+.reservation-list-card {
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.custom-table {
+    background: transparent;
+}
+
+.custom-table thead th {
+    border-bottom: 2px solid #333;
+    color: #888;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.custom-table td {
+    border-top: 1px solid #333;
+    vertical-align: middle;
+    padding: 15px;
+}
+
+/* Bouton annulation */
+.btn-outline-danger {
+    font-size: 0.75rem;
+    border-radius: 0;
+}

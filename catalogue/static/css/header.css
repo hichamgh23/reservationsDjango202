@@ -1,0 +1,98 @@
+/* =============================================================
+   HEADER.CSS — Barre de navigation supérieure fixe
+   Contient : navbar, barre de recherche, boutons connexion/inscription,
+              animation laser sous le header
+   ============================================================= */
+
+/* --- FOND NOIR OBLIGATOIRE --- */
+.bg-black {
+    background-color: #000 !important;
+}
+
+/* --- ANIMATION LASER (trait rouge qui balaye le bas du header) --- */
+.header-laser-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+}
+
+.header-laser-beam {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #e74c3c, transparent);
+    box-shadow: 0 0 12px #e74c3c;
+    animation: header-scan 5s linear infinite;
+}
+
+@keyframes header-scan {
+    0%   { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* --- BOUTON CONNEXION (style contour rouge) --- */
+.btn-login-neon {
+    color: #e74c3c !important;
+    background: transparent;
+    border: 1px solid #e74c3c;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-login-neon:hover {
+    background: rgba(231, 76, 60, 0.1) !important;
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+    transform: scale(1.05);
+    color: #ff4d4d !important;
+}
+
+/* --- BOUTON INSCRIPTION (fond rouge plein) --- */
+.btn-signup-header {
+    color: #fff !important;
+    background: #e74c3c;
+    border: 1px solid #e74c3c;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+}
+
+.btn-signup-header:hover {
+    background: #ff4d4d !important;
+    border-color: #ff4d4d !important;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.5);
+    transform: translateY(-2px);
+}
+
+/* --- BARRE DE RECHERCHE --- */
+.search-input {
+    background: #111 !important;
+    border: 1px solid #333 !important;
+    border-radius: 20px 0 0 20px !important;
+    color: white !important;
+    height: 38px;
+}
+
+.btn-search {
+    background: #111;
+    border: 1px solid #333;
+    border-left: none;
+    border-radius: 0 20px 20px 0;
+    color: #666;
+    height: 38px;
+}

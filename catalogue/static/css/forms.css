@@ -1,0 +1,133 @@
+/* =============================================================
+   FORMS.CSS — Formulaires CRUD (artiste, localité, etc.)
+   Utilisé par : artist_form.html, locality_form.html
+   ============================================================= */
+
+/* --- FOND ET CONTENEUR --- */
+.utick-detail-page {
+    background-color: #050505;
+    min-height: 100vh;
+    padding: 120px 0 60px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Carte blanche centrale */
+.utick-main-wrapper {
+    background: #fff;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+}
+
+/* --- FIL D'ARIANE --- */
+.utick-breadcrumb {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 1.5px;
+}
+
+.utick-breadcrumb a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+/* --- TITRE DU FORMULAIRE --- */
+.utick-title {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    margin: 8px 0;
+    color: #111;
+}
+
+/* Trait rouge décoratif */
+.utick-red-line-form {
+    width: 50px;
+    height: 4px;
+    background: #e74c3c;
+    margin: 10px 0 30px;
+}
+
+/* --- CHAMPS DU FORMULAIRE --- */
+.form-group-locality {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: #111;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Inputs texte */
+.form-locality input,
+.form-locality select,
+.form-locality textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e5e5;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: border 0.2s;
+}
+
+.form-locality input:focus,
+.form-locality select:focus,
+.form-locality textarea:focus {
+    border-color: #e74c3c;
+    outline: none;
+}
+
+/* Message d'erreur de validation */
+.form-error {
+    color: #dc2626;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+/* --- ACTIONS (annuler / soumettre) --- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #111;
+}
+
+.btn-cancel {
+    padding: 12px 24px;
+    background: #f0f0f0;
+    color: #111;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    text-decoration: none !important;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+.btn-cancel:hover {
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+}
+
+.btn-submit {
+    padding: 12px 28px;
+    background: #e74c3c;
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 1.5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-submit:hover {
+    background: #111;
+}

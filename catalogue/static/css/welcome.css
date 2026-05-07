@@ -1,0 +1,149 @@
+/* =============================================================
+   WELCOME.CSS — Page d'accueil avec animation de rideau de théâtre
+   Contient : viewport théâtre, rideaux animés, contenu révélé, citation
+   ============================================================= */
+
+/* --- FORCE LE FOND NOIR DERRIÈRE LA PAGE --- */
+:root {
+    background-color: #000 !important;
+}
+
+/* --- CONTENEUR PRINCIPAL (plein écran, noir) --- */
+.theater-viewport {
+    position: relative;
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-bottom: -100px;
+    padding-bottom: 100px;
+    width: calc(100% + 30px);
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+/* Dégradé radial pour l'effet scène */
+.stage-background {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 85%);
+    z-index: 1;
+}
+
+/* --- RIDEAUX (gauche et droite) --- */
+.curtain-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.curtain {
+    width: 50.5%; /* Chevauchement au centre pour éviter une ligne blanche */
+    height: 100%;
+    background: url('https://i.imgur.com/Yh380S7.jpg') center/cover no-repeat;
+    box-shadow: inset 0 0 100px #000;
+    transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+/* Animation d'ouverture : classe ajoutée via JS après 500ms */
+.theater-viewport.opened .left-curtain  { transform: translateX(-100%); }
+.theater-viewport.opened .right-curtain { transform: translateX(100%); }
+
+/* --- CONTENU RÉVÉLÉ (texte + bouton) --- */
+.reveal-content {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.9);
+    /* Démarre après le début de l'ouverture des rideaux */
+    transition: all 1.5s ease 1.2s;
+}
+
+.theater-viewport.opened .reveal-content {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* --- TITRES PRINCIPAUX --- */
+.main-title {
+    font-size: 5.5rem;
+    font-weight: 900;
+    color: white;
+    margin: 0;
+    line-height: 0.9;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.text-danger {
+    color: #e74c3c !important;
+}
+
+.hero-lead {
+    color: #888;
+    letter-spacing: 12px;
+    text-transform: uppercase;
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+/* --- BOUTON D'ENTRÉE --- */
+.btn-theatre {
+    display: inline-block;
+    padding: 18px 50px;
+    border: 2px solid #e74c3c;
+    border-radius: 50px;
+    color: white;
+    text-decoration: none !important;
+    background: rgba(231, 76, 60, 0.1);
+    font-weight: bold;
+    transition: 0.4s;
+    margin-top: 30px;
+}
+
+.btn-theatre:hover {
+    background: #e74c3c;
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.5);
+    transform: translateY(-3px);
+}
+
+/* --- CITATION (API externe DummyJSON) --- */
+.citation-box {
+    max-width: 500px;
+    margin: 30px auto 0;
+    padding: 20px;
+    background: rgba(232, 98, 26, 0.05);
+    border-left: 3px solid #E8621A;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.citation-text {
+    color: rgba(255, 255, 255, 0.85);
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+}
+
+.citation-author {
+    color: #E8621A;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: right;
+    margin: 0;
+}
+
+/* --- FIX FOOTER POUR CETTE PAGE (évite la coupure visuelle) --- */
+footer {
+    position: relative;
+    z-index: 2;
+    background-color: #000 !important;
+    border-top: none !important;
+    margin-top: 0 !important;
+}

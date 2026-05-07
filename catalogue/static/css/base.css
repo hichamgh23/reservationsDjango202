@@ -1,0 +1,111 @@
+/* =============================================================
+   BASE.CSS — Structure globale de l'application PickShow
+   Contient : reset, layout flex (header/sidebar/footer), messages
+   ============================================================= */
+
+/* --- RESET & TYPOGRAPHIE --- */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #000 !important;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* --- LAYOUT PRINCIPAL (flex colonne pour coller le footer en bas) --- */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-wrapper {
+    display: flex;
+    flex: 1 0 auto;
+}
+
+/* Zone de contenu : décalée de 65px pour laisser place au menu latéral */
+.content-area {
+    flex-grow: 1;
+    margin-left: 65px;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+}
+
+.page-body {
+    flex-grow: 1;
+    width: 100%;
+}
+
+/* --- FOOTER (fixé en bas grâce au flex) --- */
+footer {
+    flex-shrink: 0;
+    background-color: #0a0a0a;
+    border-top: 1px solid #222;
+    padding: 20px 0;
+    z-index: 100;
+}
+
+/* --- BANDEAU COOKIES RGPD --- */
+#cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #111;
+    color: #fff;
+    padding: 20px 30px;
+    z-index: 9999;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    display: none; /* Affiché via JS si pas encore accepté */
+}
+
+#cookie-banner .cookie-text {
+    flex: 1;
+    min-width: 280px;
+}
+
+#cookie-banner .cookie-label {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+}
+
+#cookie-banner .cookie-desc {
+    margin: 5px 0 0;
+    font-size: 0.85rem;
+    color: #ccc;
+}
+
+#cookie-banner .cookie-actions {
+    display: flex;
+    gap: 8px;
+}
+
+#cookie-banner .btn-cookie-refuse {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #555;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+#cookie-banner .btn-cookie-accept {
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+}

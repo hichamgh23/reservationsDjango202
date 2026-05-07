@@ -1,58 +1,61 @@
-/* --- STRUCTURE DE BASE (Source 571-582) --- */
-body, html {
-    height: 100%;
+/* =============================================================
+   MENU.CSS — Barre latérale (sidebar) escamotable
+   Comportement : 65px de large par défaut, 240px au survol
+   ============================================================= */
+
+/* --- STRUCTURE DE BASE --- */
+.sidebar-hover {
+    width: 65px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: #0a0a0a !important;
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-x: hidden;
+    border-right: 1px solid #222;
 }
 
-nav.sidebar.navbar {
-    border-radius: 0px; /* Pas d'arrondis (Source 581) */
+/* Expansion au survol */
+.sidebar-hover:hover {
+    width: 240px;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
 }
 
-nav.sidebar, .main {
-    -webkit-transition: margin 200ms ease-out;
-    -moz-transition: margin 200ms ease-out;
-    -o-transition: margin 200ms ease-out;
-    transition: margin 200ms ease-out; /* Animation fluide (Source 587) */
+/* --- LABELS ET TEXTE (masqués par défaut, visibles au survol) --- */
+.menu-label,
+.username-text {
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
 }
 
-/* --- LOGIQUE DU MENU ESCAMOTABLE (Source 649-664) --- */
-@media (min-width: 768px) {
-    nav.sidebar {
-        width: 200px;
-        height: 100%;
-        margin-left: -160px; /* Cache le menu de 160px (Source 652) */
-        float: left;
-        z-index: 8000;
-        margin-bottom: 0px;
-    }
-
-    /* Déplace le menu vers la droite au survol (Source 662) */
-    nav.sidebar:hover {
-        margin-left: 0px;
-    }
-
-    /* Empêche le contenu de se superposer (Source 600) */
-    #page-content-wrapper {
-        margin-left: 40px; 
-    }
+.sidebar-hover:hover .menu-label,
+.sidebar-hover:hover .username-text {
+    opacity: 1;
 }
 
-/* --- STYLE DES LIENS ET BORDURES (Source 618-628) --- */
-nav.sidebar a {
-    padding-right: 13px;
-    color: white;
-}
-
-nav.sidebar .navbar-nav > li {
-    border-bottom: 1px #e5e5e5 solid; /* Ligne de séparation (Source 628) */
-    width: 100%;
-}
-
-/* --- TITRE DU MENU EN ROUGE (Source 701-707) --- */
-nav.navbar ul.navbar-nav li:nth-child(1) {
-    color: white !important;
-    background-color: darkred !important; /* Rouge foncé (Source 703) */
-    font-weight: bold;
-    text-align: center;
-    font-size: 1.2em;
+/* --- LIENS DE NAVIGATION --- */
+.nav-link {
+    transition: 0.3s;
     padding: 10px 0;
+}
+
+/* Effets de couleur au survol selon le type de lien */
+.hover-red:hover  { color: #e74c3c !important; transform: translateX(5px); }
+.hover-blue:hover { color: #3498db !important; transform: translateX(5px); }
+.hover-gold:hover { color: #f1c40f !important; transform: translateX(5px); }
+
+/* --- ICÔNES (position fixe pour ne pas bouger lors de l'expansion) --- */
+.nav-link i {
+    min-width: 35px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+/* --- PHOTO DE PROFIL (zoom au survol de la sidebar) --- */
+.sidebar-hover:hover .profile-section img {
+    transform: scale(1.1);
+    border-color: #e74c3c !important;
 }
