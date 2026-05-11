@@ -34,6 +34,7 @@
         <!-- Liens utilisateur (connexion / inscription) -->
         <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
             <ul class="navbar-nav ml-auto align-items-center pr-lg-5">
+
                 {% if user.is_authenticated %}
                 <li class="nav-item mx-2">
                     <span class="nav-link text-white-50 small">
@@ -53,6 +54,54 @@
                     </a>
                 </li>
                 {% endif %}
+
+                <!-- Liens de navigation principaux (visibles uniquement sur mobile) -->
+                <li class="nav-item d-lg-none mt-2">
+                    <hr class="border-secondary my-2">
+                </li>
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-white-50" href="{% url 'catalogue:welcome' %}">
+                        <i class="fas fa-home mr-2 text-danger"></i>Accueil
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-white-50" href="{% url 'catalogue:show_index' %}">
+                        <i class="fas fa-ticket-alt mr-2 text-danger"></i>Spectacles
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-white-50" href="{% url 'catalogue:artist_index' %}">
+                        <i class="fas fa-user-tie mr-2 text-danger"></i>Artistes
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-white-50" href="{% url 'catalogue:locality_index' %}">
+                        <i class="fas fa-map-marker-alt mr-2 text-danger"></i>Localités
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-info" href="{% url 'catalogue:profile' %}">
+                        <i class="fas fa-user-cog mr-2"></i>Mon profil
+                    </a>
+                </li>
+                {% if user.is_staff %}
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-warning" href="{% url 'admin:index' %}" target="_blank">
+                        <i class="fas fa-user-shield mr-2"></i>Administration
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item d-lg-none mt-2">
+                    <form action="{% url 'logout' %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-link text-danger p-0 nav-link border-0">
+                            <i class="fas fa-power-off mr-2"></i>Déconnexion
+                        </button>
+                    </form>
+                </li>
+                {% endif %}
+
             </ul>
         </div>
 
