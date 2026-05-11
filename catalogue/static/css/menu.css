@@ -59,3 +59,10 @@
     transform: scale(1.1);
     border-color: #e74c3c !important;
 }
+
+/* --- RESPONSIVE MOBILE : sidebar cachée --- */
+@media (max-width: 767px) {
+    .sidebar-hover {
+        display: none !important;
+    }
+}

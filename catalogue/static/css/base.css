@@ -109,3 +109,22 @@ footer {
     letter-spacing: 1px;
     cursor: pointer;
 }
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 767px) {
+    .content-area {
+        margin-left: 0 !important;
+    }
+    #cookie-banner {
+        flex-direction: column;
+        padding: 16px;
+        gap: 12px;
+    }
+    #cookie-banner .cookie-actions {
+        width: 100%;
+        justify-content: stretch;
+    }
+    #cookie-banner .cookie-actions button {
+        flex: 1;
+    }
+}

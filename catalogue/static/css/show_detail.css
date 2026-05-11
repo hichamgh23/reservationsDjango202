@@ -267,3 +267,29 @@
 .utick-btn-buy:hover {
     background: #000;
 }
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 767px) {
+    .utick-detail-page {
+        padding: 80px 0 40px;
+    }
+    .utick-visual-side img {
+        min-height: 250px;
+        max-height: 300px;
+    }
+    .utick-content-side {
+        padding: 24px 16px;
+    }
+    .utick-title {
+        font-size: 1.8rem;
+    }
+    .artistes-list {
+        flex-direction: column;
+    }
+    .booking-inner {
+        padding: 16px;
+    }
+    .utick-reviews-section {
+        padding: 16px;
+    }
+}

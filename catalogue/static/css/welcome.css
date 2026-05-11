@@ -147,3 +147,29 @@ footer {
     border-top: none !important;
     margin-top: 0 !important;
 }
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 767px) {
+    .main-title {
+        font-size: 3rem;
+        line-height: 1;
+    }
+    .hero-lead {
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+        margin-top: 15px;
+    }
+    .btn-theatre {
+        padding: 14px 30px;
+        font-size: 0.85rem;
+        margin-top: 20px;
+    }
+    .citation-box {
+        max-width: 90%;
+        padding: 14px;
+        margin-top: 20px;
+    }
+    .citation-text {
+        font-size: 0.85rem;
+    }
+}

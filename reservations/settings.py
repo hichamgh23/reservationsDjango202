@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Sécurité
 SECRET_KEY = 'django-insecure-ik5!h=%np*)@m)j^l1(w9i(!z34d*#&kbbb(rmc8f9gk=skr=6'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '172.20.10.4', '10.5.0.2']
 
 
 # IMPORTANT : Pour que le bouton déconnexion fonctionne sans erreur 405
