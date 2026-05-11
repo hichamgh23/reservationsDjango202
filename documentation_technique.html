@@ -661,13 +661,11 @@ venv\Scripts\Activate.ps1</pre>
 <h2 class="sub">Étape 4 — Créer la base de données dans HeidiSQL</h2>
 <ol>
   <li>Vérifier que MariaDB est démarré (Gestionnaire des tâches → Services → MariaDB)</li>
-  <li>Ouvrir <strong>HeidiSQL</strong> → Nouveau → Type : <strong>MySQL (TCP/IP)</strong> | Hôte : <code>127.0.0.1</code> | Port : <code>3306</code> | User : <code>root</code></li>
+  <li>Ouvrir <strong>HeidiSQL</strong> → Nouveau → Type : <strong>MySQL (TCP/IP)</strong> | Hôte : <code>127.0.0.1</code> | Port : <code>3306</code> | User : <code>root</code> | Mot de passe : <code>rooot</code></li>
   <li>Dans l'onglet <strong>Requête</strong>, exécuter :</li>
 </ol>
-<pre>CREATE DATABASE reservations CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'rooot'@'127.0.0.1' IDENTIFIED BY 'rooot';
-GRANT ALL PRIVILEGES ON reservations.* TO 'rooot'@'127.0.0.1';
-FLUSH PRIVILEGES;</pre>
+<pre>CREATE DATABASE reservations CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;</pre>
+<div class="note">La base de données Django utilise l'utilisateur <strong>root</strong> avec le mot de passe <strong>rooot</strong> — aucun utilisateur supplémentaire à créer.</div>
 
 <h2 class="sub">Étape 5 — Importer le dump SQL</h2>
 <ol>
