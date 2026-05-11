@@ -79,6 +79,29 @@
     transform: translateY(-2px);
 }
 
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 991px) {
+    /* Hauteur auto quand le menu s'ouvre */
+    .navbar {
+        height: auto !important;
+    }
+    /* Fond sombre pour le menu déroulant */
+    .navbar-collapse {
+        background: #0a0a0a;
+        padding: 10px 16px 16px;
+        border-top: 1px solid #222;
+        margin-top: 8px;
+    }
+    .navbar-collapse .nav-link {
+        padding: 10px 0 !important;
+        border-bottom: 1px solid #1a1a1a;
+        font-size: 0.95rem;
+    }
+    .navbar-collapse .nav-link:last-child {
+        border-bottom: none;
+    }
+}
+
 /* --- BARRE DE RECHERCHE --- */
 .search-input {
     background: #111 !important;
