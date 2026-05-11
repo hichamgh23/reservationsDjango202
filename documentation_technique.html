@@ -2,175 +2,421 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Documentation Technique — Projet Réservations</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: Arial, sans-serif; font-size: 10.5pt; color: #111; background:#fff; line-height:1.55; }
+  @page { margin: 2.5cm 2cm; }
 
-/* ── PAGE DE GARDE ─────────────────────── */
-.cover {
-  width:100%; min-height:100vh;
-  display:flex; flex-direction:column; align-items:center;
-  page-break-after:always; border-top:7px solid #1a2e45;
-}
-.cover-top { width:100%; background:#1a2e45; color:#fff; text-align:center; padding:14px 0 10px; font-size:12pt; font-weight:bold; letter-spacing:1px; }
-.cover-school { margin-top:36px; text-align:center; font-size:15pt; font-weight:bold; color:#1a2e45; text-transform:uppercase; letter-spacing:2px; }
-.cover-school-sub { text-align:center; font-size:10.5pt; color:#555; margin-top:5px; }
-.cover-line { width:55px; height:3px; background:#c0392b; margin:26px auto; }
-.cover-title { text-align:center; font-size:26pt; font-weight:bold; color:#1a2e45; text-transform:uppercase; letter-spacing:3px; padding:0 30px; }
-.cover-sub { text-align:center; font-size:13pt; color:#c0392b; font-weight:bold; margin-top:8px; letter-spacing:1px; }
-.cover-box { margin:38px auto 0; width:440px; border:1px solid #ccc; border-left:4px solid #1a2e45; padding:20px 28px; background:#f7f8fa; font-size:10pt; }
-.cover-box table { width:100%; border-collapse:collapse; }
-.cover-box td { padding:5px 0; vertical-align:top; }
-.cover-box td:first-child { color:#555; width:140px; font-weight:bold; }
-.cover-footer { margin-top:auto; padding:18px 0 28px; text-align:center; font-size:9pt; color:#999; border-top:1px solid #ddd; width:100%; }
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-/* ── MISE EN PAGE ─────────────────────── */
-.page { max-width:720px; margin:0 auto; padding:36px 48px; }
-@media print {
-  .cover { page-break-after:always; }
-  .page { max-width:100%; padding:0; }
-  h1.st { page-break-before:auto; }
-  section { page-break-inside:avoid; }
-}
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11pt;
+    color: #000;
+    background: #fff;
+    line-height: 1.5;
+  }
 
-/* ── TITRES ───────────────────────────── */
-h1.st {
-  font-size:12pt; font-weight:bold; color:#fff;
-  background:#1a2e45; padding:7px 14px;
-  margin-top:32px; margin-bottom:12px; letter-spacing:0.3px;
-}
-h2.sub {
-  font-size:10.5pt; font-weight:bold; color:#1a2e45;
-  border-left:4px solid #c0392b; padding-left:9px;
-  margin-top:16px; margin-bottom:7px;
-}
+  /* ── PAGE DE GARDE ─────────────────────────────────── */
+  .cover {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+  }
 
-/* ── TABLEAUX ─────────────────────────── */
-table.t { width:100%; border-collapse:collapse; margin:8px 0 14px; font-size:10pt; }
-table.t th { background:#1a2e45; color:#fff; padding:7px 11px; text-align:left; font-size:9.5pt; }
-table.t td { padding:6px 11px; border-bottom:1px solid #e0e0e0; vertical-align:top; }
-table.t tr:nth-child(even) td { background:#f7f8fa; }
+  .icc-header-box {
+    border: 1.5px solid #000;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    gap: 18px;
+  }
 
-/* ── CODE ─────────────────────────────── */
-code { font-family:'Courier New',monospace; font-size:9pt; background:#f0f0f0; padding:1px 5px; color:#c0392b; border-radius:2px; }
-pre {
-  background:#1a2e45; color:#cde; padding:12px 16px;
-  font-family:'Courier New',monospace; font-size:8.8pt;
-  margin:8px 0 12px; border-left:4px solid #c0392b;
-  white-space:pre-wrap; word-break:break-all; line-height:1.6;
-}
+  .icc-logo-block {
+    border: 2px solid #8b1a1a;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 60px;
+  }
 
-/* ── BADGES ───────────────────────────── */
-.b-pub  { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#d5f5e3; color:#1a7a40; }
-.b-mem  { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#d6eaf8; color:#1a5276; }
-.b-adm  { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#f4ecf7; color:#6c3483; }
-.b-get  { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#d5f5e3; color:#1a7a40; }
-.b-post { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#d6eaf8; color:#1a5276; }
-.b-put  { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#fef9e7; color:#7d6608; }
-.b-del  { display:inline-block; padding:2px 8px; border-radius:3px; font-size:8pt; font-weight:bold; background:#fdedec; color:#922b21; }
+  .icc-logo-letters {
+    font-size: 22pt;
+    font-weight: bold;
+    color: #8b1a1a;
+    font-family: serif;
+    line-height: 1;
+  }
 
-.info { background:#eaf4fb; border-left:4px solid #2980b9; padding:9px 13px; margin:8px 0; font-size:10pt; }
-.warn { background:#fef9e7; border-left:4px solid #f39c12; padding:9px 13px; margin:8px 0; font-size:10pt; }
+  .icc-logo-bar {
+    width: 100%;
+    height: 2px;
+    background: #8b1a1a;
+    margin: 3px 0;
+  }
 
-p { margin-bottom:7px; }
-ul,ol { padding-left:20px; margin-bottom:9px; }
-li { margin-bottom:3px; }
+  .icc-logo-bottom {
+    font-size: 7pt;
+    color: #8b1a1a;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+
+  .icc-header-text { flex: 1; }
+
+  .icc-header-text .icc-name {
+    font-size: 14pt;
+    font-weight: bold;
+    font-variant: small-caps;
+    letter-spacing: 2px;
+  }
+
+  .icc-header-text .icc-sub {
+    font-size: 9pt;
+    color: #333;
+    font-style: italic;
+  }
+
+  .cover-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 40px 40px;
+    text-align: center;
+  }
+
+  .cover-title {
+    font-size: 20pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  .cover-info {
+    margin-top: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 11pt;
+    text-align: left;
+    gap: 40px;
+  }
+
+  .cover-info .col-left { flex: 1; }
+  .cover-info .col-right { flex: 1; }
+
+  .cover-info .label {
+    font-weight: bold;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cover-info .label::before { content: '➢'; font-size: 10pt; }
+
+  .cover-info .value { margin-left: 24px; margin-bottom: 8px; }
+
+  .cover-ue {
+    margin-top: 80px;
+    font-size: 11pt;
+    font-weight: bold;
+    letter-spacing: 4px;
+    text-align: center;
+  }
+
+  .cover-year {
+    margin-top: 30px;
+    font-size: 11pt;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  /* ── DOCUMENT ───────────────────────────────────────── */
+  .doc {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 30px 40px;
+  }
+
+  @media print {
+    .cover { page-break-after: always; min-height: 100vh; }
+    .doc { max-width: 100%; padding: 0; margin: 0; }
+  }
+
+  /* ── TABLE DES MATIÈRES ─────────────────────────────── */
+  .toc-title {
+    font-size: 14pt;
+    font-weight: bold;
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    margin: 20px 0 14px;
+    font-variant: small-caps;
+    letter-spacing: 1px;
+  }
+
+  .toc { list-style: none; }
+  .toc li {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted #999;
+    padding: 3px 0;
+    font-size: 10.5pt;
+  }
+  .toc li.sub { padding-left: 20px; font-size: 10pt; color: #333; }
+  .toc li a { color: #000; text-decoration: none; }
+  .toc li .pg { color: #555; font-size: 10pt; }
+
+  /* ── TITRES — style GarageConnect ──────────────────── */
+  h1.sec {
+    font-size: 12.5pt;
+    font-weight: bold;
+    background: #d8e4bc;
+    padding: 5px 12px;
+    margin-top: 30px;
+    margin-bottom: 14px;
+  }
+
+  h2.sub {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-decoration: underline;
+  }
+
+  /* ── TEXTE ──────────────────────────────────────────── */
+  p { margin-bottom: 8px; text-align: justify; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 3px; text-align: justify; }
+
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 9.5pt;
+    background: #f5f5f5;
+    padding: 1px 4px;
+    border: 1px solid #ddd;
+  }
+
+  pre {
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 10px 14px;
+    font-family: 'Courier New', monospace;
+    font-size: 9pt;
+    margin: 8px 0 12px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+
+  /* ── TABLEAUX — style GarageConnect ────────────────── */
+  table.t {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 16px;
+    font-size: 10pt;
+    font-family: Arial, sans-serif;
+  }
+
+  table.t th {
+    background: #000;
+    color: #fff;
+    padding: 6px 10px;
+    text-align: left;
+    font-size: 9.5pt;
+    font-weight: bold;
+    border: 1px solid #000;
+  }
+
+  table.t td {
+    padding: 5px 10px;
+    border: 1px solid #000;
+    vertical-align: top;
+  }
+
+  table.t tr:nth-child(even) td { background: #f9f9f9; }
+
+  /* ── BADGES ACCÈS ───────────────────────────────────── */
+  .b-pub  { font-weight: bold; color: #1a6b2f; }
+  .b-mem  { font-weight: bold; color: #1a3d7a; }
+  .b-adm  { font-weight: bold; color: #6c1a7a; }
+
+  .note {
+    background: #eaf2ff;
+    border-left: 4px solid #2060c0;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-size: 10pt;
+    font-family: Arial, sans-serif;
+  }
+
+  .warn {
+    background: #fffde7;
+    border-left: 4px solid #c09000;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-size: 10pt;
+    font-family: Arial, sans-serif;
+  }
+
+  .footer-line {
+    text-align: center;
+    font-size: 9pt;
+    color: #555;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 30px;
+    font-family: Arial, sans-serif;
+  }
 </style>
 </head>
 <body>
 
-<!-- ══ PAGE DE GARDE ══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════
+     PAGE DE GARDE
+══════════════════════════════════════════════════ -->
 <div class="cover">
-  <div class="cover-top">Institut des Carrières Commerciales (ICC) — EPFC — Bruxelles</div>
-  <div class="cover-school" style="margin-top:48px;">ICC / EPFC</div>
-  <div class="cover-school-sub">Institut des Carrières Commerciales<br>École Pratique des Hautes Études Commerciales</div>
-  <div class="cover-line"></div>
-  <div class="cover-title">Documentation<br>Technique</div>
-  <div class="cover-sub">Projet Réservations — PickShow</div>
-  <div class="cover-box">
-    <table>
-      <tr><td>Cours</td><td>Développement Web Avancé — Python / Django</td></tr>
-      <tr><td>Étudiant</td><td>Hicham Ghassoul</td></tr>
-      <tr><td>Année académique</td><td>2025 – 2026</td></tr>
-      <tr><td>Dépôt GitHub</td><td>hichamgh23 / reservationsDjango202</td></tr>
-      <tr><td>Version document</td><td>1.0 — Mai 2026</td></tr>
-    </table>
+
+  <div class="icc-header-box">
+    <div class="icc-logo-block">
+      <div class="icc-logo-letters">ICC</div>
+      <div class="icc-logo-bar"></div>
+      <div class="icc-logo-bottom">ICC</div>
+    </div>
+    <div class="icc-header-text">
+      <div class="icc-name">Institut des Carrières Commerciales</div>
+      <div class="icc-sub">Enseignement supérieur pour adultes</div>
+      <div class="icc-sub">Ville de Bruxelles</div>
+    </div>
   </div>
-  <div class="cover-footer">Document à usage académique — ICC / EPFC — 2026</div>
+
+  <div class="cover-body">
+
+    <div class="cover-title">
+      Documentation Technique du Projet Réservations<br>
+      « PickShow »
+    </div>
+
+    <div class="cover-info">
+      <div class="col-left">
+        <div class="label">Chargé de cours</div>
+        <div class="value">&nbsp;</div>
+        <div class="label">M. LOUIS Mathieu</div>
+      </div>
+      <div class="col-right">
+        <div class="label">Travail présenté par :</div>
+        <div class="value">M. Ghassoul Hicham</div>
+      </div>
+    </div>
+
+    <div class="cover-ue">
+      UE : D É V E L O P P E M E N T &nbsp; W E B &nbsp; A V A N C É
+    </div>
+
+    <div class="cover-year">2025 / 2026</div>
+
+  </div>
 </div>
 
-<!-- ══ CONTENU ════════════════════════════════════════════════ -->
-<div class="page">
+<!-- ══════════════════════════════════════════════
+     TABLE DES MATIÈRES
+══════════════════════════════════════════════════ -->
+<div class="doc">
 
-<!-- ═══ 1. MÉTHODOLOGIE ═══ -->
-<h1 class="st" id="s1">1. Méthodologie et techniques de développement</h1>
+<div class="toc-title">TABLE DES MATIÈRES</div>
+<ul class="toc">
+  <li><a href="#s1">1 &nbsp; Méthodologie et techniques de développement</a><span class="pg">1</span></li>
+  <li class="sub"><a href="#s11">1.1 &nbsp; Langage de développement choisi</a><span class="pg">1</span></li>
+  <li class="sub"><a href="#s12">1.2 &nbsp; Framework utilisé</a><span class="pg">1</span></li>
+  <li class="sub"><a href="#s13">1.3 &nbsp; Logiciels utilisés</a><span class="pg">1</span></li>
+  <li class="sub"><a href="#s14">1.4 &nbsp; Méthodes de gestion de projet</a><span class="pg">2</span></li>
+  <li><a href="#s2">2 &nbsp; Fonctionnalités implémentées (URLs)</a><span class="pg">2</span></li>
+  <li><a href="#s3">3 &nbsp; Développements futurs</a><span class="pg">3</span></li>
+  <li><a href="#s4">4 &nbsp; Gestion de la sécurité</a><span class="pg">4</span></li>
+  <li class="sub"><a href="#s41">4.1 &nbsp; Procédures d'identification selon les profils</a><span class="pg">4</span></li>
+  <li><a href="#s5">5 &nbsp; API consommée</a><span class="pg">5</span></li>
+  <li><a href="#s6">6 &nbsp; API produites</a><span class="pg">5</span></li>
+  <li><a href="#s7">7 &nbsp; Flux RSS produit</a><span class="pg">6</span></li>
+  <li><a href="#s8">8 &nbsp; Export / Import CSV</a><span class="pg">6</span></li>
+  <li><a href="#s9">9 &nbsp; Procédures de déploiement</a><span class="pg">7</span></li>
+  <li><a href="#s10">10 &nbsp; URL de déploiement</a><span class="pg">8</span></li>
+  <li><a href="#s11b">11 &nbsp; URL de développement — dépôt GitHub</a><span class="pg">8</span></li>
+</ul>
 
-<p>Le projet a été développé de manière <strong>itérative</strong>, fonctionnalité par fonctionnalité, en suivant le plan de cours chapitre par chapitre. Chaque itération livrait un ensemble cohérent et fonctionnel versionné sur Git avant de passer à la suivante.</p>
+<br>
 
-<h2 class="sub">Architecture</h2>
-<p>Pattern <strong>MVT (Model – View – Template)</strong> imposé par Django :</p>
+<!-- ══ 1. MÉTHODOLOGIE ══════════════════════════════════ -->
+<h1 class="sec" id="s1">1 &nbsp;&nbsp; Méthodologie et techniques de développement</h1>
+
+<p>Le projet a été développé de manière <strong>itérative</strong>, fonctionnalité par fonctionnalité, en suivant le plan de cours chapitre par chapitre. Le projet suit le pattern <strong>MVT (Model – View – Template)</strong> imposé par Django :</p>
 <ul>
   <li><strong>Model</strong> — 13 modèles ORM mappés sur MariaDB (<code>catalogue/models.py</code>)</li>
   <li><strong>View</strong> — fonctions et une classe Python (<code>catalogue/views.py</code>)</li>
-  <li><strong>Template</strong> — moteur Django avec héritage via <code>base.html</code></li>
+  <li><strong>Template</strong> — moteur de templates Django avec héritage via <code>base.html</code></li>
 </ul>
-
-<h2 class="sub">Principes appliqués</h2>
-<ul>
-  <li>Séparation stricte HTML / CSS / JS — un fichier externe par composant</li>
-  <li>DRY via <code>{% extends %}</code> et <code>{% include %}</code> dans les templates</li>
-  <li>Contrôle d'accès déclaratif : <code>@login_required</code> et décorateur <code>@group_required</code> personnalisé</li>
-  <li>API REST exposée via Django REST Framework</li>
-  <li>Données exportables en CSV et en flux RSS</li>
-</ul>
+<p>Principes appliqués : séparation stricte HTML / CSS / JS, DRY via <code>{% extends %}</code> et <code>{% include %}</code>, contrôle d'accès déclaratif par décorateurs.</p>
 
 
-<!-- ═══ 2. LANGAGE ET FRAMEWORK ═══ -->
-<h1 class="st" id="s2">2. Langage et framework</h1>
+<!-- ── 1.1 Langage ─────────────────────────────────────── -->
+<h2 class="sub" id="s11">1.1 &nbsp; Langage de développement choisi</h2>
+
+<table class="t">
+  <tr><th>Langage</th><th>Version</th><th>Rôle</th></tr>
+  <tr><td>Python</td><td><strong>3.14.1</strong></td><td>Backend — modèles, vues, logique métier</td></tr>
+  <tr><td>HTML5</td><td>—</td><td>Structure des templates</td></tr>
+  <tr><td>CSS3</td><td>—</td><td>Mise en forme — un fichier externe par composant</td></tr>
+  <tr><td>JavaScript (ES6)</td><td>—</td><td>Interactions front-end — un fichier externe par fonctionnalité</td></tr>
+  <tr><td>SQL (MariaDB)</td><td>10.6.25</td><td>Base de données relationnelle</td></tr>
+</table>
+
+
+<!-- ── 1.2 Framework ───────────────────────────────────── -->
+<h2 class="sub" id="s12">1.2 &nbsp; Framework utilisé</h2>
 
 <table class="t">
   <tr><th>Composant</th><th>Technologie</th><th>Version exacte</th></tr>
-  <tr><td>Langage backend</td><td>Python</td><td><strong>3.14.1</strong></td></tr>
-  <tr><td>Framework web</td><td>Django</td><td><strong>6.0.4</strong></td></tr>
+  <tr><td>Framework web principal</td><td>Django</td><td><strong>6.0.4</strong></td></tr>
   <tr><td>API REST</td><td>Django REST Framework</td><td><strong>3.17.1</strong></td></tr>
   <tr><td>Connecteur base de données</td><td>PyMySQL</td><td>1.4.6</td></tr>
   <tr><td>Traitement d'images</td><td>Pillow</td><td>12.2.0</td></tr>
-  <tr><td>Serveur de base de données</td><td>MariaDB</td><td>10.6.25</td></tr>
   <tr><td>CSS Framework (CDN)</td><td>Bootstrap</td><td>4.6.2</td></tr>
   <tr><td>Icônes (CDN)</td><td>Font Awesome</td><td>5.15.4</td></tr>
   <tr><td>Animations JS (CDN)</td><td>Anime.js</td><td>3.2.1</td></tr>
-  <tr><td>Requêtes HTTP Python</td><td>Requests</td><td>inclus venv</td></tr>
 </table>
 
 
-<!-- ═══ 3. LOGICIELS ═══ -->
-<h1 class="st" id="s3">3. Logiciels utilisés</h1>
+<!-- ── 1.3 Logiciels ───────────────────────────────────── -->
+<h2 class="sub" id="s13">1.3 &nbsp; Logiciels utilisés</h2>
 
-<h2 class="sub">Développement</h2>
+<p><strong>Développement :</strong></p>
 <table class="t">
   <tr><th>Logiciel</th><th>Rôle</th></tr>
-  <tr><td>Visual Studio Code</td><td>Éditeur principal — extensions Python, Django, GitLens</td></tr>
-  <tr><td>MariaDB 10.6.25 (service Windows)</td><td>Serveur de base de données — installé en tant que service Windows dans <code>C:\Program Files\MariaDB 10.6\</code></td></tr>
-  <tr><td>HeidiSQL 12.11.0.7065</td><td>Client SQL graphique — création de la base, import du dump, inspection des tables</td></tr>
-  <tr><td>Git</td><td>Contrôle de version local</td></tr>
-  <tr><td>GitHub</td><td>Hébergement du dépôt distant et livrable</td></tr>
-  <tr><td>Google Chrome / Firefox</td><td>Tests frontend, inspection réseau (DevTools)</td></tr>
+  <tr><td>Visual Studio Code</td><td>Éditeur principal (extensions Python, Django, GitLens)</td></tr>
+  <tr><td>Google Chrome / Firefox</td><td>Tests frontend et inspection réseau (DevTools)</td></tr>
   <tr><td>Postman</td><td>Tests des endpoints de l'API REST</td></tr>
+  <tr><td>Git</td><td>Contrôle de version local</td></tr>
+  <tr><td>GitHub</td><td>Hébergement du dépôt distant et livrable officiel</td></tr>
 </table>
 
-<h2 class="sub">Déploiement (développement local)</h2>
+<p><strong>Déploiement (environnement de développement local) :</strong></p>
 <table class="t">
   <tr><th>Logiciel</th><th>Rôle</th></tr>
-  <tr><td>MariaDB 10.6 (service Windows)</td><td>Base de données — démarre automatiquement avec Windows</td></tr>
+  <tr><td>MariaDB 10.6.25 (service Windows)</td><td>Serveur de base de données — installé dans <code>C:\Program Files\MariaDB 10.6\</code> — démarre automatiquement avec Windows</td></tr>
+  <tr><td>HeidiSQL 12.11.0.7065</td><td>Client SQL graphique — création de la BDD, import du dump, inspection des tables</td></tr>
   <tr><td><code>python manage.py runserver</code></td><td>Serveur HTTP de développement Django intégré</td></tr>
 </table>
-<div class="warn">⚠ Le projet tourne en mode développement (<code>DEBUG = True</code>). Un déploiement production nécessiterait Gunicorn + Nginx et la désactivation du debug.</div>
+<div class="warn">⚠ Le projet tourne en mode développement (<code>DEBUG = True</code>). Un déploiement en production nécessiterait Gunicorn + Nginx et la désactivation du debug.</div>
 
 
-<!-- ═══ 4. GESTION DE PROJET ═══ -->
-<h1 class="st" id="s4">4. Méthodes de gestion de projet</h1>
+<!-- ── 1.4 Gestion de projet ───────────────────────────── -->
+<h2 class="sub" id="s14">1.4 &nbsp; Méthodes de gestion de projet</h2>
 
 <ul>
   <li><strong>Git</strong> — commits atomiques par fonctionnalité, messages descriptifs en français</li>
@@ -180,49 +426,47 @@ li { margin-bottom:3px; }
 </ul>
 
 
-<!-- ═══ 5. FONCTIONNALITÉS ET URLs ═══ -->
-<h1 class="st" id="s5">5. Fonctionnalités implémentées</h1>
+<!-- ══ 2. FONCTIONNALITÉS ════════════════════════════════ -->
+<h1 class="sec" id="s2">2 &nbsp;&nbsp; Fonctionnalités implémentées (URLs)</h1>
 
 <table class="t">
   <tr><th style="width:38%">URL</th><th style="width:38%">Fonctionnalité</th><th style="width:24%">Accès</th></tr>
 
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">AUTHENTIFICATION</td></tr>
+  <tr><td colspan="3" style="background:#e8e8e8;font-weight:bold;font-size:9.5pt;">AUTHENTIFICATION</td></tr>
   <tr><td><code>/accounts/login/</code></td><td>Connexion utilisateur</td><td><span class="b-pub">Public</span></td></tr>
-  <tr><td><code>/signup/</code></td><td>Inscription (formulaire étendu : prénom, nom, email, langue)</td><td><span class="b-pub">Public</span></td></tr>
+  <tr><td><code>/signup/</code></td><td>Inscription (formulaire étendu)</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/accounts/logout/</code></td><td>Déconnexion (POST)</td><td><span class="b-mem">Connecté</span></td></tr>
 
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">PROFIL UTILISATEUR</td></tr>
+  <tr><td colspan="3" style="background:#e8e8e8;font-weight:bold;font-size:9.5pt;">PROFIL UTILISATEUR</td></tr>
   <tr><td><code>/profile/</code></td><td>Tableau de bord — liste de mes réservations</td><td><span class="b-mem">Connecté</span></td></tr>
   <tr><td><code>/profile/password/</code></td><td>Changement de mot de passe</td><td><span class="b-mem">Connecté</span></td></tr>
   <tr><td><code>/profile/update/</code></td><td>Upload photo de profil (POST multipart)</td><td><span class="b-mem">Connecté</span></td></tr>
   <tr><td><code>/profile/image/delete/</code></td><td>Suppression photo de profil</td><td><span class="b-mem">Connecté</span></td></tr>
 
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">CATALOGUE DES SPECTACLES</td></tr>
-  <tr><td><code>/</code></td><td>Page d'accueil — animation rideau + citation (API externe)</td><td><span class="b-pub">Public</span></td></tr>
+  <tr><td colspan="3" style="background:#e8e8e8;font-weight:bold;font-size:9.5pt;">CATALOGUE DES SPECTACLES</td></tr>
+  <tr><td><code>/</code></td><td>Page d'accueil — animation rideau + citation API externe</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/shows/</code></td><td>Catalogue des spectacles — grille + recherche par titre</td><td><span class="b-pub">Public</span></td></tr>
-  <tr><td><code>/show/&lt;id&gt;/</code></td><td>Détail spectacle — description, distribution, séances, avis + formulaire réservation</td><td><span class="b-pub">Public</span></td></tr>
+  <tr><td><code>/show/&lt;id&gt;/</code></td><td>Détail spectacle — description, distribution, séances, avis</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/book/&lt;representation_id&gt;/</code></td><td>Page de réservation avec calcul dynamique du total</td><td><span class="b-mem">Connecté</span></td></tr>
   <tr><td><code>/reservation/&lt;id&gt;/delete/</code></td><td>Annulation d'une réservation (POST)</td><td><span class="b-mem">Connecté</span></td></tr>
 
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">GESTION DES ARTISTES — CRUD</td></tr>
+  <tr><td colspan="3" style="background:#e8e8e8;font-weight:bold;font-size:9.5pt;">ARTISTES — CRUD COMPLET</td></tr>
   <tr><td><code>/artist/</code></td><td>Liste des artistes</td><td><span class="b-pub">Public</span></td></tr>
-  <tr><td><code>/artist/&lt;id&gt;/</code></td><td>Fiche d'un artiste (prénom, nom, types)</td><td><span class="b-pub">Public</span></td></tr>
+  <tr><td><code>/artist/&lt;id&gt;/</code></td><td>Fiche d'un artiste</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/artist/create/</code></td><td>Création d'un artiste</td><td><span class="b-adm">Superuser</span></td></tr>
   <tr><td><code>/artist/&lt;id&gt;/edit/</code></td><td>Modification d'un artiste</td><td><span class="b-adm">Superuser</span></td></tr>
   <tr><td><code>/artist/&lt;id&gt;/delete/</code></td><td>Suppression d'un artiste</td><td><span class="b-adm">Superuser</span></td></tr>
 
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">GESTION DES LOCALITÉS — CRUD</td></tr>
+  <tr><td colspan="3" style="background:#e8e8e8;font-weight:bold;font-size:9.5pt;">LOCALITÉS — CRUD COMPLET</td></tr>
   <tr><td><code>/localities/</code></td><td>Liste des localités</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/locality/&lt;id&gt;/</code></td><td>Détail d'une localité et ses lieux</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/locality/create/</code></td><td>Création d'une localité</td><td><span class="b-adm">Superuser</span></td></tr>
   <tr><td><code>/locality/&lt;id&gt;/edit/</code></td><td>Modification d'une localité</td><td><span class="b-adm">Superuser</span></td></tr>
   <tr><td><code>/locality/&lt;id&gt;/delete/</code></td><td>Suppression d'une localité</td><td><span class="b-adm">Superuser</span></td></tr>
 
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">LIEUX (LECTURE SEULE)</td></tr>
+  <tr><td colspan="3" style="background:#e8e8e8;font-weight:bold;font-size:9.5pt;">LIEUX &amp; FONCTIONNALITÉS COMPLÉMENTAIRES</td></tr>
   <tr><td><code>/locations/</code></td><td>Liste des salles de spectacle</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/location/&lt;id&gt;/</code></td><td>Détail d'une salle</td><td><span class="b-pub">Public</span></td></tr>
-
-  <tr><td colspan="3" style="background:#ecf0f1;font-weight:bold;padding:5px 11px;font-size:9.5pt;">FONCTIONNALITÉS COMPLÉMENTAIRES</td></tr>
   <tr><td><code>/export/reservations/</code></td><td>Export CSV de toutes les réservations</td><td><span class="b-adm">Superuser</span></td></tr>
   <tr><td><code>/feed/representations/</code></td><td>Flux RSS des 20 prochaines représentations</td><td><span class="b-pub">Public</span></td></tr>
   <tr><td><code>/admin/</code></td><td>Interface d'administration Django</td><td><span class="b-adm">Staff</span></td></tr>
@@ -231,16 +475,16 @@ li { margin-bottom:3px; }
 </table>
 
 
-<!-- ═══ 6. DÉVELOPPEMENTS FUTURS ═══ -->
-<h1 class="st" id="s6">6. Développements futurs</h1>
+<!-- ══ 3. DÉVELOPPEMENTS FUTURS ══════════════════════════ -->
+<h1 class="sec" id="s3">3 &nbsp;&nbsp; Développements futurs</h1>
 
 <table class="t">
   <tr><th>Fonctionnalité</th><th>Description</th></tr>
   <tr><td>Paiement en ligne</td><td>Intégration Stripe ou Mollie pour paiement sécurisé des réservations</td></tr>
   <tr><td>Confirmation par e-mail</td><td>Envoi automatique d'un e-mail de confirmation à chaque réservation (Django SMTP)</td></tr>
   <tr><td>Billet PDF / QR Code</td><td>Génération d'un billet numérique avec QR Code unique par réservation</td></tr>
-  <tr><td>Déploiement en production</td><td>Mise en ligne sur VPS (Gunicorn + Nginx + PostgreSQL)</td></tr>
-  <tr><td>Disponibilité en temps réel</td><td>Affichage dynamique (WebSocket) des places restantes par représentation</td></tr>
+  <tr><td>Déploiement en production</td><td>Mise en ligne sur VPS (Gunicorn + Nginx + MariaDB)</td></tr>
+  <tr><td>Disponibilité en temps réel</td><td>Affichage dynamique des places restantes par représentation</td></tr>
   <tr><td>Modération des avis</td><td>Interface admin dédiée à la validation/rejet des avis utilisateurs</td></tr>
   <tr><td>Recherche avancée</td><td>Filtres par date, type, prix, lieu sur la page catalogue</td></tr>
   <tr><td>API étendue</td><td>Endpoints REST pour les spectacles, représentations et réservations</td></tr>
@@ -248,90 +492,57 @@ li { margin-bottom:3px; }
 </table>
 
 
-<!-- ═══ 7. SÉCURITÉ ═══ -->
-<h1 class="st" id="s7">7. Gestion de la sécurité</h1>
+<!-- ══ 4. SÉCURITÉ ══════════════════════════════════════ -->
+<h1 class="sec" id="s4">4 &nbsp;&nbsp; Gestion de la sécurité</h1>
 
 <h2 class="sub">Protection CSRF</h2>
-<p>Le middleware <code>CsrfViewMiddleware</code> est actif. Tous les formulaires POST incluent le token <code>{% csrf_token %}</code>. La vue de déconnexion utilise <code>@csrf_exempt</code> uniquement car elle accepte un POST direct sans formulaire Django standard.</p>
+<p>Le middleware <code>CsrfViewMiddleware</code> est actif sur toutes les requêtes POST. Chaque formulaire inclut le token <code>{% csrf_token %}</code>.</p>
 
 <h2 class="sub">Authentification</h2>
 <ul>
   <li>Système Django natif (<code>django.contrib.auth</code>) — mots de passe hashés PBKDF2-SHA256</li>
   <li>Sessions sécurisées via <code>django.contrib.sessions</code></li>
   <li>Décorateur <code>@login_required</code> sur toutes les vues nécessitant une connexion</li>
-  <li>Validation : longueur minimale 6 caractères, vérificateur de mots de passe communs</li>
 </ul>
 
 <h2 class="sub">Autorisations par profil</h2>
-
 <table class="t">
   <tr><th>Profil</th><th>Condition technique</th><th>Accès autorisé</th></tr>
-  <tr>
-    <td><span class="b-pub">Public</span></td>
-    <td>Utilisateur non connecté</td>
-    <td>Lecture catalogue, spectacles, artistes, lieux, localités, flux RSS</td>
-  </tr>
-  <tr>
-    <td><span class="b-mem">MEMBER</span></td>
-    <td>Utilisateur authentifié (groupe MEMBER)</td>
-    <td>Public + réservations + profil + dépôt d'avis + API REST</td>
-  </tr>
-  <tr>
-    <td><span class="b-adm">Superuser / Staff</span></td>
-    <td><code>is_superuser = True</code></td>
-    <td>Tout + CRUD artistes / localités + export CSV + Django Admin</td>
-  </tr>
+  <tr><td><span class="b-pub">Public</span></td><td>Utilisateur non connecté</td><td>Lecture catalogue, spectacles, artistes, lieux, flux RSS</td></tr>
+  <tr><td><span class="b-mem">MEMBER</span></td><td>Utilisateur authentifié (groupe MEMBER)</td><td>Public + réservations + profil + avis + API REST</td></tr>
+  <tr><td><span class="b-adm">Superuser</span></td><td><code>is_superuser = True</code></td><td>Tout + CRUD artistes/localités + export CSV + Django Admin</td></tr>
 </table>
-
-<p>Le décorateur <code>@group_required('ADMIN')</code> défini dans <code>views.py</code> autorise les superusers automatiquement, même sans appartenance explicite au groupe ADMIN.</p>
+<p>Le décorateur <code>@group_required('ADMIN')</code> défini dans <code>catalogue/views.py</code> autorise les superusers automatiquement, même sans appartenance explicite au groupe ADMIN.</p>
 
 <h2 class="sub">Intégrité de la base de données</h2>
 <p>Toutes les clés étrangères définissent explicitement <code>ON DELETE</code> et <code>ON UPDATE</code> au niveau SQL (CASCADE, SET NULL ou RESTRICT), en complément du comportement ORM Django.</p>
 
 
-<!-- ═══ 8. COMPTES ═══ -->
-<h1 class="st" id="s8">8. Procédures d'identification</h1>
+<!-- ── 4.1 Procédures d'identification ─────────────────── -->
+<h2 class="sub" id="s41">4.1 &nbsp; Procédures d'identification selon les profils</h2>
 
-<p>URL de connexion : <code>http://127.0.0.1:8000/accounts/login/</code></p>
+<p><strong>URL de connexion :</strong> <code>http://127.0.0.1:8000/accounts/login/</code></p>
+<p><strong>URL de l'administration Django :</strong> <code>http://127.0.0.1:8000/admin/</code></p>
 
 <table class="t">
   <tr><th>Profil</th><th>Login</th><th>Mot de passe</th><th>is_superuser</th><th>Groupe</th></tr>
-  <tr>
-    <td><span class="b-adm">Superuser</span></td>
-    <td><code>admin</code></td>
-    <td><code>Admin2026!</code></td>
-    <td>✅ Oui</td>
-    <td>—</td>
-  </tr>
-  <tr>
-    <td><span class="b-adm">Superuser</span></td>
-    <td><code>hicham</code></td>
-    <td><code>Hicham2026!</code></td>
-    <td>✅ Oui</td>
-    <td>—</td>
-  </tr>
-  <tr>
-    <td><span class="b-mem">Membre</span></td>
-    <td><code>hicham2026</code></td>
-    <td><code>Member2026!</code></td>
-    <td>❌ Non</td>
-    <td>MEMBER</td>
-  </tr>
+  <tr><td><span class="b-adm">Superuser</span></td><td><code>admin</code></td><td><code>Admin2026!</code></td><td>Oui</td><td>—</td></tr>
+  <tr><td><span class="b-adm">Superuser</span></td><td><code>hicham</code></td><td><code>Hicham2026!</code></td><td>Oui</td><td>—</td></tr>
+  <tr><td><span class="b-mem">Membre</span></td><td><code>hicham2026</code></td><td><code>Member2026!</code></td><td>Non</td><td>MEMBER</td></tr>
 </table>
 
-<p>URL de l'administration Django : <code>http://127.0.0.1:8000/admin/</code> (accessible aux comptes <code>admin</code> et <code>hicham</code>)</p>
 
+<!-- ══ 5. API CONSOMMÉE ══════════════════════════════════ -->
+<h1 class="sec" id="s5">5 &nbsp;&nbsp; API consommée</h1>
 
-<!-- ═══ 9. API CONSOMMÉE ═══ -->
-<h1 class="st" id="s9">9. API consommée (externe)</h1>
-
+<h2 class="sub">DummyJSON Quotes API</h2>
 <table class="t">
   <tr><th>Paramètre</th><th>Valeur</th></tr>
   <tr><td>Nom</td><td>DummyJSON Quotes API</td></tr>
-  <tr><td>URL</td><td><code>https://dummyjson.com/quotes/random</code></td></tr>
+  <tr><td>Adresse (URL)</td><td><code>https://dummyjson.com/quotes/random</code></td></tr>
   <tr><td>Méthode</td><td>GET</td></tr>
   <tr><td>Authentification</td><td>Aucune (API publique et gratuite)</td></tr>
-  <tr><td>Format réponse</td><td>JSON</td></tr>
+  <tr><td>Format réponse</td><td>JSON — champs <code>quote</code> (texte) et <code>author</code> (auteur)</td></tr>
   <tr><td>Timeout</td><td>3 secondes</td></tr>
   <tr><td>Gestion d'erreur</td><td>Fail silencieux — la page s'affiche sans citation si l'API est indisponible</td></tr>
 </table>
@@ -339,7 +550,7 @@ li { margin-bottom:3px; }
 <p><strong>Exemple de réponse :</strong></p>
 <pre>{ "id": 42, "quote": "Life is what happens when you're busy making other plans.", "author": "John Lennon" }</pre>
 
-<p><strong>Utilisation :</strong> Appelée dans la vue <code>welcome()</code> à chaque chargement de la page d'accueil. Les champs <code>quote</code> et <code>author</code> sont transmis au template et affichés dans un encadré stylisé.</p>
+<p><strong>Exploitation dans le projet :</strong> Appelée dans la vue <code>welcome()</code> à chaque chargement de la page d'accueil. Les champs <code>quote</code> et <code>author</code> sont transmis au template et affichés dans un encadré stylisé sous l'animation rideau.</p>
 
 <pre>
 # catalogue/views.py — def welcome(request)
@@ -350,19 +561,19 @@ auteur   = data.get('author')
 </pre>
 
 
-<!-- ═══ 10. API PRODUITE ═══ -->
-<h1 class="st" id="s10">10. API produite (REST)</h1>
+<!-- ══ 6. API PRODUITES ══════════════════════════════════ -->
+<h1 class="sec" id="s6">6 &nbsp;&nbsp; API produites</h1>
 
-<p>API construite avec <strong>Django REST Framework 3.17.1</strong>. Elle expose le modèle <strong>Artist</strong> avec des liens hypermédia. Authentification Session ou Basic Auth requise sur tous les endpoints.</p>
+<p>API construite avec <strong>Django REST Framework 3.17.1</strong>. Elle expose le modèle <strong>Artist</strong> avec des liens hypermédia (<code>HyperlinkedModelSerializer</code>). Authentification Session ou Basic Auth requise.</p>
 
-<h2 class="sub">Endpoints</h2>
+<h2 class="sub">Endpoints disponibles</h2>
 <table class="t">
-  <tr><th>Méthode</th><th>URL</th><th>Action</th><th>Réponse</th></tr>
-  <tr><td><span class="b-get">GET</span></td><td><code>/api/artists/</code></td><td>Lister tous les artistes</td><td>200 + tableau JSON</td></tr>
-  <tr><td><span class="b-post">POST</span></td><td><code>/api/artists/</code></td><td>Créer un artiste</td><td>201 Created</td></tr>
-  <tr><td><span class="b-get">GET</span></td><td><code>/api/artists/&lt;id&gt;/</code></td><td>Détail d'un artiste</td><td>200 + objet JSON</td></tr>
-  <tr><td><span class="b-put">PUT</span></td><td><code>/api/artists/&lt;id&gt;/</code></td><td>Modifier un artiste (complet)</td><td>200 OK</td></tr>
-  <tr><td><span class="b-del">DELETE</span></td><td><code>/api/artists/&lt;id&gt;/</code></td><td>Supprimer un artiste</td><td>204 No Content</td></tr>
+  <tr><th>Méthode</th><th>URL</th><th>Action</th><th>Code réponse</th></tr>
+  <tr><td><strong>GET</strong></td><td><code>/api/artists/</code></td><td>Lister tous les artistes</td><td>200 OK</td></tr>
+  <tr><td><strong>POST</strong></td><td><code>/api/artists/</code></td><td>Créer un artiste</td><td>201 Created</td></tr>
+  <tr><td><strong>GET</strong></td><td><code>/api/artists/&lt;id&gt;/</code></td><td>Détail d'un artiste</td><td>200 OK</td></tr>
+  <tr><td><strong>PUT</strong></td><td><code>/api/artists/&lt;id&gt;/</code></td><td>Modifier un artiste (complet)</td><td>200 OK</td></tr>
+  <tr><td><strong>DELETE</strong></td><td><code>/api/artists/&lt;id&gt;/</code></td><td>Supprimer un artiste</td><td>204 No Content</td></tr>
 </table>
 
 <h2 class="sub">Format de réponse — GET /api/artists/</h2>
@@ -384,22 +595,22 @@ auteur   = data.get('author')
 { "firstname": "Jean", "lastname": "Dupont" }</pre>
 
 
-<!-- ═══ 11. FLUX RSS ═══ -->
-<h1 class="st" id="s11">11. Flux RSS</h1>
+<!-- ══ 7. FLUX RSS ══════════════════════════════════════ -->
+<h1 class="sec" id="s7">7 &nbsp;&nbsp; Flux RSS produit</h1>
 
 <table class="t">
   <tr><th>Paramètre</th><th>Valeur</th></tr>
   <tr><td>URL</td><td><code>http://127.0.0.1:8000/feed/representations/</code></td></tr>
-  <tr><td>Titre</td><td>PickShow — Représentations à venir</td></tr>
+  <tr><td>Titre du flux</td><td>PickShow — Représentations à venir</td></tr>
   <tr><td>Format</td><td>RSS 2.0 — généré par <code>django.contrib.syndication.views.Feed</code></td></tr>
-  <tr><td>Contenu</td><td>20 prochaines représentations triées par date croissante (<code>when &gt;= now()</code>)</td></tr>
+  <tr><td>Contenu</td><td>20 prochaines représentations triées par date croissante</td></tr>
   <tr><td>Champs par item</td><td>Titre du spectacle, date/heure, lieu, lien vers la page de détail</td></tr>
   <tr><td>Accès</td><td>Public — aucune authentification requise</td></tr>
 </table>
 
 
-<!-- ═══ 12. EXPORT CSV ═══ -->
-<h1 class="st" id="s12">12. Export / Import CSV</h1>
+<!-- ══ 8. EXPORT CSV ═══════════════════════════════════ -->
+<h1 class="sec" id="s8">8 &nbsp;&nbsp; Export / Import CSV</h1>
 
 <h2 class="sub">Export via vue Django</h2>
 <table class="t">
@@ -407,7 +618,7 @@ auteur   = data.get('author')
   <tr><td>URL</td><td><code>http://127.0.0.1:8000/export/reservations/</code></td></tr>
   <tr><td>Accès</td><td>Superuser uniquement (<code>@group_required('ADMIN')</code>)</td></tr>
   <tr><td>Format</td><td>CSV, séparateur <code>;</code>, encodage UTF-8</td></tr>
-  <tr><td>Nom du fichier</td><td><code>reservations.csv</code></td></tr>
+  <tr><td>Nom du fichier généré</td><td><code>reservations.csv</code></td></tr>
   <tr><td>Colonnes</td><td>ID · Utilisateur · Email · Spectacle · Date représentation · Lieu · Places · Prix unitaire · Total</td></tr>
   <tr><td>Calcul total</td><td><code>places × prix_unitaire + 2,00 €</code> (frais administratifs fixes)</td></tr>
 </table>
@@ -415,141 +626,114 @@ auteur   = data.get('author')
 <h2 class="sub">Export via Django Admin</h2>
 <p>Action disponible dans <code>/admin/</code> sur la liste des réservations : <em>« Exporter les réservations sélectionnées en CSV »</em>. Permet un export partiel sur une sélection.</p>
 
-<div class="info">Aucun import CSV n'est implémenté. Les données sont gérées via l'Admin Django ou les scripts de seed (<code>seed_data.py</code>).</div>
+<div class="note">ℹ Aucun import CSV n'est implémenté. Les données sont gérées via l'interface Admin Django ou les scripts de seed (<code>seed_data.py</code>).</div>
 
 
-<!-- ═══ 13. DÉPLOIEMENT ═══ -->
-<h1 class="st" id="s13">13. Procédures de déploiement</h1>
+<!-- ══ 9. DÉPLOIEMENT ══════════════════════════════════ -->
+<h1 class="sec" id="s9">9 &nbsp;&nbsp; Procédures de déploiement</h1>
 
-<h2 class="sub">Environnement de développement</h2>
-<table class="t">
-  <tr><th>Composant</th><th>Outil / Version</th></tr>
-  <tr><td>Système</td><td>Windows 11 Pro</td></tr>
-  <tr><td>Serveur BDD</td><td>MariaDB 10.6.25 — service Windows, chemin : <code>C:\Program Files\MariaDB 10.6\</code></td></tr>
-  <tr><td>Client SQL</td><td>HeidiSQL 12.11.0.7065</td></tr>
-  <tr><td>Python</td><td>3.14.1</td></tr>
-  <tr><td>Éditeur</td><td>Visual Studio Code</td></tr>
-</table>
+<p>La procédure suivante explique comment installer et faire fonctionner le site <strong>à partir de l'archive ZIP</strong> téléchargée depuis GitHub.</p>
 
-<h2 class="sub">Prérequis à installer sur une nouvelle machine</h2>
+<h2 class="sub">Prérequis — logiciels à installer</h2>
 <ol>
-  <li><strong>Python 3.14+</strong> — <code>https://www.python.org/downloads/</code> — cocher "Add to PATH"</li>
-  <li><strong>MariaDB 10.6</strong> — <code>https://mariadb.org/download/</code> — installer comme service Windows, noter le mot de passe <code>root</code> défini pendant l'installation</li>
-  <li><strong>HeidiSQL</strong> — <code>https://www.heidisql.com/</code> — client graphique pour gérer MariaDB</li>
-  <li><strong>Git</strong> — <code>https://git-scm.com/</code></li>
+  <li><strong>Python 3.14+</strong> — <code>https://www.python.org/downloads/</code> — cocher <em>"Add Python to PATH"</em> lors de l'installation</li>
+  <li><strong>MariaDB 10.6</strong> — <code>https://mariadb.org/download/</code> — installer comme service Windows, noter le mot de passe <code>root</code></li>
+  <li><strong>HeidiSQL</strong> — <code>https://www.heidisql.com/</code> — client graphique SQL pour administrer MariaDB</li>
 </ol>
 
-<h2 class="sub">Installation pas à pas</h2>
+<h2 class="sub">Étape 1 — Télécharger et extraire l'archive</h2>
+<ol>
+  <li>Aller sur <code>https://github.com/hichamgh23/reservationsDjango202</code></li>
+  <li>Cliquer sur <strong>Code → Download ZIP</strong></li>
+  <li>Extraire l'archive dans le dossier de votre choix (ex : <code>C:\projets\reservationsDjango202\</code>)</li>
+</ol>
 
-<p><strong>Étape 1 — Récupérer le projet depuis GitHub</strong></p>
-<pre>git clone https://github.com/hichamgh23/reservationsDjango202.git
-cd reservationsDjango202</pre>
-
-<p><strong>Étape 2 — Créer et activer l'environnement virtuel Python</strong></p>
+<h2 class="sub">Étape 2 — Créer et activer l'environnement virtuel Python</h2>
+<p>Ouvrir un terminal PowerShell dans le dossier extrait :</p>
 <pre>python -m venv venv
+venv\Scripts\Activate.ps1</pre>
 
-# Windows PowerShell
-venv\Scripts\Activate.ps1
-
-# Windows CMD
-venv\Scripts\activate.bat</pre>
-
-<p><strong>Étape 3 — Installer les dépendances Python</strong></p>
+<h2 class="sub">Étape 3 — Installer les dépendances Python</h2>
 <pre>pip install -r requirements.txt</pre>
 
-<p><strong>Étape 4 — Créer la base de données avec HeidiSQL</strong></p>
+<h2 class="sub">Étape 4 — Créer la base de données dans HeidiSQL</h2>
 <ol>
-  <li>Ouvrir <strong>HeidiSQL</strong> → Gestionnaire de sessions → <em>Nouveau</em></li>
-  <li>Paramètres de connexion :<br>
-    Type : <strong>MySQL (TCP/IP)</strong> | Hôte : <code>127.0.0.1</code> | Port : <code>3306</code><br>
-    Utilisateur : <code>root</code> | Mot de passe : celui défini à l'installation de MariaDB
-  </li>
-  <li>Cliquer <em>Ouvrir</em>, puis dans l'onglet <strong>Requête</strong>, exécuter :</li>
+  <li>Vérifier que MariaDB est démarré (Gestionnaire des tâches → Services → MariaDB)</li>
+  <li>Ouvrir <strong>HeidiSQL</strong> → Nouveau → Type : <strong>MySQL (TCP/IP)</strong> | Hôte : <code>127.0.0.1</code> | Port : <code>3306</code> | User : <code>root</code></li>
+  <li>Dans l'onglet <strong>Requête</strong>, exécuter :</li>
 </ol>
 <pre>CREATE DATABASE reservations CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'rooot'@'127.0.0.1' IDENTIFIED BY 'rooot';
 GRANT ALL PRIVILEGES ON reservations.* TO 'rooot'@'127.0.0.1';
 FLUSH PRIVILEGES;</pre>
 
-<p><strong>Étape 5 — Importer le dump SQL (structure + données)</strong></p>
+<h2 class="sub">Étape 5 — Importer le dump SQL</h2>
 <ol>
   <li>Dans HeidiSQL, sélectionner la base <code>reservations</code> dans le panneau gauche</li>
-  <li>Menu <em>Outils → Importer un fichier SQL…</em></li>
-  <li>Sélectionner le fichier <code>dump_reservations.sql</code> fourni à la racine du projet</li>
-  <li>Cliquer <em>Ouvrir</em> — toutes les tables et données sont créées automatiquement</li>
+  <li>Menu <em>Outils → Importer un fichier SQL…</em> → sélectionner <code>dump_reservations.sql</code></li>
+  <li>Cliquer <em>Ouvrir</em> — tables, contraintes et données créées automatiquement</li>
 </ol>
-<div class="info">Le dump inclut : structure complète + FK + CHECK + données de démonstration (7 spectacles, 12 artistes, 9 localités, 7 lieux, 28 représentations, 7 réservations, 9 avis, 3 utilisateurs).</div>
+<div class="note">Le dump contient toutes les tables avec FK (ON DELETE / ON UPDATE) et les données de démonstration complètes.</div>
 
-<p><strong>Étape 6 — Vérifier settings.py</strong></p>
-<p>Le fichier <code>reservations/settings.py</code> est déjà configuré :</p>
-<pre>DATABASES = {
-    'default': {
-        'ENGINE':   'django.db.backends.mysql',
-        'NAME':     'reservations',
-        'USER':     'rooot',
-        'PASSWORD': 'rooot',
-        'HOST':     '127.0.0.1',
-        'PORT':     '3306',
-        'OPTIONS':  {'charset': 'utf8mb4'},
-    }
-}</pre>
-
-<p><strong>Étape 7 — Lancer le serveur</strong></p>
+<h2 class="sub">Étape 6 — Lancer le serveur Django</h2>
 <pre>python manage.py runserver</pre>
 
-<p><strong>Étape 8 — Accéder au site</strong></p>
+<h2 class="sub">Étape 7 — Accéder au site</h2>
 <table class="t">
-  <tr><th>Page</th><th>URL</th><th>Compte</th></tr>
+  <tr><th>Page</th><th>URL locale</th><th>Identifiants</th></tr>
   <tr><td>Site web</td><td><code>http://127.0.0.1:8000/</code></td><td>—</td></tr>
-  <tr><td>Connexion</td><td><code>http://127.0.0.1:8000/accounts/login/</code></td><td>Voir section 8</td></tr>
+  <tr><td>Connexion</td><td><code>http://127.0.0.1:8000/accounts/login/</code></td><td>Voir section 4.1</td></tr>
   <tr><td>Administration Django</td><td><code>http://127.0.0.1:8000/admin/</code></td><td><code>admin</code> / <code>Admin2026!</code></td></tr>
   <tr><td>API REST</td><td><code>http://127.0.0.1:8000/api/artists/</code></td><td>Connexion requise</td></tr>
   <tr><td>Flux RSS</td><td><code>http://127.0.0.1:8000/feed/representations/</code></td><td>—</td></tr>
 </table>
 
-<h2 class="sub">Structure des fichiers principaux</h2>
-<pre>reservationsDjango202/
+<h2 class="sub">Structure de l'archive</h2>
+<pre>
+reservationsDjango202/
 ├── manage.py                  ← point d'entrée Django
 ├── requirements.txt           ← dépendances pip
 ├── dump_reservations.sql      ← dump BDD à importer dans HeidiSQL
-├── seed_data.py               ← script de peuplement alternatif
-├── reservations/              ← configuration du projet
-│   ├── settings.py            ← paramètres (BDD, auth, static…)
+├── reservations/
+│   ├── settings.py            ← configuration (BDD, auth, static…)
 │   └── urls.py                ← routage principal
-├── catalogue/                 ← application principale
-│   ├── models.py              ← 13 modèles ORM
-│   ├── views.py               ← logique des vues
-│   ├── urls.py                ← routes de l'application
-│   ├── forms.py               ← formulaires Django
-│   ├── admin.py               ← configuration de l'admin
-│   ├── static/css/            ← fichiers CSS séparés par composant
-│   ├── static/js/             ← fichiers JS séparés par fonctionnalité
+├── catalogue/
+│   ├── models.py  views.py  urls.py  forms.py  admin.py
+│   ├── static/css/            ← fichiers CSS par composant
+│   ├── static/js/             ← fichiers JS par fonctionnalité
 │   └── templates/             ← templates HTML
-├── api/catalogue/             ← API REST (DRF)
-│   ├── views.py               ← ListCreateAPIView, RetrieveUpdateDestroyAPIView
-│   ├── serializers.py         ← ArtistSerializer (HyperlinkedModelSerializer)
-│   └── urls.py                ← /api/artists/ et /api/artists/&lt;id&gt;/
-└── venv/                      ← environnement virtuel (à créer localement)</pre>
+└── api/catalogue/             ← API REST (DRF)
+</pre>
 
 
-<!-- ═══ 14. URLs DE RÉFÉRENCE ═══ -->
-<h1 class="st" id="s14">14. URLs de référence</h1>
+<!-- ══ 10. URL DE DÉPLOIEMENT ═══════════════════════════ -->
+<h1 class="sec" id="s10">10 &nbsp; URL de déploiement</h1>
+
+<p>Le projet n'est pas actuellement déployé sur un hébergement public en ligne. Il fonctionne uniquement en environnement de développement local.</p>
+
+<table class="t">
+  <tr><th>Environnement</th><th>URL</th></tr>
+  <tr><td>Déploiement en ligne (production)</td><td><em>Aucun — non déployé en ligne à ce stade</em></td></tr>
+  <tr><td>Développement local</td><td><code>http://127.0.0.1:8000/</code></td></tr>
+</table>
+
+<div class="warn">Un déploiement en production nécessiterait : VPS, Gunicorn + Nginx, <code>DEBUG = False</code> et configuration des variables d'environnement.</div>
+
+
+<!-- ══ 11. URL DE DÉVELOPPEMENT (GITHUB) ════════════════ -->
+<h1 class="sec" id="s11b">11 &nbsp; URL de développement — dépôt GitHub</h1>
 
 <table class="t">
   <tr><th>Ressource</th><th>URL</th></tr>
-  <tr><td>Dépôt GitHub (développement)</td><td><code>https://github.com/hichamgh23/reservationsDjango202</code></td></tr>
-  <tr><td>Site en production (déploiement)</td><td><em>Non déployé en ligne — environnement local uniquement</em></td></tr>
-  <tr><td>URL locale (développement)</td><td><code>http://127.0.0.1:8000/</code></td></tr>
-  <tr><td>Admin local</td><td><code>http://127.0.0.1:8000/admin/</code></td></tr>
-  <tr><td>API REST locale</td><td><code>http://127.0.0.1:8000/api/artists/</code></td></tr>
-  <tr><td>Flux RSS local</td><td><code>http://127.0.0.1:8000/feed/representations/</code></td></tr>
+  <tr><td><strong>Dépôt GitHub du projet</strong></td><td><code>https://github.com/hichamgh23/reservationsDjango202</code></td></tr>
+  <tr><td>Téléchargement archive ZIP</td><td><code>https://github.com/hichamgh23/reservationsDjango202/archive/refs/heads/main.zip</code></td></tr>
+  <tr><td>Branche principale</td><td><code>main</code></td></tr>
 </table>
 
-<br>
-<p style="text-align:center;color:#888;font-size:9pt;border-top:1px solid #ddd;padding-top:10px;margin-top:20px;">
+<div class="footer-line">
   Documentation technique — Projet Réservations PickShow — Hicham Ghassoul — ICC / EPFC — 2025–2026
-</p>
-
 </div>
+
+</div><!-- .doc -->
 </body>
 </html>
