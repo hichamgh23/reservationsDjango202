@@ -69,6 +69,16 @@
                         <i class="fas fa-ticket-alt mr-2 text-danger"></i>Spectacles
                     </a>
                 </li>
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-white-50" href="{% url 'catalogue:artist_index' %}">
+                        <i class="fas fa-user-tie mr-2 text-danger"></i>Artistes
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link text-white-50" href="{% url 'catalogue:locality_index' %}">
+                        <i class="fas fa-map-marker-alt mr-2 text-danger"></i>Localités
+                    </a>
+                </li>
 {% if user.is_authenticated %}
                 <li class="nav-item d-lg-none">
                     <a class="nav-link text-info" href="{% url 'catalogue:profile' %}">
