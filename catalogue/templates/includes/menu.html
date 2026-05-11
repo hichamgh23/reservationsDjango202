@@ -49,22 +49,6 @@
                 </a>
             </li>
 
-            <li class="nav-item mb-3">
-                <a href="{% url 'catalogue:artist_index' %}"
-                   class="nav-link text-white-50 p-0 d-flex align-items-center hover-red">
-                    <i class="fas fa-user-tie fa-fw"></i>
-                    <span class="menu-label ml-3">Artistes</span>
-                </a>
-            </li>
-
-            <li class="nav-item mb-3">
-                <a href="{% url 'catalogue:locality_index' %}"
-                   class="nav-link text-white-50 p-0 d-flex align-items-center hover-red">
-                    <i class="fas fa-map-marker-alt fa-fw"></i>
-                    <span class="menu-label ml-3">Localités</span>
-                </a>
-            </li>
-
             <hr class="border-secondary my-3" style="opacity: 0.2;">
 
             {% if user.is_authenticated %}
